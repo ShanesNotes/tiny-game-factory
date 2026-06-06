@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tiny Game Factory Playtest Report",
+  "type": "object",
+  "required": [
+    "branch",
+    "duration_seconds",
+    "bot_type",
+    "crashed",
+    "stuck",
+    "loop_completed",
+    "anti_boring"
+  ],
+  "properties": {
+    "branch": { "type": "string" },
+    "engine_profile": { "type": "string" },
+    "seed": { "type": "string" },
+    "duration_seconds": { "type": "number", "minimum": 0 },
+    "bot_type": { "enum": ["random", "heuristic", "skilled", "scripted", "human"] },
+    "crashed": { "type": "boolean" },
+    "stuck": { "type": "boolean" },
+    "loop_completed": { "type": "boolean" },
+    "terminal_state": { "type": "string" },
+    "action_distribution": { "type": "object" },
+    "unique_states": { "type": "integer", "minimum": 0 },
+    "score": { "type": "number" },
+    "performance": { "type": "object" },
+    "capture_path": { "type": "string" },
+    "anti_boring": {
+      "type": "object",
+      "required": ["naked_mechanics", "two_bot_spread", "dominant_move", "second_session"],
+      "properties": {
+        "naked_mechanics": { "type": "boolean" },
+        "two_bot_spread": { "type": "boolean" },
+        "dominant_move": { "type": "boolean" },
+        "second_session": { "type": "boolean" }
+      }
+    }
+  }
+}

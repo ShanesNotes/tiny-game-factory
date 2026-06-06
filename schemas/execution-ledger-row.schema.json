@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tiny Game Factory Execution Ledger Row",
+  "type": "object",
+  "required": ["ts", "seed_id", "phase", "event", "status", "actor"],
+  "properties": {
+    "ts": { "type": "string" },
+    "seed_id": { "type": "string" },
+    "phase": { "type": "string" },
+    "event": { "type": "string" },
+    "status": {
+      "enum": ["not-run", "in-progress", "checkpointed", "passed", "failed", "blocked", "killed", "complete"]
+    },
+    "lane": { "type": "string" },
+    "actor": { "type": "string" },
+    "attempt": { "type": "integer", "minimum": 1 },
+    "input_artifact_paths": { "type": "array", "items": { "type": "string" } },
+    "owned_paths": { "type": "array", "items": { "type": "string" } },
+    "changed_paths": { "type": "array", "items": { "type": "string" } },
+    "verification": {
+      "type": "object",
+      "properties": {
+        "commands": { "type": "array", "items": { "type": "string" } },
+        "status": { "type": "string" },
+        "evidence": { "type": "string" }
+      }
+    },
+    "blockers": { "type": "array", "items": { "type": "string" } },
+    "resume_point": { "type": ["object", "null"] }
+  }
+}

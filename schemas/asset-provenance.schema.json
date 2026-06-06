@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tiny Game Factory Asset Provenance",
+  "type": "object",
+  "required": ["asset_path", "kind", "generator", "recipe", "reviewed"],
+  "properties": {
+    "asset_path": { "type": "string" },
+    "kind": { "enum": ["image", "audio", "model", "texture", "font", "other"] },
+    "generator": { "type": "string" },
+    "model": { "type": "string" },
+    "version": { "type": "string" },
+    "prompt": { "type": "string" },
+    "recipe": { "type": "string" },
+    "license": { "type": "string" },
+    "reviewed": { "type": "boolean" },
+    "reviewed_by": { "type": "string" }
+  }
+}

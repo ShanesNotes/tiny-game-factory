@@ -1,0 +1,116 @@
+# Tiny Game Factory — guardrail config (factory v0.1.0; derived from init pack v0.3)
+# This is a desired/guardrail config, not a claim that every tool exists locally.
+
+[doctrine]
+search_over_codegen = true
+fun_over_polish = true
+evidence_over_sunk_cost = true
+code_native_over_opaque = true
+human_questions_max_before_first_slice = 1
+no_code_before_game_thesis = true
+no_content_before_fun_lock = true
+no_opaque_assets_before_art_gate = true
+no_multiplayer_before_solo_or_hotseat_fun_lock = true
+
+[gates]
+minimum_bot_session_seconds = 60
+nightly_bot_session_seconds = 300
+depth_vector_min_total = 16
+dominant_move_max_action_share = 0.70
+minimum_two_bot_spread_required = true
+skill_null_is_hard_fail = true
+
+[builders.claude_code]
+enabled = "detect"
+role = "orchestrator"
+required_files = ["CLAUDE.md"]
+preferred_features = ["skills", "subagents", "agent_teams", "hooks", "plugins", "mcp"]
+
+[builders.codex]
+enabled = "detect"
+role = "implementation_or_reviewer"
+required_files = ["AGENTS.md"]
+preferred_features = ["skills", "subagents", "hooks", "plugins", "mcp", "worktrees"]
+
+[builders.omx]
+enabled = "detect"
+role = "codex_skill_accelerator"
+preferred_commands = ["$deep-interview", "$ralplan", "$prometheus-strict", "$ultragoal", "$ultraqa", "$visual-verdict", "$autopilot", "$ecomode"]
+guard = "helpful_when_installed_not_required"
+
+[builders.grok_build]
+enabled = "detect"
+role = "optional_third_competitor"
+guard = "beta_account_gated; do_not_require_for_factory"
+probe_before_use = ["parallel_subagents", "worktrees", "headless_-p", "arena_mode"]
+
+[engines.raw_canvas_ts]
+tier = "default_candidate"
+status = "stable_pattern"
+best_when = "2D, deterministic, headless-testable, custom loop, no editor dependency"
+starter = "vite + typescript + canvas + vitest + playwright"
+risk = "agents may overbuild ECS; keep sim minimal"
+
+[engines.phaser_ts]
+tier = "candidate"
+desired_minimum = "phaser@4.1.0"
+verify_command = "npm view phaser version"
+best_when = "2D arcade/action where engine batteries accelerate slice"
+risk = "agents may emit Phaser 3 APIs; version-pin hook required"
+
+[engines.kaplay_ts]
+tier = "probe"
+verify_command = "npm view kaplay version"
+best_when = "very small 2D arcade first slice"
+risk = "headless and long-term engine maturity must be probed"
+
+[engines.excalibur_ts]
+tier = "probe"
+verify_command = "npm view excalibur version"
+best_when = "TS-native 2D game needing batteries but simpler than Phaser"
+risk = "headless and ecosystem probe required"
+
+[engines.react_canvas]
+tier = "candidate"
+best_when = "UI/management/card-heavy game with Canvas game surface"
+risk = "React must not own the 60fps sim loop"
+
+[engines.three_r3f]
+tier = "candidate"
+desired_minimum = "three@0.184.0"
+verify_command = "npm view three version"
+best_when = "3D is intrinsic to fantasy, not decorative"
+risk = "visual-wow-no-game failure; must pass programmer-art fun gate first"
+
+[engines.godot]
+tier = "candidate"
+desired_minimum = "Godot 4.6.3"
+verify_command = "godot --version || godot4 --version"
+best_when = "scene tooling/export/presentation genuinely matters"
+risk = "editor pipeline; require text .tscn/.tres and headless smoke"
+
+[engines.bevy]
+tier = "candidate_for_sim_is_game"
+desired_minimum = "0.18"
+verify_command = "cargo search bevy --limit 1"
+best_when = "simulation-heavy, ECS pays off, Rust tax acceptable"
+risk = "compile/borrow-checker tax; avoid for arcade slices"
+
+[mcp.defaults]
+playwright_cli = "on_for_harness"
+playwright_mcp = "exploration_only"
+chrome_devtools_mcp = "on_for_perf_if_available"
+godot_mcp = "off_until_godot_lane_selected"
+blender_mcp = "off_rung3_only"
+meshy_mcp = "off_rung3_only"
+unity_mcp = "off_seed_must_earn_it"
+
+[hooks]
+scope_brake = true
+art_fidelity_cap = true
+asset_provenance = true
+mcp_mutation_must_emit_text = true
+engine_migration_requires_adr = true
+phaser_version_pin = true
+playtest_report_required = true
+afk_heartbeat_required = true

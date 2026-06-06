@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tiny Game Factory Game Thesis",
+  "type": "object",
+  "required": [
+    "seed",
+    "pitch",
+    "thesis",
+    "player_fantasy",
+    "core_loop_candidates",
+    "replayability_hypothesis",
+    "engine_profile_candidates",
+    "first_playable_slice",
+    "kill_conditions"
+  ],
+  "properties": {
+    "seed": { "type": "string" },
+    "pitch": { "type": "string" },
+    "thesis": { "type": "string" },
+    "player_fantasy": { "type": "string" },
+    "genre_hypotheses": { "type": "array", "items": { "type": "object" } },
+    "core_loop_candidates": { "type": "array", "minItems": 1, "items": { "type": "object" } },
+    "replayability_hypothesis": { "type": "string" },
+    "depth_mechanisms": { "type": "array", "items": { "type": "string" } },
+    "risk_register": { "type": "array", "items": { "type": "object" } },
+    "engine_profile_candidates": { "type": "array", "minItems": 1, "items": { "type": "object" } },
+    "first_playable_slice": { "type": "object" },
+    "bot_success_criteria": { "type": "array", "items": { "type": "string" } },
+    "taste_gates": { "type": "array", "items": { "type": "string" } },
+    "kill_conditions": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+  }
+}

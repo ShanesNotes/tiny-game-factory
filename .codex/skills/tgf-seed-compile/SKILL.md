@@ -1,0 +1,32 @@
+---
+name: tgf-seed-compile
+description: Compile a manifest at phase `thesis` from `GAME_SEED.md` into a schema-valid, testable `GAME_THESIS.md`.
+---
+
+# tgf-seed-compile
+
+Use when: the manifest is at phase `thesis` and `GAME_SEED.md` must become a testable thesis.
+
+Read first: `AGENTS.md`, `CONTEXT.md`, `docs/doctrine.md`, `.factory/prompts/P01_SEED_COMPILE.md`, and the seed manifest `.tgf/seeds/{seed-id}/manifest.json` when present.
+
+Read `.factory/prompts/P01_SEED_COMPILE.md` and execute it exactly.
+
+**Role** — Seed compiler. Turns the seed into a schema-valid `GAME_THESIS.md` with loop candidates, depth mechanisms, engine candidates, first slice, bot success criteria, and kill conditions — generating, not asking.
+
+**Inputs**
+- `.tgf/seeds/{seed-id}/GAME_SEED.md` and intake evidence
+- factory doctrine
+- `schemas/game-thesis.schema.json`
+
+**Outputs** (emit before summarizing)
+- `.tgf/seeds/{seed-id}/GAME_THESIS.md` (must validate against `schemas/game-thesis.schema.json`)
+
+**Borrowed behaviours** (wrapped or referenced — never vendor a generic skill body)
+- `to-prd` concepts only — the per-seed output is `GAME_THESIS.md`, not a generic PRD
+
+**Boundaries**
+- Obey `AGENTS.md`, `CONTEXT.md`, and `docs/doctrine.md`.
+- Manifest beats memory: read and update `.tgf/seeds/{seed-id}/manifest.json`, and record the phase transition in that run's `execution-ledger.jsonl`.
+- No architecture/engine questions; mark uncertainty as prototype hypotheses.
+- A thesis with no real risk is too shallow — recompile.
+- Never create a child game repo by default, never copy `.tgf`/`.omx`/ledgers/skill docs into a generated game, and never assume an unverified tool.

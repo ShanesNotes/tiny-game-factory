@@ -1,0 +1,28 @@
+{
+  "seed": "tiny asteroid gardening",
+  "pitch": "Cultivate fragile gardens across drifting asteroids before they tumble out of sunlight.",
+  "thesis": "A timing-and-placement loop where light, drift, and scarce water force constant re-prioritisation.",
+  "player_fantasy": "A patient gardener coaxing life from hostile rock.",
+  "genre_hypotheses": [
+    { "hypothesis": "tile-placement puzzle", "confidence": 0.6 }
+  ],
+  "core_loop_candidates": [
+    { "id": "loop-a", "verbs": "plant, water, rotate-asteroid", "cycle_length_s": 45 },
+    { "id": "loop-b", "verbs": "plant, harvest, relocate", "cycle_length_s": 60 }
+  ],
+  "replayability_hypothesis": "Procedural asteroid drift and sunlight angles create different scarcity puzzles each run.",
+  "depth_mechanisms": ["resource scarcity", "time/space pressure", "irreversible commitment"],
+  "risk_register": [
+    { "risk": "loop may resolve to one dominant planting order", "kind": "fun", "severity": 2 }
+  ],
+  "engine_profile_candidates": [
+    { "rank": 1, "profile": "raw Canvas + TS", "rationale": "deterministic, headless-testable 2D grid" }
+  ],
+  "first_playable_slice": {
+    "scope": "one asteroid, three plant types, sunlight sweep, 60s run",
+    "excluded": ["content expansion", "high-fidelity art", "multiplayer"]
+  },
+  "bot_success_criteria": ["60s run without crash", "no stuck state", "random vs skilled bot score spread measurable"],
+  "taste_gates": ["G1: is the primitive loop worth replaying?"],
+  "kill_conditions": ["fails anti-boring gate after two deepen attempts", "dominant planting order cannot be removed cheaply"]
+}

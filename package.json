@@ -1,0 +1,16 @@
+{
+  "name": "tiny-game-factory",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Tiny Game Factory — a local-first, evidence-first agentic game-development meta-factory. Turns a one-line game seed into a bot-tested, anti-boring-gated first playable slice without committing to an engine before a thesis exists.",
+  "scripts": {
+    "verify:tools": "node scripts/verify-local-tools.mjs",
+    "init:run": "node scripts/init-game-run.mjs",
+    "gates": "node scripts/run-gates.mjs --dry-run",
+    "validate": "node scripts/validate-artifacts.mjs --check all",
+    "test": "node --test \"tests/**/*.test.mjs\"",
+    "lint": "node scripts/lint.mjs",
+    "verify": "npm run lint && npm run validate && npm run gates && npm test"
+  }
+}

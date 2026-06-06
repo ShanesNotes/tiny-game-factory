@@ -1,0 +1,30 @@
+{
+  "ts": "2026-06-06T00:00:00Z",
+  "seed_id": "tiny-asteroid-gardening",
+  "phase": "toolchain",
+  "event": "run-initialized",
+  "status": "checkpointed",
+  "lane": "solo",
+  "actor": "init-game-run.mjs",
+  "attempt": 1,
+  "input_artifact_paths": [".tgf/seeds/tiny-asteroid-gardening/GAME_SEED.md"],
+  "owned_paths": [".tgf/seeds/tiny-asteroid-gardening/**"],
+  "changed_paths": [
+    ".tgf/seeds/tiny-asteroid-gardening/manifest.json",
+    ".tgf/seeds/tiny-asteroid-gardening/GAME_SEED.md",
+    ".tgf/seeds/tiny-asteroid-gardening/README_AGENT_BOOT.md",
+    ".tgf/seeds/tiny-asteroid-gardening/README_NEXT_ACTIONS.md",
+    ".tgf/seeds/tiny-asteroid-gardening/execution-ledger.jsonl"
+  ],
+  "verification": {
+    "commands": ["node scripts/validate-artifacts.mjs --check run --seed-id tiny-asteroid-gardening"],
+    "status": "passed",
+    "evidence": "Run manifest and path policy validated; no child game repo created."
+  },
+  "blockers": [],
+  "resume_point": {
+    "phase": "toolchain",
+    "artifact_path": ".tgf/seeds/tiny-asteroid-gardening/README_AGENT_BOOT.md",
+    "reason": "Run toolchain verification."
+  }
+}

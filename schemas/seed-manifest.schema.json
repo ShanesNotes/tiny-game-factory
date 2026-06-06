@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tiny Game Factory Seed Run Manifest",
+  "type": "object",
+  "required": [
+    "seed_id",
+    "factory_version",
+    "current_phase",
+    "seed_path",
+    "external_side_effects_allowed",
+    "execution_ledger_path",
+    "resume_point"
+  ],
+  "properties": {
+    "seed_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$" },
+    "factory_version": { "type": "string" },
+    "current_phase": {
+      "enum": [
+        "intake", "toolchain", "thesis", "engine-profile", "prototype-dispatch",
+        "first-slice", "depth-review", "bakeoff", "deepen", "fun-lock", "content",
+        "art", "polish", "qa", "release-candidate", "handoff",
+        "blocked", "failed", "killed", "complete"
+      ]
+    },
+    "seed_path": { "type": "string" },
+    "game_thesis_path": { "type": ["string", "null"] },
+    "engine_decision_path": { "type": ["string", "null"] },
+    "default_child_game_root": { "type": "string" },
+    "child_game_path": { "type": ["string", "null"] },
+    "external_side_effects_allowed": { "type": "boolean" },
+    "redaction_status": { "enum": ["unknown", "clean", "redacted", "needs-review"] },
+    "execution_ledger_path": { "type": "string" },
+    "prototype_lanes": { "type": "object" },
+    "playtest_report_paths": { "type": "array", "items": { "type": "string" } },
+    "review_report_paths": { "type": "array", "items": { "type": "string" } },
+    "handoff_paths": { "type": "array", "items": { "type": "string" } },
+    "resume_point": {
+      "type": "object",
+      "required": ["phase", "artifact_path", "reason"],
+      "properties": {
+        "phase": { "type": "string" },
+        "artifact_path": { "type": "string" },
+        "reason": { "type": "string" }
+      }
+    },
+    "last_verified_at": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "branch": "loop-a-canvas",
+  "engine_profile": "raw Canvas + TS",
+  "seed": "tiny asteroid gardening",
+  "duration_seconds": 62,
+  "bot_type": "random",
+  "crashed": false,
+  "stuck": false,
+  "loop_completed": true,
+  "terminal_state": "harvest-cycle-complete",
+  "action_distribution": { "plant": 18, "water": 21, "rotate": 9 },
+  "unique_states": 47,
+  "score": 12,
+  "capture_path": "playtests/loop-a-canvas/capture.jsonl",
+  "anti_boring": {
+    "naked_mechanics": true,
+    "two_bot_spread": true,
+    "dominant_move": false,
+    "second_session": true
+  }
+}

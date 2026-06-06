@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tiny Game Factory Depth Vector",
+  "type": "object",
+  "required": ["scores", "total", "verdict"],
+  "properties": {
+    "scores": {
+      "type": "object",
+      "required": [
+        "meaningful_choice",
+        "tradeoff",
+        "pressure",
+        "uncertainty",
+        "mastery",
+        "replayable_variation"
+      ],
+      "properties": {
+        "meaningful_choice": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "tradeoff": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "pressure": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "uncertainty": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "progression": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "mastery": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "combinatorial": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "emergence": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "replayable_variation": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "failure_recovery": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "expression": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "expansion_headroom": { "type": "integer", "minimum": 0, "maximum": 2 }
+      }
+    },
+    "total": { "type": "integer", "minimum": 0, "maximum": 24 },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "verdict": { "enum": ["ADVANCE", "DEEPEN", "KILL"] }
+  }
+}

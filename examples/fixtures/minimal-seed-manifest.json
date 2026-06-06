@@ -1,0 +1,23 @@
+{
+  "seed_id": "tiny-asteroid-gardening",
+  "factory_version": "0.1.0",
+  "current_phase": "toolchain",
+  "seed_path": ".tgf/seeds/tiny-asteroid-gardening/GAME_SEED.md",
+  "game_thesis_path": null,
+  "engine_decision_path": null,
+  "default_child_game_root": "/home/ark/tgf-games/tiny-asteroid-gardening",
+  "child_game_path": null,
+  "external_side_effects_allowed": false,
+  "redaction_status": "unknown",
+  "execution_ledger_path": ".tgf/seeds/tiny-asteroid-gardening/execution-ledger.jsonl",
+  "prototype_lanes": {},
+  "playtest_report_paths": [],
+  "review_report_paths": [],
+  "handoff_paths": [],
+  "resume_point": {
+    "phase": "toolchain",
+    "artifact_path": ".tgf/seeds/tiny-asteroid-gardening/README_AGENT_BOOT.md",
+    "reason": "Run P17_VERIFY_TOOLCHAIN before seed thesis or implementation."
+  },
+  "last_verified_at": null
+}

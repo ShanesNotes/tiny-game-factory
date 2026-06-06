@@ -1,0 +1,22 @@
+{
+  "scores": {
+    "meaningful_choice": 2,
+    "tradeoff": 2,
+    "pressure": 2,
+    "uncertainty": 1,
+    "progression": 1,
+    "mastery": 2,
+    "combinatorial": 1,
+    "emergence": 1,
+    "replayable_variation": 2,
+    "failure_recovery": 1,
+    "expression": 1,
+    "expansion_headroom": 1
+  },
+  "total": 17,
+  "evidence": [
+    "skilled bot scored 2.3x random bot over 20 runs",
+    "no single action exceeded 40% of meaningful actions"
+  ],
+  "verdict": "ADVANCE"
+}
