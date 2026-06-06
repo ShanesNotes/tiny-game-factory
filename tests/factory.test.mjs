@@ -176,6 +176,29 @@ test("schemas reject undeclared properties (additionalProperties:false)", () => 
   }
 });
 
+test("validate-artifacts --check issues validates local issue files", () => {
+  const dir = tmp();
+  try {
+    const issues = path.join(dir, ".tgf", "issues");
+    fs.mkdirSync(issues, { recursive: true });
+    fs.writeFileSync(path.join(issues, "add-guard.md"), "---\nid: add-guard\ntitle: T\ntype: chore\nstate: needs-triage\nafk: ready-for-agent\n---\nbody\n");
+    let r = node("validate-artifacts.mjs", ["--check", "issues"], { cwd: dir });
+    assert.equal(r.status, 0, r.stdout);
+    fs.writeFileSync(path.join(issues, "broken.md"), "---\nid: wrong-id\ntitle: T\ntype: epic\nstate: needs-triage\nafk: ready-for-agent\n---\n");
+    r = node("validate-artifacts.mjs", ["--check", "issues"], { cwd: dir });
+    assert.equal(r.status, 1, r.stdout);
+    assert.match(r.stdout, /type 'epic' not in|must match filename/);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("validate-artifacts --check issues is a no-op when .tgf/issues is absent", () => {
+  const dir = tmp();
+  try {
+    const r = node("validate-artifacts.mjs", ["--check", "issues"], { cwd: dir });
+    assert.equal(r.status, 0, r.stdout);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
 test("registry gate thresholds stay in sync with factory.config.toml", () => {
   const toml = fs.readFileSync(rel("factory.config.toml"), "utf8");
   const num = (key) => {

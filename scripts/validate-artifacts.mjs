@@ -212,6 +212,32 @@ function checkGate() {
   return errors;
 }
 
+// --- local issue files (.tgf/issues/*.md): structural check per issue-tracker.md ---
+// No-op when .tgf/issues/ is absent (the convention is not active yet). Keeps the
+// borrowed to-issues/to-prd/triage output honest the moment it lands locally.
+const ISSUE_TYPES = ["bug", "feature", "chore", "slice"];
+function checkIssues() {
+  const errors = [];
+  const dir = path.join(process.cwd(), ".tgf", "issues");
+  if (!fs.existsSync(dir)) return errors;
+  for (const name of fs.readdirSync(dir)) {
+    if (!name.endsWith(".md")) continue;
+    const fm = fs.readFileSync(path.join(dir, name), "utf8").match(/^---\n([\s\S]*?)\n---/);
+    if (!fm) { errors.push(`${name}: missing YAML front matter`); continue; }
+    const front = fm[1];
+    const field = (k) => { const m = front.match(new RegExp(`^${k}:\\s*(.+)$`, "m")); return m ? m[1].trim() : null; };
+    const stem = name.replace(/\.md$/, "");
+    if (!/^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(stem)) errors.push(`${name}: filename must be a kebab-case slug`);
+    if (field("id") !== stem) errors.push(`${name}: id '${field("id")}' must match filename '${stem}'`);
+    for (const req of ["title", "type", "state", "afk"]) {
+      if (!field(req)) errors.push(`${name}: missing required front-matter key '${req}'`);
+    }
+    const type = field("type");
+    if (type && !ISSUE_TYPES.includes(type)) errors.push(`${name}: type '${type}' not in ${ISSUE_TYPES.join("|")}`);
+  }
+  return errors;
+}
+
 const CHECKS = {
   "required-tree": checkRequiredTree,
   schemas: checkSchemas,
@@ -219,12 +245,13 @@ const CHECKS = {
   "no-default-engine": checkNoDefaultEngine,
   "skill-refs": checkSkillRefs,
   gate: checkGate,
+  issues: checkIssues,
   run: () => checkRun(arg("seed-id"))
 };
 
 const mode = arg("check") || "all";
 const toRun = mode === "all"
-  ? ["required-tree", "schemas", "generated-leakage", "no-default-engine", "skill-refs", "gate"]
+  ? ["required-tree", "schemas", "generated-leakage", "no-default-engine", "skill-refs", "gate", "issues"]
   : [mode];
 
 let totalErrors = 0;
