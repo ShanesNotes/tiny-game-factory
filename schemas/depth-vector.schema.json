@@ -11,8 +11,14 @@
         "tradeoff",
         "pressure",
         "uncertainty",
+        "progression",
         "mastery",
-        "replayable_variation"
+        "combinatorial",
+        "emergence",
+        "replayable_variation",
+        "failure_recovery",
+        "expression",
+        "expansion_headroom"
       ],
       "properties": {
         "meaningful_choice": { "type": "integer", "minimum": 0, "maximum": 2 },

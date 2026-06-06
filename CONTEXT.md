@@ -35,9 +35,11 @@ The child game root is a **declared default, not a created path**. Nothing creat
 `/home/ark/tgf-games/` until an explicit child-game phase. An opt-in
 `runs/{seed-id}/game/` bundled mode exists but is not the default.
 
-**Separation is absolute:** factory vocabulary, ledgers, hooks, and skill docs
-must never leak into a generated child game. The `generated-leakage` validator
-enforces this against `templates/game-repo/**`.
+**Separation is absolute:** factory state — `.tgf/`/`.omx/`/`.sandcastle/` paths,
+GStack/Pocock/OMX/Sandcastle markers, ledgers, handoffs, skill docs, source-product
+terms, and absolute `/home/ark/...` paths — must never leak into a generated child
+game. The `generated-leakage` validator forbids these across every generated-game
+surface (child-repo templates and example seeds).
 
 ## Manifest beats memory
 
@@ -57,7 +59,13 @@ release-candidate · handoff · blocked · failed · killed · complete
 ```
 
 `blocked`, `failed`, `killed`, and `complete` are terminal: resuming from them
-requires an evidence-backed ledger transition.
+requires an evidence-backed ledger transition. A run is **initialized at
+`toolchain`** (the standard sentence-seed entry); **`intake`** is the entry phase
+only when a raw/vague seed or an inherited repo needs office-hours grilling before
+the thesis. `deepen` and `fun-lock` are gate *states*, not prompts: `deepen` is
+driven by a `DEEPEN` depth verdict (one transform, ≤2 attempts), and `fun-lock` is
+the state entered when the anti-boring gate + depth minimum pass, recorded by a
+ledger transition.
 
 ## Workflow contract (P00–P17)
 
@@ -98,9 +106,11 @@ A slice cannot advance to content/art/polish/multiplayer until it passes:
 4. **Second-Session Test** — is there a reason to replay after understanding the
    loop once? "More levels" and "better art" do not count.
 
-Plus a **depth vector**: twelve axes scored 0/1/2 (`schemas/depth-vector`).
-**Minimum for fun-lock: total ≥ 16/24 with nonzero Choice, Tradeoff, Pressure,
-Uncertainty, Mastery, and Replayable Variation.**
+Plus a **depth vector**: twelve named axes, each scored 0/1/2 — all twelve are
+required (`schemas/depth-vector`). **Minimum for fun-lock: total ≥ 16/24 with
+nonzero Choice, Tradeoff, Pressure, Uncertainty, Mastery, and Replayable
+Variation.** The ≥16 total and nonzero-axes rule is applied by the depth red-team
+(P07), not by the schema, which only checks the axes are present and in range.
 
 ## No default engine (ADR 0002 / `docs/engine-matrix.md`)
 
@@ -108,7 +118,9 @@ There is **no default engine before `GAME_THESIS.md`**. Raw Canvas + TypeScript 
 a strong common candidate, not a default. Engine choice is scored after the thesis
 (headless testability, iteration speed, fantasy/loop fit, deterministic sim,
 migration cost, visual-wow-no-game risk, editor opacity, toolchain-verified) and
-recorded as a reversible ADR. Engine migration always requires a new decision file.
+recorded as a reversible **per-seed engine decision** (`decisions/0001-engine-profile.md`
+— a seed-scoped, ADR-style record, distinct from the factory `docs/adr/`). Engine
+migration always requires a new decision file.
 
 ## Lane policy
 

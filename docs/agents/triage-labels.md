@@ -1,9 +1,10 @@
 # Triage labels — canonical vocabulary
 
 The canonical label set for the factory's **local** tracker (issues live as
-markdown under `.tgf/seeds/{seed-id}/` or the workspace `.scratch/`, never a remote
-host by default — ADR 0004). The borrowed `triage` and `to-issues` skills read this
-file as their label authority.
+markdown under `.tgf/issues/` — or `.scratch/` for pre-triage notes — never a remote
+host by default, per `issue-tracker.md` and ADR 0004; per-seed run state under
+`.tgf/seeds/{seed-id}/` is evidence, not issues). The borrowed `triage` and
+`to-issues` skills read this file as their label authority.
 
 **HARD RULE: these five labels are the entire vocabulary. Do not invent, alias, or
 extend it.** A need that no label covers is a signal to sharpen the issue, not to

@@ -1,7 +1,9 @@
 # ADR 0004 — Factory layout and skill packaging
 
-- Status: **Accepted** (reconciliation; decided by the 2026-06-06 implementation
-  handoff and the owned-skills package plan)
+- Status: **Proposed — pending owner confirmation.** Reconciliation recorded by the
+  implementing agent; it supersedes the user-accepted clean-init spec §4 tree layout
+  (while preserving D012's "project-local skills first" principle), so it is **not**
+  self-Accepted — the owner confirms or reverses it. See decision register D013.
 - Date: 2026-06-06
 
 ## Context
@@ -35,27 +37,45 @@ Adopt the **later, authoritative layout**:
   Pocock skills; those skills are **wrapped/referenced, never vendored**, and
   generic issue/PRD/triage skills route through local artifacts (no remote publish
   by default).
-- `adapters/{codex,claude-code,grok-build,mcp}/` are thin per-host mirrors; the
-  `.codex/skills/` definitions are the source of truth.
-- Everything else follows clean-init spec §4: eight hyphenated `schemas/`, seven
-  `hooks/`, five `scripts/`, `templates/run/` + `templates/game-repo/`,
-  `examples/`, `docs/` with `adr/`.
+- `adapters/{codex,claude-code,grok-build,mcp}/` are thin per-builder mirrors
+  (currently READMEs and Claude-Code role briefs; the mirroring is not
+  validator-enforced); the `.codex/skills/` definitions are the source of truth.
+- This ADR supersedes only §4's prompt path (`prompts/` → `.factory/prompts/`), skill
+  location and count (`skills/` with 6 → `.codex/skills/` with 12), and the P07
+  filename. Everything else follows §4 verbatim: eight hyphenated `schemas/`, seven
+  `hooks/`, five `scripts/`, `templates/run/` + `templates/game-repo/`, `examples/`,
+  and `docs/` with `adr/`.
 
-Each wrapper references exactly one existing prompt/contract or declares itself a
+Each wrapper references at least one existing prompt/contract or declares itself a
 router; `validate-artifacts.mjs --check skill-refs` enforces this.
+
+## Alternatives considered
+
+- *Keep the flat `prompts/` + six top-level `skills/` layout* as clean-init §4
+  dictated.
+- *Adopt the handoff layout* (chosen). It wins on substance, not recency: the v0.3
+  init pack already ships prompts under `.factory/prompts/`; the twelve wrappers map
+  1:1 to the P00–P17 phases (six were missing under the old six-skill set); and
+  `docs/agents/` is required to ground the borrowed Matt Pocock skills. The cost —
+  `.codex` coupling and a second skill-location stratum — is accepted for that
+  phase coverage.
 
 ## Consequences
 
 - The clean-init spec §4 flat `prompts/`/`skills/` layout (6 skills) is
-  **superseded** by this ADR. The test spec stays satisfied because its checks are
-  path-agnostic ("prompts P00–P17 exist", "schemas parse") and the validator asserts
-  the actual tree.
+  **superseded** by this ADR. The test spec stays satisfied: its checks are
+  path-agnostic — §3.1 requires only that prompts P00–P17 and the schemas exist (no
+  directory named), §3.2 parses `schemas/*.json`, and the §4 acceptance matrix names
+  no `prompts/`/`skills/`/`.codex`/`.factory` path or P07 filename — and the validator
+  asserts the actual tree.
 - Post-fun-lock prompts (`P05`, `P06`, `P09`–`P12`, `P14`) ship as contracts; their
   wrappers are deferred until gameplay proof exists.
 
 ## Provenance / caveat
 
 This ADR records a decision made in the implementation handoff, not a novel
-architectural choice invented here. It is flagged in the initialization report so it
-can be revisited; if the flat layout is preferred, this ADR is the single place to
-reverse.
+architectural choice invented here. Because it reverses a detail of the user-accepted
+clean-init spec §4 (the flat prompts/skills tree) without a direct owner ratification
+— while preserving D012's "project-local skills first" principle — its status is
+**Proposed** and decision register **D013** tracks the open confirmation. It is flagged in the initialization report so it can be
+revisited; if the flat layout is preferred, this ADR is the single place to reverse.
