@@ -156,6 +156,8 @@ function checkRun(seedId) {
   runState.validateManifest(manifest).forEach((e) => errors.push(`manifest ${e}`));
   runState.manifestPathPolicyErrors(manifest, seedId).forEach((e) => errors.push(e));
   runState.phaseArtifactConstraintErrors(manifest).forEach((e) => errors.push(e));
+  runState.questionBudgetErrors(manifest).forEach((e) => errors.push(e));
+  runState.deepenAttemptErrors(manifest).forEach((e) => errors.push(e));
   if (!["toolchain", "intake"].includes(manifest.current_phase)) errors.push(`current_phase must be toolchain|intake, got ${manifest.current_phase}`);
   if (manifest.external_side_effects_allowed !== false) errors.push("external_side_effects_allowed must be false");
 

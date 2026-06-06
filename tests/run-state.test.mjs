@@ -77,6 +77,20 @@ test("phaseArtifactConstraintErrors enforces thesis/engine paths strictly after 
   assert.deepEqual(rs.phaseArtifactConstraintErrors({ current_phase: "killed", game_thesis_path: null, engine_decision_path: null }), []);
 });
 
+test("questionBudgetErrors enforces <=1 direction-changing question before first-slice", () => {
+  const q = (n) => Array.from({ length: n }, (_, i) => ({ question: `q${i}`, recommended_default: "d", phase_asked: "thesis" }));
+  assert.deepEqual(rs.questionBudgetErrors({ current_phase: "thesis", questions_asked: q(1) }), []);
+  assert.ok(rs.questionBudgetErrors({ current_phase: "thesis", questions_asked: q(2) }).length > 0);
+  assert.deepEqual(rs.questionBudgetErrors({ current_phase: "toolchain", questions_asked: q(5) }), []); // not yet gated
+  assert.deepEqual(rs.questionBudgetErrors({ current_phase: "first-slice" }), []); // no field -> 0
+});
+
+test("deepenAttemptErrors enforces the 2-attempt deepen cap", () => {
+  assert.deepEqual(rs.deepenAttemptErrors({ current_phase: "deepen", deepen_attempt_count: 2 }), []);
+  assert.ok(rs.deepenAttemptErrors({ current_phase: "deepen", deepen_attempt_count: 3 }).length > 0);
+  assert.deepEqual(rs.deepenAttemptErrors({ current_phase: "killed", deepen_attempt_count: 3 }), []);
+});
+
 test("readLedger is crash-safe: a malformed line is skipped and reported", () => {
   const dir = tmp();
   try {

@@ -159,6 +159,23 @@ test("factory-contract registry matches the filesystem", () => {
   assert.equal(fs.readdirSync(rel("hooks")).filter((f) => f.endsWith(".mjs")).length, HOOKS.length, "hook count");
 });
 
+test("schemas reject undeclared properties (additionalProperties:false)", () => {
+  const pairs = {
+    "minimal-seed-manifest.json": "seed-manifest.schema.json",
+    "minimal-game-thesis.json": "game-thesis.schema.json",
+    "minimal-playtest-report.json": "playtest-report.schema.json",
+    "minimal-depth-vector.json": "depth-vector.schema.json",
+    "minimal-ledger-row.json": "execution-ledger-row.schema.json"
+  };
+  for (const [fixture, schemaFile] of Object.entries(pairs)) {
+    const schema = JSON.parse(fs.readFileSync(rel("schemas", schemaFile), "utf8"));
+    const data = JSON.parse(fs.readFileSync(rel("examples/fixtures", fixture), "utf8"));
+    assert.deepEqual(validate(schema, data), [], `${fixture} should still validate`);
+    const errs = validate(schema, { ...data, injected_evil_field: "x" });
+    assert.ok(errs.some((e) => /additional property/.test(e)), `${fixture} must reject an injected field`);
+  }
+});
+
 test("registry gate thresholds stay in sync with factory.config.toml", () => {
   const toml = fs.readFileSync(rel("factory.config.toml"), "utf8");
   const num = (key) => {

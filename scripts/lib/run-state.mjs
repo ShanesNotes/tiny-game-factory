@@ -197,3 +197,23 @@ export function phaseArtifactConstraintErrors(manifest) {
   }
   return errors;
 }
+
+// Doctrine: at most one direction-changing taste question before the first slice
+// (factory.config.toml human_questions_max_before_first_slice). Returns error strings.
+const BEFORE_FIRST_SLICE = ["thesis", "engine-profile", "prototype-dispatch", "first-slice"];
+export function questionBudgetErrors(manifest) {
+  const asked = Array.isArray(manifest.questions_asked) ? manifest.questions_asked.length : 0;
+  if (BEFORE_FIRST_SLICE.includes(manifest.current_phase) && asked > 1) {
+    return [`questions_asked=${asked} but at most 1 direction-changing question is allowed before first-slice`];
+  }
+  return [];
+}
+
+// Doctrine: a DEEPEN loop gets at most two transform attempts, then it is killed.
+export function deepenAttemptErrors(manifest) {
+  const n = Number(manifest.deepen_attempt_count || 0);
+  if (n > 2 && manifest.current_phase !== "killed") {
+    return [`deepen_attempt_count=${n} exceeds the 2-attempt limit (the loop should be killed)`];
+  }
+  return [];
+}
