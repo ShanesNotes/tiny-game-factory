@@ -69,9 +69,14 @@ ledger transition.
 
 ## Workflow contract (P00–P17)
 
+`P00_ORCHESTRATOR_ULTRAGOAL` (`tgf-harness`) is a **router**, not a phase: it reads
+`manifest.current_phase` and dispatches to the skills below. `orchestrate` is therefore
+not in the § Phase vocabulary. Canonical machine-readable lists of phases, prompts,
+skills, schemas, and hooks live in `scripts/lib/factory-contract.mjs`; this table is the
+human-friendly view.
+
 | Phase | Prompt | TGF skill | Output |
 |---|---|---|---|
-| orchestrate | `P00_ORCHESTRATOR_ULTRAGOAL` | `tgf-harness` (router) | manifest routing |
 | intake | (P00/P01 prelude) | `tgf-office-hours-grill` | `intake/office-hours.md`, ≤1 question |
 | toolchain | `P17_VERIFY_TOOLCHAIN` | `tgf-verify-toolchain` | toolchain ledger from real probes |
 | thesis | `P01_SEED_COMPILE` | `tgf-seed-compile` | `GAME_THESIS.md` |

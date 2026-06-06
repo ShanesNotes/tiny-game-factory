@@ -7,9 +7,10 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { HOOKS } from "./lib/factory-contract.mjs";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const HOOKS = path.join(REPO, "hooks");
+const HOOKS_DIR = path.join(REPO, "hooks");
 
 function write(dir, rel, content) {
   const p = path.join(dir, rel);
@@ -46,7 +47,7 @@ for (const sc of scenarios) {
   const sandbox = fs.mkdtempSync(path.join(os.tmpdir(), "tgf-gate-"));
   try {
     sc.setup(sandbox);
-    const r = spawnSync(process.execPath, [path.join(HOOKS, `${sc.guard}.mjs`), ...sc.args], { cwd: sandbox, encoding: "utf8" });
+    const r = spawnSync(process.execPath, [path.join(HOOKS_DIR, `${sc.guard}.mjs`), ...sc.args], { cwd: sandbox, encoding: "utf8", env: { ...process.env, ...(sc.env || {}) } });
     const got = r.status;
     results.push({ ...sc, got, pass: got === sc.expect });
   } finally {
@@ -54,10 +55,19 @@ for (const sc of scenarios) {
   }
 }
 
+// Coverage: every guard registered in the factory-contract must have at least one
+// proof scenario, so a newly added guard cannot ship unproven.
+const covered = new Set(scenarios.map((s) => s.guard));
+const uncovered = HOOKS.filter((h) => !covered.has(h));
+
 let failed = 0;
 for (const r of results) {
   if (!r.pass) failed++;
   console.log(`${r.pass ? "✓" : "✗"} ${r.guard} [${r.kind}] expected exit ${r.expect}, got ${r.got}`);
 }
-console.log(failed ? `\n${failed} guard scenario(s) failed.` : `\nAll ${results.length} guard scenarios passed.`);
+for (const h of uncovered) {
+  failed++;
+  console.log(`✗ ${h} [COVERAGE] registered guard has no gate scenario`);
+}
+console.log(failed ? `\n${failed} guard scenario(s) failed.` : `\nAll ${results.length} guard scenarios passed (${HOOKS.length} guards covered).`);
 process.exit(failed ? 2 : 0);

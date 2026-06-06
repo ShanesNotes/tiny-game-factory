@@ -8,6 +8,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { validate } from "./lib/validate-json-schema.mjs";
 import * as runState from "./lib/run-state.mjs";
+import { SKILLS, SCHEMAS, HOOKS, FIXTURE_SCHEMA, PROMPT_MAX } from "./lib/factory-contract.mjs";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rel = (...p) => path.join(REPO, ...p);
@@ -18,29 +19,8 @@ function arg(name) {
   return i >= 0 ? process.argv[i + 1] : null;
 }
 
-const SKILLS = [
-  "tgf-harness", "tgf-office-hours-grill", "tgf-verify-toolchain", "tgf-seed-compile",
-  "tgf-engine-profile", "tgf-prototype-dispatch", "tgf-first-slice", "tgf-depth-redteam",
-  "tgf-branch-bakeoff", "tgf-existing-project-rescue", "tgf-repo-scout", "tgf-handoff"
-];
-
-const SCHEMAS = [
-  "seed-manifest", "game-thesis", "engine-profile-decision", "playtest-report",
-  "depth-vector", "branch-score", "execution-ledger-row", "asset-provenance"
-];
-
-const HOOKS = [
-  "scope_brake", "art_fidelity_cap", "asset_provenance", "engine_migration_requires_adr",
-  "phaser_version_pin", "playtest_report_required", "afk_heartbeat_required"
-];
-
-const FIXTURE_SCHEMA = {
-  "minimal-seed-manifest.json": "seed-manifest.schema.json",
-  "minimal-game-thesis.json": "game-thesis.schema.json",
-  "minimal-playtest-report.json": "playtest-report.schema.json",
-  "minimal-depth-vector.json": "depth-vector.schema.json",
-  "minimal-ledger-row.json": "execution-ledger-row.schema.json"
-};
+// SKILLS, SCHEMAS, HOOKS, FIXTURE_SCHEMA, PROMPT_MAX come from the factory-contract
+// registry (scripts/lib/factory-contract.mjs) — the single source of truth.
 
 // --- required tree ---
 function checkRequiredTree() {
@@ -68,7 +48,7 @@ function checkRequiredTree() {
   // prompts P00..P17
   const promptDir = rel(".factory/prompts");
   const promptFiles = fs.existsSync(promptDir) ? fs.readdirSync(promptDir) : [];
-  for (let n = 0; n <= 17; n++) {
+  for (let n = 0; n <= PROMPT_MAX; n++) {
     const pre = `P${String(n).padStart(2, "0")}_`;
     if (!promptFiles.some((f) => f.startsWith(pre) && f.endsWith(".md"))) errors.push(`missing prompt: .factory/prompts/${pre}*.md`);
   }

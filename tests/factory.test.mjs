@@ -6,6 +6,7 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { validate } from "../scripts/lib/validate-json-schema.mjs";
+import { SKILLS, SCHEMAS, HOOKS, THRESHOLDS } from "../scripts/lib/factory-contract.mjs";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rel = (...p) => path.join(REPO, ...p);
@@ -16,11 +17,6 @@ function node(script, args, opts = {}) {
 function tmp() {
   return fs.mkdtempSync(path.join(os.tmpdir(), "tgf-test-"));
 }
-
-const SCHEMAS = [
-  "seed-manifest", "game-thesis", "engine-profile-decision", "playtest-report",
-  "depth-vector", "branch-score", "execution-ledger-row", "asset-provenance"
-];
 
 test("all schemas parse and declare $schema/title/type", () => {
   for (const s of SCHEMAS) {
@@ -151,4 +147,27 @@ test("validate-artifacts --check run passes for a created run", () => {
 test("run-gates --dry-run proves all guards gate", () => {
   const r = node("run-gates.mjs", ["--dry-run"]);
   assert.equal(r.status, 0, r.stdout + r.stderr);
+});
+
+test("factory-contract registry matches the filesystem", () => {
+  for (const s of SKILLS) assert.ok(fs.existsSync(rel(".codex/skills", s, "SKILL.md")), `skill file for ${s}`);
+  for (const s of SCHEMAS) assert.ok(fs.existsSync(rel("schemas", `${s}.schema.json`)), `schema file for ${s}`);
+  for (const h of HOOKS) assert.ok(fs.existsSync(rel("hooks", `${h}.mjs`)), `hook file for ${h}`);
+  // and no stray files the registry forgot
+  assert.equal(fs.readdirSync(rel(".codex/skills")).filter((d) => fs.existsSync(rel(".codex/skills", d, "SKILL.md"))).length, SKILLS.length, "skill count");
+  assert.equal(fs.readdirSync(rel("schemas")).filter((f) => f.endsWith(".schema.json")).length, SCHEMAS.length, "schema count");
+  assert.equal(fs.readdirSync(rel("hooks")).filter((f) => f.endsWith(".mjs")).length, HOOKS.length, "hook count");
+});
+
+test("registry gate thresholds stay in sync with factory.config.toml", () => {
+  const toml = fs.readFileSync(rel("factory.config.toml"), "utf8");
+  const num = (key) => {
+    const m = toml.match(new RegExp(`^${key}\\s*=\\s*([0-9.]+)`, "m"));
+    assert.ok(m, `factory.config.toml missing ${key}`);
+    return Number(m[1]);
+  };
+  assert.equal(num("depth_vector_min_total"), THRESHOLDS.depth_vector_min_total);
+  assert.equal(num("dominant_move_max_action_share"), THRESHOLDS.dominant_move_max_action_share);
+  assert.equal(num("minimum_bot_session_seconds"), THRESHOLDS.minimum_bot_session_seconds);
+  assert.equal(num("nightly_bot_session_seconds"), THRESHOLDS.nightly_bot_session_seconds);
 });
