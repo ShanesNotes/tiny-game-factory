@@ -1,7 +1,8 @@
 # End-to-end harness + factory test, with Karpathy-style autoresearch — RESULT
 
-**Date:** 2026-06-07 · **Mission:** `.omx/goals/autoresearch/dolphin-tgf-e2e/`
-(durable omx state: mission, rubric, ledger of verdicts).
+**Date:** 2026-06-07 · **Mission:** autoresearch dolphin-tgf-e2e (OMX goal state was
+local-only under `.omx/goals/autoresearch/dolphin-tgf-e2e/`, gitignored; this file is
+the committed canonical record).
 
 ## What this was
 

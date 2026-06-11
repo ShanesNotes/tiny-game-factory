@@ -1,26 +1,27 @@
 # Initialization Handoff — Tiny Game Factory
 
-Status: **initialized and verify-green (v0.1.0).** No game has been generated; no
-child game repo or `/home/ark/tgf-games/` exists; source repos untouched.
+> **Historical record (2026-06 init).** For current status see `README.md` and
+> `docs/handoffs/dolphin-tgf-e2e-RESULT.md`. Counts below reflect the tree at
+> merge time; run `npm run verify` for live proof.
 
-> **Update (2026-06-06):** an architecture-deepening pass landed on branch
-> `deepen-architecture` (run-state module, factory-contract registry, guard-policy
-> module, anti-boring gate consistency checker, 4 new guards, schema hardening, +
-> doc coherence). It is verify-green and pending owner review + the ADR 0004 call
-> below. See `docs/handoffs/claude-architecture-deepening-RESULT.md`.
+Status at init: **initialized and verify-green (v0.1.0).** No child game repo or
+`/home/ark/tgf-games/` existed yet; source repos untouched.
+
+**Later (2026-06-07):** e2e validation drove two seeds to fun-lock and shipped
+`advance-run.mjs` plus run-validator fixes — see `docs/handoffs/dolphin-tgf-e2e-RESULT.md`.
 
 ## Layout decision — resolved
 
 **ADR 0004 (factory layout) is `Accepted`** (owner-confirmed 2026-06-06; register
 **D013** resolved). The repo uses `.factory/prompts/` + `.codex/skills/` (12 wrappers)
 + `docs/agents/`, superseding the flat `prompts/` + `skills/`-with-6 layout of
-clean-init spec §4 (which is amended to point at ADR 0004). No open governance items
-remain.
+clean-init spec §4 (which is amended to point at ADR 0004). Architecture deepening
+merged on `deepen-architecture`; see `docs/handoffs/claude-architecture-deepening-RESULT.md`.
 
 ## Verify
 
 ```bash
-npm run verify     # lint (15/15) + validate-artifacts (5 checks) + run-gates (14) + tests (11)
+npm run verify     # lint + validate-artifacts (7 checks) + run-gates (11 guards) + tests
 ```
 
 Plus the on-demand initializer check (creates only `.tgf/seeds/{id}`):
@@ -43,18 +44,18 @@ node scripts/verify-local-tools.mjs --write docs/toolchain-verification-ledger.m
 ## What was built
 
 - `docs/` doctrine, engine matrix, anti-boring gate, hooks/guards, ledgers; `adr/`
-  0001–0004; `agents/` (domain, issue-tracker, triage-labels) for borrowed skills.
+  0001–0005; `agents/` (domain, issue-tracker, triage-labels) for borrowed skills.
 - `.factory/prompts/` P00–P17 task contracts (normalized; `P07_DEPTH_RED_TEAM.md`).
 - `.codex/skills/` 12 TGF wrappers (wrap/reference Pocock skills, never vendor).
 - `schemas/` 8 JSON schemas + `examples/fixtures/` 5 fixtures; zero-dep validator.
-- `hooks/` 7 blocking guards; `scripts/` init-game-run, validate-artifacts, run-gates,
-  verify-local-tools, summarize-run.
+- `hooks/` 11 blocking guards; `scripts/` init-game-run, advance-run, validate-artifacts,
+  run-gates, verify-local-tools, summarize-run.
 - `templates/run/` (seed run state) + `templates/game-repo/` (leakage-clean child).
 
 ## Constraints honored
 
-No `/home/ark/tgf-games/`; no child game repo; no engine scaffolded before a thesis;
-no orchestration/source leakage into child-game templates; the three source repos
-(`tiny-app-factory`, `tincture-of-mercy`, `rescue-town-builders`) are byte-unchanged
-(before/after snapshots under `.omx/ultragoal/source-status/`); no external/credentialed
-action. Full audit: `.omx/ultragoal/tiny-game-factory-implementation-final-report.md`.
+No `/home/ark/tgf-games/` at init; no child game repo; no engine scaffolded before a
+thesis; no orchestration/source leakage into child-game templates; the three source
+repos (`tiny-app-factory`, `tincture-of-mercy`, `rescue-town-builders`) were
+byte-unchanged at init. OMX ultragoal audit artifacts were local-only (not committed);
+committed handoff records live under `docs/handoffs/`.

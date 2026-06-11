@@ -73,10 +73,10 @@ not publish remotely by default.
 
 ## Gates (must block, not warn)
 
-`scripts/run-gates.mjs --dry-run` proves the guards in `hooks/` block their unsafe
-scenario: `scope_brake`, `art_fidelity_cap`, `asset_provenance`,
-`engine_migration_requires_adr`, `phaser_version_pin`, `playtest_report_required`,
-`afk_heartbeat_required`. Harden them if needed; do not remove one without an ADR.
+`scripts/run-gates.mjs --dry-run` proves every guard in `factory.config.toml` `[hooks]`
+blocks its unsafe scenario (11 guards — see `docs/hooks-and-guards.md` and
+`scripts/lib/factory-contract.mjs`). Harden them if needed; do not remove one
+without an ADR.
 
 ## Before claiming done
 

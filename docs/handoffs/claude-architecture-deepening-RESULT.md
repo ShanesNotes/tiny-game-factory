@@ -1,10 +1,13 @@
 # Architecture Deepening — Result
 
-Branch: `deepen-architecture` (off `main`). `npm run verify` green throughout; one
-verify-green commit per slice. All six findings from
+> **Superseded on ADR 0004 acceptance (2026-06-06).** ADR 0004 is now **Accepted**
+> (owner-confirmed; register D013 resolved). E2e validation followed on 2026-06-07;
+> see `docs/handoffs/dolphin-tgf-e2e-RESULT.md`.
+
+Branch: `deepen-architecture` (merged to `main`). `npm run verify` green throughout;
+one verify-green commit per slice. All six findings from
 `claude-architecture-deepening.md` plus an adversarially-verified `/improve-codebase-
-architecture` pass were addressed. **ADR 0004 is untouched (still Proposed)** — its
-ratification is the one decision left to the owner.
+architecture` pass were addressed.
 
 ## What changed, by finding
 
@@ -60,15 +63,14 @@ rather than merely asserting it.
 ## Verification
 
 ```
-npm run verify     # lint 25/25 + validate-artifacts (7 checks) + run-gates (31, 11 guards) + tests 33
+npm run verify     # live proof — do not trust archived counts
 ```
 
-All green. No child game repo, no `/home/ark/tgf-games`, no engine scaffolded; source
-repos untouched; zero new dependencies.
+All green at merge. No child game repo, no `/home/ark/tgf-games`, no engine scaffolded;
+source repos untouched; zero new dependencies.
 
 ## Remaining risks / deferred
 
-- ADR 0004 unratified (owner decision; nothing else blocks on it).
 - `deepen-apply` wrapper deferred until a real run needs it (only the
   `deepen_attempt_count` invariant ships now).
 - `--check issues`/`--check gate --file` and the phase-transition/question/deepen

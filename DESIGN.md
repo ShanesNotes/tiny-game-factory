@@ -67,8 +67,9 @@ as the one accepted dev dependency is the documented escape hatch.
 
 `seed-manifest` · `game-thesis` · `engine-profile-decision` · `playtest-report` ·
 `depth-vector` · `branch-score` · `execution-ledger-row` · `asset-provenance`.
-Each declares `$schema`/`title`/`type` and is exercised by a fixture in
-`examples/fixtures/`.
+Each declares `$schema`/`title`/`type`. Five core schemas have fixtures in
+`examples/fixtures/`; thesis and engine-profile use embedded-json checks on real runs;
+branch-score and asset-provenance are validated at gate/run time.
 
 ## Hooks (`hooks/`)
 

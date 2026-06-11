@@ -1,12 +1,17 @@
 # Claude Handoff — Tiny Game Factory Architecture Deepening
 
+> **Historical mission brief (2026-06).** Completed and merged on `deepen-architecture`.
+> For outcomes see `claude-architecture-deepening-RESULT.md`; for current status see
+> `README.md`. ADR 0004 is **Accepted** (owner-confirmed 2026-06-06). Run
+> `npm run verify` for live proof — do not trust archived counts below.
+
 You are working in `/home/ark/tiny-game-factory`.
 
 ## Mission
 
 Run an architecture-deepening pass on the initialized Tiny Game Factory repo. Start from the six findings below, choose the highest-leverage candidate, and produce a clean plan or small implementation slice that improves locality, leverage, testability, and AI-navigability without violating the factory doctrine.
 
-Do **not** start a game seed. Do **not** create `/home/ark/tgf-games`. Do **not** accept or reverse ADR 0004 unless the user explicitly gives that decision.
+Do **not** start a game seed. Do **not** create `/home/ark/tgf-games`.
 
 ## Required read path
 
@@ -28,23 +33,21 @@ Read these first, in order:
 The repo was freshly analyzed after initialization:
 
 - `npm run verify` passed.
-- Lint: 15/15 files OK.
+- Lint: all `.mjs` files OK (run `npm run lint` for the current count).
 - Artifact validation: required tree, schemas, generated leakage, no default engine, skill refs all passed.
-- Gates: 14/14 guard scenarios passed.
-- Tests: 11/11 passed.
+- Gates: all guard scenarios passed (run `npm run gates` for the current count).
+- Tests: all passed (run `npm test` for the current count).
 - Git tree was clean after verification.
 
-## Open governance point
+## Layout (resolved — ADR 0004 Accepted)
 
-ADR 0004 / D013 is still **Proposed**, not Accepted.
-
-The repo currently uses:
+The repo uses:
 
 - `.factory/prompts/` for P00–P17
 - `.codex/skills/` for 12 TGF wrappers
 - `docs/agents/` for borrowed Matt Pocock-style skill context
 
-This supersedes an earlier clean-init spec detail that used flat `prompts/` + `skills/` with 6 skills. The implementation records this as Proposed because it reversed a ratified planning detail. Treat the layout as current working reality, but do not mark ADR 0004 Accepted without user confirmation.
+This supersedes an earlier clean-init spec detail that used flat `prompts/` + `skills/` with 6 skills. See `docs/adr/0004-factory-layout-and-skill-packaging.md`.
 
 ## Six architecture-deepening findings
 
@@ -111,7 +114,7 @@ Each hook owns its own argv/cwd parsing and blocking behavior. Gate scenarios li
 
 **Deepening direction**
 
-Deepen guard execution into a shared guard-policy Module while keeping each guard rule focused. Preserve executable hooks and current 14 scenario checks.
+Deepen guard execution into a shared guard-policy Module while keeping each guard rule focused. Preserve executable hooks and gate dry-run coverage.
 
 **Benefits**
 
@@ -212,7 +215,7 @@ If implementing, finish with:
 - why this increases Depth
 - verification commands and results
 - remaining risks
-- whether ADR 0004 remains untouched
+- whether ADR 0004 status changed (it should not — already Accepted)
 
 ## Verification gate
 

@@ -19,5 +19,6 @@ logic.
 - **Subagents must be explicitly requested.** No assumed silent parallelism — the
   parent runs solo by default and only fans out into lanes when asked, with disjoint
   touch sets, then integrates and owns verification.
-- **Hooks in `hooks/` are the guards.** They block unsafe actions; treat a blocked
-  gate as a stop, not a warning. Do not remove a guard without an ADR.
+- **Hooks in `hooks/` are the guards** — all 11 entries in `factory.config.toml`
+  `[hooks]` (listed in `docs/hooks-and-guards.md`). They block unsafe actions; treat
+  a blocked gate as a stop, not a warning. Do not remove a guard without an ADR.

@@ -1,6 +1,10 @@
 node_modules/
+.env
+.env.*
 .factory/local_tool_probe.json
 *.local
+*.local.json
+.claude/
 .DS_Store
 # Per-run state and research runtime (durable on disk, not factory source).
 # A completed run's evidence lives in .tgf/seeds/<id>/, the child game repo's

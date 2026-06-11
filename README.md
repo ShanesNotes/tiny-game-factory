@@ -52,19 +52,24 @@ schemas/         8 JSON schemas (manifest, thesis, playtest, depth, branch, ...)
 hooks/           11 executable guard prototypes
 scripts/         verify-local-tools · init-game-run · advance-run · validate-artifacts · run-gates · summarize-run
 templates/       run/ (seed-run state) · game-repo/ (future child game)
-examples/        fixtures/ (schema fixtures) · seeds/
+examples/        fixtures/ (schema fixtures) · seeds/ (empty; see README there)
 ```
 
 ## Documentation
 
 - `CONTEXT.md` — domain dictionary (start here).
+- `DESIGN.md` — how the factory is built (runtime vs orchestration).
 - `docs/doctrine.md` — non-negotiable doctrine and phase model.
 - `docs/engine-matrix.md` — engine candidates and the no-default-engine policy.
 - `docs/anti-boring-gate.md` — falsifiers and the depth vector.
 - `docs/adr/` — accepted architectural decisions.
 - `docs/agents/` — domain, issue-tracker, and triage-label context for borrowed skills.
+- `docs/handoffs/` — completed factory passes (e2e validation, architecture deepening).
 
 ## Status
 
-v0.1.0 — initialized factory skeleton. No game has been generated. Run a seed to
-begin a search.
+v0.1.0 — factory skeleton, **e2e-validated**. Two contrasting seeds reached
+fun-lock through the full pipeline; see `docs/handoffs/dolphin-tgf-e2e-RESULT.md`.
+Child game repos live outside this repo at `/home/ark/tgf-games/{seed-id}/`; per-seed
+run state is gitignored under `.tgf/seeds/{seed-id}/`. Run `npm run verify` before
+claiming done — do not trust hard-coded counts in archived handoff docs.

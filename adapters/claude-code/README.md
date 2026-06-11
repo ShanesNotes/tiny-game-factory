@@ -19,9 +19,8 @@ shape how an agent routes through phases, but they do not enforce the gates.
 
 ## Hard guards
 
-`hooks/` (at the repo root) are the hard guards — `art_fidelity_cap`,
-`asset_provenance`, `engine_migration_requires_adr`, `phaser_version_pin`,
-`playtest_report_required`, `scope_brake`, `afk_heartbeat_required`. A guard
+`hooks/` (at the repo root) are the hard guards — all 11 entries in
+`factory.config.toml` `[hooks]` (listed in `docs/hooks-and-guards.md`). A guard
 blocks; an agent cannot talk past it.
 
 ## MCP
