@@ -43,7 +43,7 @@ function checkRequiredTree() {
     "templates/run/README_AGENT_BOOT.md", "templates/run/README_NEXT_ACTIONS.md",
     "templates/run/decisions/0001-engine-profile.md",
     "templates/spec-pack/AGENTS.md", "templates/spec-pack/README.md", "templates/spec-pack/PLAYTEST_PLAN.md",
-    "templates/spec-pack/MISSION.md", "templates/spec-pack/RESOURCES.md",
+    "templates/spec-pack/MISSION.md", "templates/spec-pack/RESOURCES.md", "templates/spec-pack/NOTES.md",
     "templates/spec-pack/guards/lib/guard.mjs"
   ];
   required.push(...SCHEMAS.map((s) => `schemas/${s}.schema.json`));

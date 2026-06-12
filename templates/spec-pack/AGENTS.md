@@ -26,11 +26,14 @@ tracer bullet comes first and proves the verbs fit together end to end.
 
 This folder doubles as a teaching workspace. `MISSION.md` (seeded from the thesis)
 is the compass — refine it with the human before slice 1 and keep it current.
-`RESOURCES.md` tracks trusted sources; fill its gaps before trusting parametric
-knowledge about the engine. If a teaching skill is in use, its artifacts
-(`lessons/`, `learning-records/`, `reference/`, `NOTES.md`) live here too — treat
-them as first-class: a learning record about why a mechanic works is evidence,
-the same as a playtest report.
+`NOTES.md` records how the human likes to be taught — read it before the first
+session. `RESOURCES.md` tracks trusted sources; fill its gaps before trusting
+parametric knowledge about the engine. If a teaching skill is in use, its
+artifacts (`lessons/`, `learning-records/`, `reference/`) live here too — treat
+them as first-class: a learning record about why a mechanic works is evidence
+alongside (not instead of) the playtest reports the guards require. End each
+session with a codebase checkpoint in a learning record: project state, decisions
+and their why, deferrals and what un-defers them.
 
 ## Non-negotiables (inherited from the spec)
 

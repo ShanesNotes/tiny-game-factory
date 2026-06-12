@@ -18,14 +18,14 @@ exactly one fenced ```json block that validates against `schemas/spec-decomposit
 SLICING RULES:
 - **Tracer bullet first.** The order-1 slice is type "slice" and exercises every
   verb of the chosen core loop end to end, however crudely. It proves the verbs
-  fit together before anything is elaborated.
+  fit together before anything is elaborated (checker enforces full coverage).
 - **Vertical, not horizontal.** Every slice yields something playable or testable;
   no "set up the architecture" slices.
 - **Falsifiable acceptance.** Each acceptance criterion is checkable by running
   the game or a bot — not "feels good". Carry the thesis bot_success_criteria
   into the slices that earn them.
-- **Evidence requirements.** Gameplay slices name the playtest evidence they must
-  produce (see PLAYTEST_PLAN falsifiers — the Two-Bot test deferred at
+- **Evidence requirements.** Every slice/feature names the playtest evidence it must
+  produce (checker enforces at least one entry) (see PLAYTEST_PLAN falsifiers — the Two-Bot test deferred at
   design-review lands here as a slice obligation).
 - **Dependencies are earned.** `depends_on` only when the earlier slice's evidence
   is genuinely required; orders must respect dependencies (checker enforces).

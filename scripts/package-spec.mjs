@@ -99,7 +99,7 @@ function copyTree(fromDir, toRel) {
 }
 
 try {
-  for (const f of ["README.md", "AGENTS.md", "PLAYTEST_PLAN.md", "MISSION.md", "RESOURCES.md"]) {
+  for (const f of ["README.md", "AGENTS.md", "PLAYTEST_PLAN.md", "MISSION.md", "RESOURCES.md", "NOTES.md"]) {
     put(f, sub(fs.readFileSync(path.join(tplDir, f), "utf8")));
   }
   copyTree(path.join(tplDir, "guards"), "guards");

@@ -14,8 +14,9 @@ Seed: {{SEED}}
 - `decisions/0001-engine-profile.md` — the recommended engine profile and its reversal triggers.
 - `issues/` — one issue per slice. Build them in `order`, starting with the tracer bullet.
 - `PLAYTEST_PLAN.md` — the falsifiers every gameplay slice must survive.
-- `MISSION.md` / `RESOURCES.md` — the learning workspace: why the human is building
-  this and where trusted knowledge lives. A teaching skill boots from these.
+- `MISSION.md` / `RESOURCES.md` / `NOTES.md` — the learning workspace: why the human
+  is building this, where trusted knowledge lives, and how they like to be taught.
+  A teaching skill boots from these.
 - `guards/` — optional dependency-free checks (run `node guards/<name>.mjs`) that block
   scope drift: content before fun-lock, opaque assets without provenance, missing
   playtest evidence, and more.

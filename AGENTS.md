@@ -88,7 +88,7 @@ The factory keeps 3 hooks (`factory.config.toml` `[hooks]`, executables in
 `hooks/`); 8 build-time guards ship inside every spec pack
 (`[spec_pack.guards]`, executables in `templates/spec-pack/guards/`).
 `scripts/run-gates.mjs --dry-run` proves all 11 block their unsafe scenarios
-(31 scenarios — see `docs/hooks-and-guards.md` and
+(33 scenarios — see `docs/hooks-and-guards.md` and
 `scripts/lib/factory-contract.mjs`). Harden them if needed; do not remove one
 without an ADR.
 

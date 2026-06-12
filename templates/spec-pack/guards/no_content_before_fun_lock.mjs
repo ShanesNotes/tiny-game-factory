@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 // Doctrine non-negotiable: no content expansion before fun-lock. Blocks edits to
 // content/level/narrative authoring paths unless .factory/FUN_LOCK exists.
-// (scope_brake guards src/ pre-thesis; this guards content/ pre-fun-lock.)
 import fs from "node:fs";
 import { changedPaths, block, allow } from "./lib/guard.mjs";
 

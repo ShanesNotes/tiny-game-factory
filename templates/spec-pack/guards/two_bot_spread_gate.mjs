@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Anti-boring Two-Bot test: a random bot and a heuristic/skilled bot must produce
 // materially different outcomes. Blocks unless playtests cover >=2 distinct
-// bot_type values. Mirrors factory.config.toml [gates] minimum_two_bot_spread_required.
+// bot_type values.
 import { playtestReports, readJsonSafe, block, allow } from "./lib/guard.mjs";
 
 const types = new Set();

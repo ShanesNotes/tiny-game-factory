@@ -54,7 +54,7 @@ const scenarios = [
   { guard: "no_content_before_fun_lock", kind: "BLOCK", setup: () => {}, args: ["content/level-1.json"], expect: 2 },
   { guard: "no_content_before_fun_lock", kind: "ALLOW", setup: (d) => write(d, ".factory/FUN_LOCK", ""), args: ["content/level-1.json"], expect: 0 },
 
-  { guard: "minimum_bot_session_gate", kind: "BLOCK", setup: (d) => write(d, "playtests/loop-a/playtest_report.json", JSON.stringify({ duration_seconds: 30 })), args: [], expect: 2 },
+  { guard: "minimum_bot_session_gate", kind: "BLOCK", setup: (d) => write(d, "playtests/loop-a/playtest_report.json", JSON.stringify({ duration_seconds: 59 })), args: [], expect: 2 },
   { guard: "minimum_bot_session_gate", kind: "ALLOW", setup: (d) => write(d, "playtests/loop-a/playtest_report.json", JSON.stringify({ duration_seconds: 60 })), args: [], expect: 0 },
 
   { guard: "two_bot_spread_gate", kind: "BLOCK", setup: (d) => { write(d, "playtests/a/playtest_report.json", JSON.stringify({ bot_type: "random" })); write(d, "playtests/b/playtest_report.json", JSON.stringify({ bot_type: "random" })); }, args: [], expect: 2 },
@@ -70,7 +70,11 @@ const scenarios = [
   { guard: "art_fidelity_cap", kind: "BLOCK", setup: () => {}, args: ["assets/theme.ogg"], expect: 2 },
   { guard: "art_fidelity_cap", kind: "BLOCK", setup: () => {}, args: ["models/hero.blend"], expect: 2 },
   { guard: "phaser_version_pin", kind: "ALLOW", setup: (d) => write(d, "package.json", JSON.stringify({ devDependencies: { phaser: "^4.0.0" } })), args: [], expect: 0 },
-  { guard: "scope_brake", kind: "BLOCK", setup: () => {}, args: ["packs/core/index.ts"], expect: 2 }
+  { guard: "scope_brake", kind: "BLOCK", setup: () => {}, args: ["packs/core/index.ts"], expect: 2 },
+
+  // Evidence must parse, and thresholds are exercised at their true boundaries.
+  { guard: "playtest_report_required", kind: "BLOCK", setup: (d) => write(d, "playtests/loop-a/playtest_report.json", "not json"), args: [], expect: 2 },
+  { guard: "afk_heartbeat_required", kind: "BLOCK", setup: (d) => write(d, "playtests/loop-a/playtest_report.json", JSON.stringify({ duration_seconds: 299 })), args: ["--afk"], expect: 2 }
 ];
 
 const results = [];

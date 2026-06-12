@@ -5,7 +5,10 @@
 // that contradicts itself or its thesis, which is data corruption, not taste
 // (gate policy in checkers, not schemas — ADR 0005):
 //   - duplicate or non-contiguous slice ordering;
-//   - the tracer bullet rule: the order-1 slice must be type "slice";
+//   - the tracer bullet rule: the order-1 slice must be type "slice" and must
+//     exercise every verb of the chosen core loop (P18: "however crudely");
+//   - gameplay slices (type slice/feature) must name evidence_requirements
+//     (P18: completion is evidence, not prose);
 //   - depends_on pointing at unknown slices or at slices that come later;
 //   - a chosen_loop_id that does not exist in the thesis;
 //   - loop coverage: every verb of the chosen core loop must be covered by at
@@ -35,6 +38,9 @@ export function specConsistencyErrors(spec, thesis = null) {
     errors.push(`order-1 slice '${first.id}' must be type "slice" (tracer bullet), got '${first.type}'`);
   }
   for (const s of spec.slices) {
+    if (s.type !== "chore" && !(s.evidence_requirements || []).length) {
+      errors.push(`slice '${s.id}' (type '${s.type}') must name at least one evidence_requirement`);
+    }
     for (const dep of s.depends_on || []) {
       if (!ids.has(dep)) errors.push(`slice '${s.id}' depends on unknown slice '${dep}'`);
       else if (orderOf.get(dep) >= s.order) {
@@ -54,6 +60,14 @@ export function specConsistencyErrors(spec, thesis = null) {
       );
       for (const verb of verbs) {
         if (!covered.has(verb)) errors.push(`core loop verb '${verb}' is not covered by any slice's loop_verbs_covered`);
+      }
+      if (first) {
+        const firstCovered = new Set((first.loop_verbs_covered || []).map((v) => String(v).trim().toLowerCase()));
+        for (const verb of verbs) {
+          if (!firstCovered.has(verb)) {
+            errors.push(`tracer-bullet slice '${first.id}' must exercise every chosen-loop verb; missing '${verb}'`);
+          }
+        }
       }
     }
   }

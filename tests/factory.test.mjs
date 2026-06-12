@@ -761,7 +761,7 @@ test("package-spec exports a leakage-clean pack and records the handoff", () => 
     // export
     r = node("package-spec.mjs", ["--seed-id", id, "--to", target, "--write"], { cwd: dir });
     assert.equal(r.status, 0, r.stdout + r.stderr);
-    for (const f of ["README.md", "AGENTS.md", "PLAYTEST_PLAN.md", "MISSION.md", "RESOURCES.md",
+    for (const f of ["README.md", "AGENTS.md", "PLAYTEST_PLAN.md", "MISSION.md", "RESOURCES.md", "NOTES.md",
       "SPEC.md", "GAME_THESIS.md", "GAME_SEED.md",
       "decisions/0001-engine-profile.md", "issues/tracer-loop.md", "guards/playtest_report_required.mjs",
       "guards/lib/guard.mjs", "schemas/playtest-report.schema.json"]) {
@@ -1169,4 +1169,13 @@ test("registry gate thresholds stay in sync with factory.config.toml", () => {
   assert.equal(num("dominant_move_max_action_share"), THRESHOLDS.dominant_move_max_action_share);
   assert.equal(num("minimum_bot_session_seconds"), THRESHOLDS.minimum_bot_session_seconds);
   assert.equal(num("nightly_bot_session_seconds"), THRESHOLDS.nightly_bot_session_seconds);
+});
+
+test("shipped guard thresholds stay in sync with the registry (guards cannot import factory files)", () => {
+  const minGate = fs.readFileSync(rel("templates/spec-pack/guards/minimum_bot_session_gate.mjs"), "utf8");
+  assert.ok(minGate.includes(`MIN_SECONDS = ${THRESHOLDS.minimum_bot_session_seconds}`),
+    `minimum_bot_session_gate must hardcode ${THRESHOLDS.minimum_bot_session_seconds}`);
+  const afkGate = fs.readFileSync(rel("templates/spec-pack/guards/afk_heartbeat_required.mjs"), "utf8");
+  assert.ok(afkGate.includes(`MIN_AFK_SECONDS = ${THRESHOLDS.nightly_bot_session_seconds}`),
+    `afk_heartbeat_required must hardcode ${THRESHOLDS.nightly_bot_session_seconds}`);
 });
