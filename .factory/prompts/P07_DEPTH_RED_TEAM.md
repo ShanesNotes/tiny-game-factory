@@ -43,6 +43,7 @@ ADVANCE | DEEPEN | KILL
   Uncertainty, Mastery, and Replayable Variation. ADVANCE is **design-lock**: the
   run may proceed to engine-profile and decompose.
 - **DEEPEN**: name exactly one highest-leverage transform to apply to the thesis.
-  The run re-enters the thesis phase; at most two deepen attempts, then KILL.
+  Advance the run to `deepen` (advance-run increments `deepen_attempt_count` on
+  entry and refuses a third attempt), then re-enter thesis; two attempts, then KILL.
 - **KILL**: the verdict must say what evidence would have changed it, so the next
   seed brief starts smarter.

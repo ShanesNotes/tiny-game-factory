@@ -299,7 +299,7 @@ function checkGate() {
 // No-op when .tgf/issues/ is absent (the convention is not active yet). Keeps the
 // borrowed to-issues/to-prd/triage output honest the moment it lands locally.
 const ISSUE_TYPES = ["bug", "feature", "chore", "slice"];
-const ISSUE_STATES = ["needs-triage", "needs-info", "ready-for-agent", "ready-for-human", "wontfix"];
+const ISSUE_STATES = ["needs-triage", "needs-info", "ready-for-agent", "ready-for-human", "wontfix", "done"];
 const ISSUE_AFK = ["ready-for-agent", "needs-human"];
 function checkIssues() {
   const errors = [];
@@ -346,6 +346,9 @@ function checkIssueDir(dir, errors) {
     }
     if (field("state") === "ready-for-agent" && listItems("evidence").length === 0) {
       errors.push(`${name}: ready-for-agent issues must include at least one evidence link`);
+    }
+    if (field("state") === "done" && listItems("evidence").length === 0) {
+      errors.push(`${name}: done issues must record at least one evidence link (completion is evidence, not prose)`);
     }
     const type = field("type");
     if (type && !ISSUE_TYPES.includes(type)) errors.push(`${name}: type '${type}' not in ${ISSUE_TYPES.join("|")}`);

@@ -1099,6 +1099,45 @@ test("validate-artifacts --check issues requires acceptance and ready evidence",
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
+test("validate-artifacts --check issues: done is a valid closure state but demands evidence", () => {
+  const dir = tmp();
+  try {
+    const issues = path.join(dir, ".tgf", "issues");
+    fs.mkdirSync(issues, { recursive: true });
+    fs.writeFileSync(path.join(issues, "claimed-done.md"), "---\nid: claimed-done\ntitle: T\ntype: slice\nstate: done\nafk: ready-for-agent\nacceptance:\n  - prove the loop runs\nevidence:\n---\nbody\n");
+    let r = node("validate-artifacts.mjs", ["--check", "issues"], { cwd: dir });
+    assert.equal(r.status, 1, r.stdout);
+    assert.match(r.stdout, /done issues must record at least one evidence link/);
+    fs.writeFileSync(path.join(issues, "claimed-done.md"), "---\nid: claimed-done\ntitle: T\ntype: slice\nstate: done\nafk: ready-for-agent\nacceptance:\n  - prove the loop runs\nevidence:\n  - playtests/loop-a/playtest_report.json\n---\nbody\n");
+    r = node("validate-artifacts.mjs", ["--check", "issues"], { cwd: dir });
+    assert.equal(r.status, 0, r.stdout);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("advance-run auto-increments deepen attempts and refuses the third", () => {
+  const dir = tmp();
+  const id = "selftest-deepen-limit";
+  try {
+    assert.equal(node("init-game-run.mjs", ["--seed-id", id, "--seed", "x"], { cwd: dir }).status, 0);
+    const runDir = path.join(dir, ".tgf", "seeds", id);
+    fs.writeFileSync(path.join(runDir, "GAME_THESIS.md"), thesisMd());
+    advanceRun(dir, id, { phase: "design-review", thesisPath: `.tgf/seeds/${id}/GAME_THESIS.md`, ledgerPhases: ["thesis", "design-review"] });
+    const adv = (to, event) => node("advance-run.mjs", ["--seed-id", id, "--to", to, "--event", event, "--status", "passed"], { cwd: dir });
+    const count = () => JSON.parse(fs.readFileSync(path.join(runDir, "manifest.json"), "utf8")).deepen_attempt_count;
+    assert.equal(adv("deepen", "gate-failed").status, 0);
+    assert.equal(count(), 1, "first deepen entry increments the counter");
+    assert.equal(adv("thesis", "transform-applied").status, 0);
+    assert.equal(adv("design-review", "depth-redteam").status, 0);
+    assert.equal(adv("deepen", "gate-failed").status, 0);
+    assert.equal(count(), 2, "second deepen entry increments again");
+    assert.equal(adv("thesis", "transform-applied").status, 0);
+    assert.equal(adv("design-review", "depth-redteam").status, 0);
+    const r = adv("deepen", "gate-failed");
+    assert.equal(r.status, 1, r.stdout + r.stderr);
+    assert.match(r.stderr, /2-attempt limit/);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
 test("validate-artifacts --check issues rejects a symlinked issue directory", () => {
   const dir = tmp();
   const outside = tmp();

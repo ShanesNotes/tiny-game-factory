@@ -6,8 +6,8 @@ host by default, per `issue-tracker.md` and ADR 0004; per-seed run state under
 `.tgf/seeds/{seed-id}/` is evidence, not issues). The borrowed `triage` and
 `to-issues` skills read this file as their label authority.
 
-**HARD RULE: these five labels are the entire vocabulary. Do not invent, alias, or
-extend it.** A need that no label covers is a signal to sharpen the issue, not to
+**HARD RULE: these five triage labels plus the `done` closure state are the entire
+vocabulary. Do not invent, alias, or extend it.** A need that no label covers is a signal to sharpen the issue, not to
 add a label.
 
 ## The label set
@@ -19,6 +19,7 @@ add a label.
 | `ready-for-agent` | Scoped enough for an AFK agent to grab and execute unattended. |
 | `ready-for-human` | Needs human judgement (taste, direction, a verdict) before it moves. |
 | `wontfix` | Acknowledged and deliberately declined; closed without action. |
+| `done` | Closed with evidence: acceptance held and at least one evidence link recorded. |
 
 ## Factory readiness notes (phase model — see CONTEXT.md)
 

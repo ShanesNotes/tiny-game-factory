@@ -14,7 +14,8 @@
 //     [--set <key>=<jsonOrString> ...] [--append <key>=<value> ...] [--dry-run]
 import {
   runDirFor, runRelFor, readManifest, readLedger, validateManifest, validateLedgerRow,
-  manifestPathPolicyErrors, phaseArtifactConstraintErrors, isLegalTransition, legalNextPhases,
+  manifestPathPolicyErrors, phaseArtifactConstraintErrors, questionBudgetErrors,
+  deepenAttemptErrors, isLegalTransition, legalNextPhases,
   isValidSeedId, writeRunFileSync, appendRunFileSync
 } from "./lib/run-state.mjs";
 import { arg, multi, hasFlag } from "./lib/argv.mjs";
@@ -62,6 +63,13 @@ if (lane) ledgerRow.lane = lane;
 // Apply manifest edits on a clone, then validate before committing anything.
 const next = JSON.parse(JSON.stringify(manifest));
 next.current_phase = to;
+// Each entry into the deepen loop consumes one of the two transform attempts.
+// The counter is phase-machine state, not agent memory: it increments on the
+// transition itself (an explicit --set below still wins), and the budget check
+// in manErrors refuses a third attempt.
+if (to === "deepen" && from !== "deepen") {
+  next.deepen_attempt_count = Number(manifest.deepen_attempt_count || 0) + 1;
+}
 next.last_verified_at = iso;
 next.resume_point = {
   phase: to,
@@ -88,7 +96,9 @@ if (rowErrors.length) fail(`ledger row invalid:\n  ${rowErrors.join("\n  ")}`);
 const manErrors = [
   ...validateManifest(next).map((e) => `manifest ${e}`),
   ...manifestPathPolicyErrors(next, seedId),
-  ...phaseArtifactConstraintErrors(next)
+  ...phaseArtifactConstraintErrors(next),
+  ...questionBudgetErrors(next),
+  ...deepenAttemptErrors(next)
 ];
 if (manErrors.length) fail(`resulting manifest invalid:\n  ${manErrors.join("\n  ")}`);
 

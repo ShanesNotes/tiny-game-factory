@@ -12,6 +12,7 @@ To start or resume a seed run:
 
 ```bash
 node scripts/init-game-run.mjs --seed-id <kebab-id> --seed "<one-line seed>"
+node scripts/walk-game-idea.mjs --seed-id <kebab-id>   # all-in-one: init/resume + walkthrough + issue dry-run
 node scripts/summarize-run.mjs --seed-id <kebab-id>
 node scripts/advance-run.mjs --seed-id <kebab-id> --to <phase> --event <event> --status passed
 ```
