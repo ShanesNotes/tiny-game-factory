@@ -18,6 +18,11 @@ Score profile candidates by:
 - migration cost
 - risk of visual-wow/no-game
 - risk of brittle editor pipeline
+- verified agent-tooling surface: a locally-probed runtime MCP (headless scene
+  ops, screenshots, input simulation) or a deep engine skill suite is real
+  evidence toward headless testability and iteration speed — an AI co-dev repo
+  iterates at the speed of its engine's agent tooling. Unverified tooling
+  counts for nothing (P17; docs/toolchain-verification-ledger.md).
 
 HARD RULE:
 Optimize for the seed's best game, not agent convenience or incumbent stack.

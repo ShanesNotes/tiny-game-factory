@@ -1,6 +1,6 @@
 # Skill wrapper doctrine — the shared contract every TGF wrapper obeys
 
-The twelve project-local wrappers under `.codex/skills/` each bind one phase to one
+The ten project-local wrappers under `.codex/skills/` each bind one phase to one
 prompt/contract. To keep them shallow-by-design — so a wrapper carries only its
 *phase-specific* difference and not its own copy of the safety rules — every wrapper
 inherits the contract below. When a safety or wording rule changes, change it here;

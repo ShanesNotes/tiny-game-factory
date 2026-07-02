@@ -13,6 +13,18 @@ Local evidence from `/home/ark/game-dev` on 2026-06-11: that workspace is a Godo
 teaches, the human builds. Treat it as vocabulary and craft evidence, not as a
 target to mutate from here.
 
+## Downstream agentic tooling
+
+The co-dev workspace that opens a spec pack is increasingly an AI coding agent
+with game-dev leverage of its own: engine runtime MCPs (headless scene ops,
+screenshots, input simulation), per-engine skill suites, and asset-generation
+services. The factory acknowledges this in three places and no more: P02 scores
+a *verified* agent-tooling surface as engine-fit evidence, the toolchain ledger
+tracks each surface's trust status, and the pack's RESOURCES.md hands the
+possibility to the co-dev agent with the guards that govern it. No spec may
+*require* such tooling — packs must remain buildable by an agent with nothing
+but the engine and a shell.
+
 ## Boundary rules
 
 - TGF keeps owning seeds, theses, design reviews, engine decisions, spec

@@ -105,7 +105,8 @@ Depth and feel are gates; taste is the tiebreaker no rubric holds. House taste:
 
 No default engine before the thesis. Score candidates on headless testability,
 iteration speed, fantasy fit, core-loop fit, deterministic sim, migration cost,
-visual-wow-no-game risk, editor opacity, and toolchain-verified status. Choose the
+visual-wow-no-game risk, editor opacity, toolchain-verified status, and verified
+agent-tooling surface (runtime MCPs, engine skill suites — probed, never assumed). Choose the
 cheapest reversible surface for the spec to target; the decision and its reversal
 triggers ship inside the pack.
 

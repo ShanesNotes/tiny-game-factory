@@ -24,9 +24,11 @@ Legend:
 | Playwright CLI | ACCEPT | Default committed browser harness. | `npx playwright --version`; install browser. |
 | Playwright MCP | ACCEPT_FOR_EXPLORATION | Explore browser and generate scripts. | Do not use as nightly runner by default. |
 | Chrome DevTools MCP | ACCEPT_IF_AVAILABLE | Perf traces, screenshots, network/console. | Chromium-only; do not block core loop if absent. |
-| Godot MCP | PROBE / OFF_BY_DEFAULT | May help launch/capture/create text scenes. | Only on Godot lane; mutations must emit diffable text. |
+| Godot MCP (godot-runtime) | ACCEPT_IF_AVAILABLE | Headless scene ops, autoloads, screenshots, input simulation, runtime scripts — locally verified 2026-07 on a sibling Godot project. | Only on Godot lane; mutations must emit diffable text; re-probe per machine. |
+| Engine skill suites (e.g. godot-prompter: 40+ Godot 4.x skills + specialist agents) | ACCEPT_IF_INSTALLED | Deep per-engine craft guidance for the co-dev agent; counts as agent-tooling evidence at P02. | Check the host's skill listing; never assume a suite exists on a new machine. |
 | Blender MCP | OFF_BY_DEFAULT | Asset scout/rung-3 only. | Must export glTF + commit prompt/script. |
 | Meshy/Tripo/Rodin style 3D gen | OFF_BY_DEFAULT | Asset rung-3 only unless used as low-poly greybox after gate. | Asset-provenance required. |
+| Ludo.ai style game-concept gen | PROBE | Optional ideation/reference scan at seed or thesis time; never a substitute for the depth gate or feel targets. | Account required; outputs are references, not evidence. |
 | AI audio/image assets | OFF_BY_DEFAULT | No opaque assets before G1+G2. | Asset-provenance required. |
 
 ## Harvest protocol

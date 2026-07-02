@@ -1,7 +1,8 @@
 # issue-tracker.md — Local issue convention for borrowed skills
 
 This is the issue-tracker convention the borrowed Matt Pocock skills (`to-issues`,
-`to-prd`, `triage`, `review`/`qa`) **must route through**. It grounds those skills
+`to-prd`, `triage`, `review`) **must route through** (the upstream repo deprecated
+`qa`; `review` supersedes it). It grounds those skills
 so they operate on the factory's own files instead of an external service. For term
 definitions see `CONTEXT.md`; for issue states see `triage-labels.md`.
 
