@@ -38,6 +38,7 @@
       }
     },
     "total": { "type": "integer", "minimum": 0, "maximum": 24 },
+    "register": { "enum": ["mechanics-first", "narrative-first", "hybrid"] },
     "evidence": { "type": "array", "items": { "type": "string" } },
     "verdict": { "enum": ["ADVANCE", "DEEPEN", "KILL"] }
   }

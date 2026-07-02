@@ -43,6 +43,8 @@ and their why, deferrals and what un-defers them.
 - A slice is not alive until a bot or scripted run has played it for at least 60 seconds.
 - No content expansion, opaque/high-fidelity assets, or multiplayer backend before
   the loop passes the falsifiers in `PLAYTEST_PLAN.md` (fun-lock).
+  Narrative-first packs (see `guards/guard-config.json`) may author story content
+  pre-fun-lock only alongside playtest evidence — content trails play, never leads it.
 - Out-of-scope items listed in `SPEC.md` stay out of scope until the spec is revised.
 - No copyrighted IP cloning.
 

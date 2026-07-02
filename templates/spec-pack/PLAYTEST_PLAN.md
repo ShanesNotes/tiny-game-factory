@@ -17,6 +17,12 @@ Each run emits `playtests/<branch>/playtest_report.json`.
 - Dominant-Move Test
 - Second-Session Test
 
+Narrative-first packs (see `guards/guard-config.json`) read these as: Naked
+Structure (the choice-consequence graph carries the interest), random-vs-
+intentional chooser divergence over story state, Dominant-Choice (no stance
+wins everywhere without cost), and Next-Session (continuation pull via
+accumulated state counts; more-of-the-same scenes do not).
+
 ## Metrics
 
 - crashes

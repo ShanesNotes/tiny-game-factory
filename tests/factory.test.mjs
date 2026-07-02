@@ -549,6 +549,11 @@ test("validate-artifacts --check run gates design-lock on a passing depth vector
     fs.writeFileSync(path.join(runDir, "reviews", "design", "depth-vector.json"), JSON.stringify({ ...ADVANCE_DV, verdict: "DEEPEN" }));
     r = node("validate-artifacts.mjs", ["--check", "run", "--seed-id", id], { cwd: dir });
     assert.equal(r.status, 1, r.stdout);
+    // a register-spoofed vector (narrative-first vector, mechanics thesis) does not satisfy the gate (ADR 0007)
+    fs.writeFileSync(path.join(runDir, "reviews", "design", "depth-vector.json"), JSON.stringify({ ...ADVANCE_DV, register: "narrative-first" }));
+    r = node("validate-artifacts.mjs", ["--check", "run", "--seed-id", id], { cwd: dir });
+    assert.equal(r.status, 1, r.stdout);
+    assert.match(r.stdout, /register 'narrative-first' contradicts thesis design_register 'mechanics-first'/);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
@@ -764,9 +769,11 @@ test("package-spec exports a leakage-clean pack and records the handoff", () => 
     for (const f of ["README.md", "AGENTS.md", "PLAYTEST_PLAN.md", "MISSION.md", "RESOURCES.md", "NOTES.md",
       "SPEC.md", "GAME_THESIS.md", "GAME_SEED.md",
       "decisions/0001-engine-profile.md", "issues/tracer-loop.md", "guards/playtest_report_required.mjs",
-      "guards/lib/guard.mjs", "schemas/playtest-report.schema.json"]) {
+      "guards/lib/guard.mjs", "guards/guard-config.json", "schemas/playtest-report.schema.json"]) {
       assert.ok(fs.existsSync(path.join(target, f)), `pack must contain ${f}`);
     }
+    // the pack's guards know their design register (ADR 0007); absent in the thesis -> mechanics-first
+    assert.equal(JSON.parse(fs.readFileSync(path.join(target, "guards", "guard-config.json"), "utf8")).design_register, "mechanics-first");
     // the teaching-workspace mission is seeded from the thesis, not left templated
     assert.doesNotMatch(fs.readFileSync(path.join(target, "MISSION.md"), "utf8"), /\{\{/, "MISSION.md must have all placeholders substituted");
     // the pack carries zero factory state

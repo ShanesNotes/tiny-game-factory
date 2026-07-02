@@ -248,7 +248,15 @@ function checkRun(seedId) {
       let dv;
       try { dv = JSON.parse(fs.readFileSync(f, "utf8")); }
       catch { errors.push(`reviews depth vector not parseable JSON: ${path.relative(process.cwd(), f)}`); continue; }
-      if (dv.verdict === "ADVANCE" && gate.depthVectorConsistencyErrors(dv).length === 0) passing = true;
+      if (dv.verdict === "ADVANCE" && gate.depthVectorConsistencyErrors(dv).length === 0) {
+        // Register-aware design-lock (ADR 0007): a gate-passing vector must be
+        // judged in the register the thesis declared, not one it picked itself.
+        const dvRegister = dv.register ?? "mechanics-first";
+        const thesisRegister = thesisObj?.design_register ?? "mechanics-first";
+        if (dvRegister !== thesisRegister) {
+          errors.push(`reviews depth vector register '${dvRegister}' contradicts thesis design_register '${thesisRegister}': ${path.relative(process.cwd(), f)}`);
+        } else passing = true;
+      }
     }
     if (!passing) {
       errors.push(`current_phase '${manifest.current_phase}' is past design-review but reviews/ has no gate-passing depth vector (design-lock: verdict ADVANCE, total >=16, required axes nonzero)`);

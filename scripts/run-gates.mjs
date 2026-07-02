@@ -72,6 +72,12 @@ const scenarios = [
   { guard: "phaser_version_pin", kind: "ALLOW", setup: (d) => write(d, "package.json", JSON.stringify({ devDependencies: { phaser: "^4.0.0" } })), args: [], expect: 0 },
   { guard: "scope_brake", kind: "BLOCK", setup: () => {}, args: ["packs/core/index.ts"], expect: 2 },
 
+  // Register-aware content guard (ADR 0007): narrative-first packs may author
+  // content pre-fun-lock only once playtest evidence exists; hybrid stays strict.
+  { guard: "no_content_before_fun_lock", kind: "BLOCK", setup: (d) => write(d, "guards/guard-config.json", JSON.stringify({ design_register: "narrative-first" })), args: ["story/act-1.md"], expect: 2 },
+  { guard: "no_content_before_fun_lock", kind: "ALLOW", setup: (d) => { write(d, "guards/guard-config.json", JSON.stringify({ design_register: "narrative-first" })); write(d, "playtests/tracer/playtest_report.json", "{}"); }, args: ["story/act-1.md"], expect: 0 },
+  { guard: "no_content_before_fun_lock", kind: "BLOCK", setup: (d) => { write(d, "guards/guard-config.json", JSON.stringify({ design_register: "hybrid" })); write(d, "playtests/tracer/playtest_report.json", "{}"); }, args: ["story/act-1.md"], expect: 2 },
+
   // Evidence must parse, and thresholds are exercised at their true boundaries.
   { guard: "playtest_report_required", kind: "BLOCK", setup: (d) => write(d, "playtests/loop-a/playtest_report.json", "not json"), args: [], expect: 2 },
   { guard: "afk_heartbeat_required", kind: "BLOCK", setup: (d) => write(d, "playtests/loop-a/playtest_report.json", JSON.stringify({ duration_seconds: 299 })), args: ["--afk"], expect: 2 }

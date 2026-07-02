@@ -103,6 +103,10 @@ try {
     put(f, sub(fs.readFileSync(path.join(tplDir, f), "utf8")));
   }
   copyTree(path.join(tplDir, "guards"), "guards");
+  // Guards read the pack's declared design register (ADR 0007) so register-aware
+  // doctrine (the narrative-first content allowance) travels with the pack.
+  put(path.join("guards", "guard-config.json"),
+    JSON.stringify({ design_register: thesis.design_register ?? "mechanics-first" }, null, 2) + "\n");
   put("GAME_SEED.md", fs.readFileSync(path.join(runDir, "GAME_SEED.md"), "utf8"));
   put("GAME_THESIS.md", fs.readFileSync(thesisPath, "utf8"));
   put("SPEC.md", fs.readFileSync(specPath, "utf8"));

@@ -11,7 +11,7 @@ Read first: `AGENTS.md`, `CONTEXT.md`, `docs/doctrine.md`, `.factory/prompts/P01
 
 Read `.factory/prompts/P01_SEED_COMPILE.md` and execute it exactly.
 
-**Role** — Seed compiler. Turns the seed into a schema-valid `GAME_THESIS.md` with loop candidates, depth mechanisms, engine candidates, first slice, bot success criteria, and kill conditions — generating, not asking.
+**Role** — Seed compiler. Turns the seed into a schema-valid `GAME_THESIS.md` with a declared design register (`design_register`: mechanics-first | narrative-first | hybrid, ADR 0007), loop candidates, depth mechanisms, engine candidates, first slice, bot success criteria, and kill conditions — generating, not asking.
 
 **Inputs**
 - `.tgf/seeds/{seed-id}/GAME_SEED.md` and intake evidence

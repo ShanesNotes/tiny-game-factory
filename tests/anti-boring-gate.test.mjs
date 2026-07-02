@@ -44,6 +44,42 @@ test("depth-vector: DEEPEN/KILL carry no numeric floor", () => {
   assert.deepEqual(depthVectorConsistencyErrors({ scores, total: 0, verdict: "KILL" }), []);
 });
 
+// Register-aware design-lock (ADR 0007): narrative-first swaps Replayable
+// Variation for Progression in the mandatory set; hybrid stays on the mechanics bar.
+const narrativeScores = {
+  meaningful_choice: 2, tradeoff: 2, pressure: 2, uncertainty: 2, progression: 2,
+  mastery: 2, combinatorial: 2, emergence: 1, replayable_variation: 0,
+  failure_recovery: 1, expression: 0, expansion_headroom: 0
+};
+const narrativeTotal = Object.values(narrativeScores).reduce((a, b) => a + b, 0);
+
+test("depth-vector: narrative-first ADVANCE passes with zero replayable variation", () => {
+  const dv = { scores: narrativeScores, total: narrativeTotal, verdict: "ADVANCE", register: "narrative-first" };
+  assert.deepEqual(depthVectorConsistencyErrors(dv), []);
+});
+
+test("depth-vector: the same vector under the default register self-contradicts", () => {
+  const dv = { scores: narrativeScores, total: narrativeTotal, verdict: "ADVANCE" };
+  assert.ok(depthVectorConsistencyErrors(dv).some((e) => /'replayable_variation' is 0/.test(e)));
+});
+
+test("depth-vector: narrative-first ADVANCE requires nonzero progression", () => {
+  const scores = { ...narrativeScores, progression: 0, replayable_variation: 2 };
+  const total = Object.values(scores).reduce((a, b) => a + b, 0);
+  const errs = depthVectorConsistencyErrors({ scores, total, verdict: "ADVANCE", register: "narrative-first" });
+  assert.ok(errs.some((e) => /'progression' is 0 \(register narrative-first\)/.test(e)));
+});
+
+test("depth-vector: hybrid is held to the mechanics-first mandatory set", () => {
+  const dv = { scores: narrativeScores, total: narrativeTotal, verdict: "ADVANCE", register: "hybrid" };
+  assert.ok(depthVectorConsistencyErrors(dv).some((e) => /'replayable_variation' is 0/.test(e)));
+});
+
+test("depth-vector: an unknown register is an error", () => {
+  const dv = { scores: narrativeScores, total: narrativeTotal, verdict: "ADVANCE", register: "story-mode" };
+  assert.ok(depthVectorConsistencyErrors(dv).some((e) => /unknown register 'story-mode'/.test(e)));
+});
+
 test("playtest: dominant_move boolean must agree with action_distribution", () => {
   const dominated = { anti_boring: { dominant_move: false }, action_distribution: { a: 90, b: 5, c: 5 } };
   assert.ok(playtestConsistencyErrors(dominated).some((e) => /dominant_move=false/.test(e)));

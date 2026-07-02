@@ -12,19 +12,24 @@
 //     brought back and validated here.
 // Keeping gate POLICY here (not in the JSON schema) keeps the artifact stratum and
 // the orchestration stratum uncoupled, per docs/doctrine.md and ADR 0005.
-import { THRESHOLDS, REQUIRED_NONZERO_AXES } from "./factory-contract.mjs";
+import { THRESHOLDS, DESIGN_REGISTERS, REQUIRED_NONZERO_AXES_BY_REGISTER } from "./factory-contract.mjs";
 
 export function depthVectorConsistencyErrors(dv) {
   if (!dv || typeof dv !== "object" || !dv.scores) return ["depth vector missing scores"];
   const errors = [];
+  // The mandatory-nonzero set is register-specific (ADR 0007); the vector records
+  // its register (default mechanics-first) and must be judged by that set.
+  const register = dv.register ?? "mechanics-first";
+  const requiredAxes = REQUIRED_NONZERO_AXES_BY_REGISTER[register];
+  if (!requiredAxes) return [`unknown register '${dv.register}' (expected ${DESIGN_REGISTERS.join(" | ")})`];
   const sum = Object.values(dv.scores).reduce((a, b) => a + (Number(b) || 0), 0);
   if (dv.total !== sum) errors.push(`total ${dv.total} != sum of axes ${sum}`);
   if (dv.verdict === "ADVANCE") {
     if (sum < THRESHOLDS.depth_vector_min_total) {
       errors.push(`verdict ADVANCE but total ${sum} < ${THRESHOLDS.depth_vector_min_total}`);
     }
-    for (const axis of REQUIRED_NONZERO_AXES) {
-      if (!(Number(dv.scores[axis]) > 0)) errors.push(`verdict ADVANCE but required axis '${axis}' is 0`);
+    for (const axis of requiredAxes) {
+      if (!(Number(dv.scores[axis]) > 0)) errors.push(`verdict ADVANCE but required axis '${axis}' is 0 (register ${register})`);
     }
   }
   return errors;

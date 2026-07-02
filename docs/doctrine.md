@@ -58,8 +58,11 @@ Runs **on paper, against the thesis**, at `design-review`. Three falsifiers are
 argued analytically — Naked Mechanics, Dominant-Move (>70% action share),
 Second-Session — and the Two-Bot test, which cannot run on paper, is deferred into
 the spec as `bot_success_criteria` obligations carried by the slices. Plus a
-12-axis depth vector. **Design-lock requires total ≥ 16/24 with nonzero Choice,
-Tradeoff, Pressure, Uncertainty, Mastery, and Replayable Variation.** Verdicts:
+12-axis depth vector. **Design-lock requires total ≥ 16/24 with the register's
+six mandatory axes nonzero** (ADR 0007): the thesis's `design_register` routes
+the mandatory set and the falsifier readings — mechanics-first/hybrid require
+Choice, Tradeoff, Pressure, Uncertainty, Mastery, Replayable Variation;
+narrative-first swaps Replayable Variation for Progression. Verdicts:
 `ADVANCE` | `DEEPEN` (one transform) | `KILL`. Fun-lock remains downstream
 doctrine inside the spec pack.
 

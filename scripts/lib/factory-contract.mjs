@@ -81,3 +81,18 @@ export const THRESHOLDS = {
 export const REQUIRED_NONZERO_AXES = [
   "meaningful_choice", "tradeoff", "pressure", "uncertainty", "mastery", "replayable_variation"
 ];
+
+// Design registers (ADR 0007). A thesis declares where its depth lives; the gate
+// keeps the same twelve axes and the same >=16/24 floor in every register, but the
+// mandatory-nonzero set is register-specific. mechanics-first is the historical
+// default (absent field = mechanics-first); hybrid claims mechanics are
+// load-bearing and is held to the same bar. narrative-first swaps Replayable
+// Variation for Progression: a campaign's pull is forward accumulation, not re-run
+// variation — variation still scores, it is just not load-bearing.
+export const DESIGN_REGISTERS = ["mechanics-first", "narrative-first", "hybrid"];
+
+export const REQUIRED_NONZERO_AXES_BY_REGISTER = {
+  "mechanics-first": REQUIRED_NONZERO_AXES,
+  "hybrid": REQUIRED_NONZERO_AXES,
+  "narrative-first": ["meaningful_choice", "tradeoff", "pressure", "uncertainty", "mastery", "progression"]
+};

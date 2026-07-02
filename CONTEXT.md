@@ -70,8 +70,10 @@ thesis re-enters `thesis` with **exactly one** named transform applied, then
 re-reviews (≤2 attempts, tracked by `manifest.deepen_attempt_count` and enforced
 by `validate-artifacts --check run`; after two failed attempts the run is killed).
 **Design-lock** is not a phase: it is the `ADVANCE` verdict from the design
-red-team at `design-review` (depth vector total ≥16/24 with nonzero Choice,
-Tradeoff, Pressure, Uncertainty, Mastery, and Replayable Variation) — it opens
+red-team at `design-review` (depth vector total ≥16/24 with the thesis's
+register-mandated six axes nonzero — ADR 0007; mechanics-first default: Choice,
+Tradeoff, Pressure, Uncertainty, Mastery, Replayable Variation; narrative-first
+swaps Replayable Variation for Progression) — it opens
 `engine-profile → decompose`. Design-lock replaces fun-lock *in the factory*;
 fun-lock remains downstream doctrine inside the spec pack. Legal phase transitions
 are the machine-readable graph in `scripts/lib/run-state.mjs` (derived from
@@ -123,9 +125,13 @@ cannot be design-locked — and nothing may be decomposed — until it passes:
 
 Plus a **depth vector**: twelve named axes, each scored 0/1/2 — all twelve are
 required (`schemas/depth-vector`). **Minimum for design-lock: total ≥ 16/24 with
-nonzero Choice, Tradeoff, Pressure, Uncertainty, Mastery, and Replayable
-Variation.** The ≥16 total and nonzero-axes rule is applied by the depth red-team
-(P07), not by the schema, which only checks the axes are present and in range.
+the register's six mandatory axes nonzero** (ADR 0007): the thesis declares a
+**design register** (`design_register`: `mechanics-first` default |
+`narrative-first` | `hybrid`), the vector records it, and narrative-first swaps
+Replayable Variation for Progression in the mandatory set — with the falsifiers
+re-aimed per `docs/anti-boring-gate.md` § Design registers. The ≥16 total and
+nonzero-axes rule is applied by the depth red-team (P07), not by the schema,
+which only checks the axes are present and in range.
 
 ## Spec decomposition
 
