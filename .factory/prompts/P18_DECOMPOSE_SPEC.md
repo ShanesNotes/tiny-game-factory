@@ -27,6 +27,14 @@ SLICING RULES:
 - **Evidence requirements.** Every slice/feature names the playtest evidence it must
   produce (checker enforces at least one entry) (see PLAYTEST_PLAN falsifiers — the Two-Bot test deferred at
   design-review lands here as a slice obligation).
+- **Seams are honest stubs.** Type `seam` = a growth system's data model and
+  persistence surface, schema'd but not built: acceptance must include (a) the
+  data shape exists and round-trips through save/load, and (b) at least one
+  live slice reads or writes it. A seam never adds UI, content, or systems —
+  it exists so later iteration extends instead of rewrites. Pair every
+  `out_of_scope` system the thesis intends to build later with either a seam
+  or an explicit "no seam — will rewrite" note. Seams are cheap; more than a
+  handful means the spec is an architecture fantasy, not a game.
 - **Dependencies are earned.** `depends_on` only when the earlier slice's evidence
   is genuinely required; orders must respect dependencies (checker enforces).
 - **Coverage is total.** Every verb of `chosen_loop_id` appears in some slice's

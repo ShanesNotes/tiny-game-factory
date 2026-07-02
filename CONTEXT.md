@@ -127,8 +127,10 @@ Plus a **depth vector**: twelve named axes, each scored 0/1/2 — all twelve are
 required (`schemas/depth-vector`). **Minimum for design-lock: total ≥ 16/24 with
 the register's six mandatory axes nonzero** (ADR 0007): the thesis declares a
 **design register** (`design_register`: `mechanics-first` default |
-`narrative-first` | `hybrid`), the vector records it, and narrative-first swaps
-Replayable Variation for Progression in the mandatory set — with the falsifiers
+`narrative-first` | `hybrid` | `world-first`), the vector records it, and the
+mandatory set is register-specific — narrative-first swaps Replayable Variation
+for Progression; world-first (ADR 0008) requires Progression and Expansion
+Headroom instead of Mastery and Replayable Variation — with the falsifiers
 re-aimed per `docs/anti-boring-gate.md` § Design registers. The ≥16 total and
 nonzero-axes rule is applied by the depth red-team (P07), not by the schema,
 which only checks the axes are present and in range.

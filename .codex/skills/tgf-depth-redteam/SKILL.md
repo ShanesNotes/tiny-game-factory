@@ -28,6 +28,6 @@ Read `.factory/prompts/P07_DEPTH_RED_TEAM.md` and execute it exactly.
 - Obey `AGENTS.md`, `CONTEXT.md`, and `docs/doctrine.md`.
 - Manifest beats memory: read and update `.tgf/seeds/{seed-id}/manifest.json`, and record the phase transition in that run's `execution-ledger.jsonl`.
 - Read-only on the thesis; emit a verdict `ADVANCE` | `DEEPEN` (name exactly one transform) | `KILL`.
-- Design-lock requires total >= 16/24 with the register's six mandatory axes nonzero (ADR 0007): mechanics-first/hybrid — Choice, Tradeoff, Pressure, Uncertainty, Mastery, Replayable Variation; narrative-first swaps Replayable Variation for Progression, with the falsifiers re-aimed per `docs/anti-boring-gate.md` § Design registers.
+- Design-lock requires total >= 16/24 with the register's six mandatory axes nonzero (ADR 0007): mechanics-first/hybrid — Choice, Tradeoff, Pressure, Uncertainty, Mastery, Replayable Variation; narrative-first swaps Replayable Variation for Progression; world-first requires Progression and Expansion Headroom instead of Mastery and Replayable Variation (ADR 0008) — falsifiers re-aimed per `docs/anti-boring-gate.md` § Design registers.
 - On DEEPEN the run re-enters `thesis` (deepen_attempt_count ≤ 2, then killed).
 - Never create a spec pack folder from this skill, never copy `.tgf`/`.omx`/ledgers/skill docs into generated output, and never assume an unverified tool.

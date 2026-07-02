@@ -306,7 +306,7 @@ function checkGate() {
 // --- local issue files (.tgf/issues/*.md): structural check per issue-tracker.md ---
 // No-op when .tgf/issues/ is absent (the convention is not active yet). Keeps the
 // borrowed to-issues/to-prd/triage output honest the moment it lands locally.
-const ISSUE_TYPES = ["bug", "feature", "chore", "slice"];
+const ISSUE_TYPES = ["bug", "feature", "chore", "slice", "seam"];
 const ISSUE_STATES = ["needs-triage", "needs-info", "ready-for-agent", "ready-for-human", "wontfix", "done"];
 const ISSUE_AFK = ["ready-for-agent", "needs-human"];
 function checkIssues() {

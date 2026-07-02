@@ -2,7 +2,10 @@
 
 ROLE: Seed compiler.
 
-INPUT: GAME_SEED.md, no architecture assumptions.
+INPUT: GAME_SEED.md, no architecture assumptions. If a `BRIEF.md` exists in the
+run dir it is owner intent evidence — qualities the thesis must serve. It
+constrains *what the game must feel like*, never dictates genre, register, or
+mechanics; any provenance/comparables it names stay out of every artifact.
 
 TASK:
 Emit GAME_THESIS.md carrying a fenced ```json block that validates against
@@ -11,7 +14,7 @@ schemas/game-thesis.schema.json (verify: `validate-artifacts --check thesis --se
 Generate, do not ask:
 - thesis
 - player fantasy
-- design register (`design_register`: mechanics-first | narrative-first | hybrid)
+- design register (`design_register`: mechanics-first | narrative-first | hybrid | world-first)
 - genre priors
 - 2–4 core-loop candidates
 - replayability hypothesis
@@ -38,5 +41,13 @@ RULES:
   replayability hypothesis may be a next-session (continuation) hypothesis
   rather than a re-run hypothesis. Bot success criteria must include a
   random-vs-intentional chooser divergence over story state.
+- world-first: the payload is a place. Core loops must be traversal verb loops
+  (e.g. set-out / venture / discover / return), never tour itineraries. Depth
+  mechanisms must name the world-state each discovery writes (map knowledge,
+  capability, access) and where it is read back. The replayability hypothesis
+  may be an unexplored-world (continuation) hypothesis. Bot success criteria
+  must include random-walker vs curious-walker divergence over the
+  discovered-content set. The first slice must contain one real descent-and-
+  return, however small.
 
 OUTPUT: GAME_THESIS.md only.

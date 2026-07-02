@@ -26,7 +26,7 @@ kebab-case slug (e.g. `add-afk-heartbeat-guard`).
 ---
 id: add-afk-heartbeat-guard      # kebab-case, matches filename
 title: AFK heartbeat guard blocks idle runs
-type: bug | feature | chore | slice
+type: bug | feature | chore | slice | seam
 state: needs-triage              # vocabulary owned by triage-labels.md
 afk: ready-for-agent | needs-human   # AFK/HITL readiness (see triage-labels.md)
 acceptance:                      # falsifiable criteria; completion is evidence
@@ -36,7 +36,7 @@ evidence:                        # links to proof, filled as work lands
 ---
 ```
 
-`type` values: `bug`, `feature`, `chore`, `slice`. `state` and the `afk`
+`type` values: `bug`, `feature`, `chore`, `slice`, `seam` (a growth system schema'd + persisted but deliberately not built — ADR 0008). `state` and the `afk`
 readiness flag both draw their vocabulary from `triage-labels.md` — do not invent
 new states here. **Completion is evidence, not prose** (CONTEXT.md): an issue
 closes when its `evidence` links point at a passing validator, gate, playtest

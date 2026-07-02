@@ -80,6 +80,33 @@ test("depth-vector: an unknown register is an error", () => {
   assert.ok(depthVectorConsistencyErrors(dv).some((e) => /unknown register 'story-mode'/.test(e)));
 });
 
+// world-first (ADR 0008): Progression and Expansion Headroom replace Mastery and
+// Replayable Variation in the mandatory set — the world's pull is discovery and
+// growth, not execution skill or re-runs.
+const worldScores = {
+  meaningful_choice: 2, tradeoff: 2, pressure: 2, uncertainty: 2, progression: 2,
+  mastery: 0, combinatorial: 1, emergence: 1, replayable_variation: 0,
+  failure_recovery: 1, expression: 1, expansion_headroom: 2
+};
+const worldTotal = Object.values(worldScores).reduce((a, b) => a + b, 0);
+
+test("depth-vector: world-first ADVANCE passes with zero mastery and zero replayable variation", () => {
+  const dv = { scores: worldScores, total: worldTotal, verdict: "ADVANCE", register: "world-first" };
+  assert.deepEqual(depthVectorConsistencyErrors(dv), []);
+});
+
+test("depth-vector: world-first ADVANCE requires nonzero expansion headroom", () => {
+  const scores = { ...worldScores, expansion_headroom: 0, mastery: 2 };
+  const total = Object.values(scores).reduce((a, b) => a + b, 0);
+  const errs = depthVectorConsistencyErrors({ scores, total, verdict: "ADVANCE", register: "world-first" });
+  assert.ok(errs.some((e) => /'expansion_headroom' is 0 \(register world-first\)/.test(e)));
+});
+
+test("depth-vector: the world-first vector under the default register self-contradicts", () => {
+  const dv = { scores: worldScores, total: worldTotal, verdict: "ADVANCE" };
+  assert.ok(depthVectorConsistencyErrors(dv).some((e) => /'mastery' is 0|'replayable_variation' is 0/.test(e)));
+});
+
 test("playtest: dominant_move boolean must agree with action_distribution", () => {
   const dominated = { anti_boring: { dominant_move: false }, action_distribution: { a: 90, b: 5, c: 5 } };
   assert.ok(playtestConsistencyErrors(dominated).some((e) => /dominant_move=false/.test(e)));
