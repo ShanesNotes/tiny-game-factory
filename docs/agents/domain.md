@@ -1,14 +1,15 @@
-# Domain language — Tiny Game Factory
+# Domain language — game-design
 
 > **This file defers to [`CONTEXT.md`](../../CONTEXT.md).** CONTEXT.md is the
-> single source of truth for what the Tiny Game Factory *is* and what every term
-> means. This glossary is a quick agent-facing reference for borrowed skills (e.g.
-> `grill-with-docs`) that need to ground their terminology. Where this file and
-> CONTEXT.md ever disagree, CONTEXT.md wins — fix this file, not CONTEXT.md.
+> single source of truth for what **game-design** *is* (formerly tiny-game-factory)
+> and what every term means. This glossary is a quick agent-facing reference for
+> borrowed skills (e.g. `grill-with-docs`) that need to ground their terminology.
+> Where this file and CONTEXT.md ever disagree, CONTEXT.md wins — fix this file,
+> not CONTEXT.md.
 
 ## Glossary
 
-- **Meta-factory** — The durable orchestration harness in `/home/ark/tiny-game-factory/`; owns doctrine, prompts, schemas, hooks, validators, ledgers. It is never itself a game (ADR 0001).
+- **Meta-factory** — The durable orchestration harness in `/home/ark/game-studio/design/` (package name `game-design`); owns doctrine, prompts, schemas, hooks, validators, ledgers. It is never itself a game (ADR 0001).
 - **Seed** — A one-sentence game idea (or an inherited repo) that the factory fertilizes into a depth-gated thesis and an issue-sliced spec pack (ADR 0006).
 - **GAME_SEED** — The raw seed input captured at intake, before any compilation into thesis or structure.
 - **GAME_THESIS** — The compiled, sharpened statement of intended fantasy and core loop produced by `tgf-seed-compile` as `GAME_THESIS.md`; gate before any engine choice.
@@ -32,8 +33,8 @@
 
 ## Usage rules for skills
 
-- **Write only inside this factory repo.** `grill-with-docs` and other borrowed
-  doc skills may create/edit files within `/home/ark/tiny-game-factory/` only.
+- **Write only inside this design repo.** `grill-with-docs` and other borrowed
+  doc skills may create/edit files within `/home/ark/game-studio/design/` only.
   Never mutate source repos, evidence, or exported spec packs.
 - **Treat seed run state and exported packs as read-only evidence.** Read
   `.tgf/seeds/**` and `tgf-games/**` to ground terminology; do not edit them.

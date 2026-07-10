@@ -15,7 +15,8 @@ export const LEAK_TOKENS = [
   [/sandcastle/i, "Sandcastle"],
   [/\bOMX\b/, "OMX"],
   [/tiny[ -]app[ -]factory/i, "Tiny App Factory product term"],
-  [/tiny[ -]game[ -]factory/i, "Tiny Game Factory orchestrator name"],
+  // Former product name (renamed to game-design); ban any case / hyphenation.
+  [/tiny[ -]game[ -]factory/i, "former product name tiny-game-factory"],
   [/tincture/i, "Tincture of Mercy product term"],
   [/rescue[ -]town[ -]builders/i, "Rescue Town Builders product term"],
   [/\/home\/ark\//, "absolute /home/ark path"]

@@ -818,6 +818,27 @@ test("package-spec refuses an invalid or pre-decompose run", () => {
   }
 });
 
+// T03 AC2: former product name is a forbidden leakage token (any case).
+test("package-spec leakage gate fails when pack content contains tiny game factory", () => {
+  const dir = tmp();
+  const target = tmp();
+  const id = "selftest-leak-tgf-name";
+  try {
+    const runDir = decomposeReadyRun(dir, id);
+    assert.equal(node("emit-local-issues.mjs", ["--seed-id", id, "--write"], { cwd: dir }).status, 0);
+    // Smuggle the banned former product name into an exported artifact.
+    const thesisPath = path.join(runDir, "GAME_THESIS.md");
+    fs.appendFileSync(thesisPath, "\n\nLeak probe: Tiny Game Factory must not ship.\n");
+    const r = node("package-spec.mjs", ["--seed-id", id, "--to", target, "--write"], { cwd: dir });
+    assert.equal(r.status, 1, r.stdout + r.stderr);
+    assert.match(r.stderr, /leakage gate|former product name|tiny.game.factory/i, r.stderr);
+    assert.equal(fs.readdirSync(target).length, 0, "leaky export must not write the pack");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+    fs.rmSync(target, { recursive: true, force: true });
+  }
+});
+
 test("walk-game-idea initializes a seed and writes an architectural walkthrough", () => {
   const dir = tmp();
   const id = "selftest-walk";

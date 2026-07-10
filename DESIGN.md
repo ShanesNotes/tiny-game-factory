@@ -1,7 +1,7 @@
-# DESIGN.md — Tiny Game Factory architecture
+# DESIGN.md — game-design architecture
 
-This describes *how* the factory is built and why. For *what the terms mean*, see
-`CONTEXT.md`. For *decisions*, see `docs/adr/`.
+This describes *how* the game-design harness is built and why. For *what the terms
+mean*, see `CONTEXT.md`. For *decisions*, see `docs/adr/`.
 
 ## Design goal
 
@@ -119,6 +119,6 @@ engine decision.
 
 ## Relationship to Tiny App Factory
 
-TGF reuses TAF's hard-won lesson — *orchestration artifacts stay developer-side;
+game-design reuses TAF's hard-won lesson — *orchestration artifacts stay developer-side;
 generated products stay clean* — and its manifest-first harness pattern. It does
 **not** copy TAF's Expo-specific code; TAF is evidence, not substrate.

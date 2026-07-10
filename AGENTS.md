@@ -1,7 +1,8 @@
-# AGENTS.md — Operating the Tiny Game Factory
+# AGENTS.md — Operating game-design
 
-You are operating the **meta-factory**, not a game. Read `CONTEXT.md` first; it is
-the domain dictionary. This file is the operating procedure.
+You are operating the **game-design** harness (spec-only; formerly tiny-game-factory),
+not a game. Read `CONTEXT.md` first; it is the domain dictionary. This file is the
+operating procedure.
 
 > If you are inside an exported spec pack instead, read that pack's own
 > `AGENTS.md` (derived from `templates/spec-pack/AGENTS.md`), not this one.
@@ -76,8 +77,9 @@ pack, picks an engine, or writes `GAME_THESIS.md`.
 
 ## Skills
 
-Project-local TGF skills live in `.codex/skills/`. Each wraps one prompt/contract
-(or declares itself a router) and owns its paths, gates, and leakage rules:
+Project-local skill wrappers live in `.codex/skills/` (ids still use the historical
+`tgf-*` prefix for path compatibility). Each wraps one prompt/contract (or declares
+itself a router) and owns its paths, gates, and leakage rules:
 
 `tgf-decompose` · `tgf-depth-redteam` · `tgf-engine-profile` · `tgf-existing-project-rescue` · `tgf-handoff` · `tgf-harness` · `tgf-office-hours-grill` · `tgf-repo-scout` · `tgf-seed-compile` · `tgf-verify-toolchain`.
 

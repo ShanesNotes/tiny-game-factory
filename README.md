@@ -1,6 +1,10 @@
-# Tiny Game Factory
+# game-design
 
-A local-first, evidence-first agentic **spec factory** for games. It fertilizes a
+**game-design** is the spec-only discipline repo under game-studio: it produces
+depth-gated theses and issue-sliced spec packs, and builds no game (see
+[../DESIGN-RECORD.md](../DESIGN-RECORD.md) §2). Formerly tiny-game-factory.
+
+A local-first, evidence-first agentic **spec harness** for games. It fertilizes a
 one-line game *seed* into a depth-gated `GAME_THESIS.md`, decomposes it into an
 issue-sliced `SPEC.md`, and exports the result as a **spec pack** — a clean folder
 opened elsewhere for human+AI co-development. **No game is built in this repo**
@@ -9,9 +13,9 @@ opened elsewhere for human+AI co-development. **No game is built in this repo**
 > Search > codegen · Fun > polish · Evidence > sunk cost · Code-native > opaque ·
 > Falsifiable on paper > merely asserted.
 
-This repository is the **factory**, not a game. It owns reusable doctrine, prompts,
-schemas, hooks, and validators. Spec packs are exported elsewhere
-(`/home/ark/tgf-games/{seed-id}` by default) and stay free of factory state.
+This repository is the **design harness**, not a game. It owns reusable doctrine,
+prompts, schemas, hooks, and validators. Spec packs are exported elsewhere
+(`/home/ark/tgf-games/{seed-id}` by default) and stay free of harness state.
 
 ## Quickstart
 
@@ -81,7 +85,7 @@ See `CONTEXT.md`.
 AGENTS.md CONTEXT.md DESIGN.md README.md factory.config.toml package.json
 docs/            adr/; agents/; anti-boring gate, doctrine, engine matrix, ledgers
 .factory/prompts active task contracts (P00–P02, P07, P13–P14, P16–P19); retired build prompts in attic/
-.codex/skills/   10 project-local TGF skill wrappers
+.codex/skills/   10 project-local skill wrappers (`tgf-*` ids kept for compatibility)
 schemas/         9 JSON schemas (manifest, thesis, depth, spec-decomposition, ...)
 hooks/           3 factory guards (8 build-time guards ship in templates/spec-pack/guards/)
 scripts/         advance-run · emit-local-issues · init-game-run · lint · package-spec · run-gates · summarize-run · validate-artifacts · verify-local-tools · walk-game-idea

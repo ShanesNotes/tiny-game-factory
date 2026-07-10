@@ -3,10 +3,10 @@
 ## Context
 
 The bridge is no longer a future seam — **it is the factory's main pipeline**
-(ADR 0006). The Tiny Game Factory teases a raw game seed into a falsifiable,
+(ADR 0006). **game-design** teases a raw game seed into a falsifiable,
 design-locked premise, decomposes it into ordered tracer-bullet issues, and
 exports the result as a **spec pack** that a game-development workspace builds.
-The spec pack is the handoff unit and the factory's terminal artifact.
+The spec pack is the handoff unit and the design harness's terminal artifact.
 
 Local evidence from `/home/ark/game-dev` on 2026-06-11: that workspace is a Godot
 4.6.2/GDScript learning repo. Its method is hands-on and lesson-driven: the AI
@@ -27,7 +27,7 @@ but the engine and a shell.
 
 ## Boundary rules
 
-- TGF keeps owning seeds, theses, design reviews, engine decisions, spec
+- game-design keeps owning seeds, theses, design reviews, engine decisions, spec
   decomposition, local issue emission, and pack export.
 - `/game-dev` stays a separate learning/build workspace unless a future explicit
   integration task says otherwise.
@@ -62,7 +62,7 @@ but the engine and a shell.
 
 ## Backlog vocabulary mapping
 
-| TGF artifact | Backlog meaning | Co-dev analogue |
+| game-design artifact | Backlog meaning | Co-dev analogue |
 |---|---|---|
 | `GAME_THESIS.md` | Product premise and constraints | Mission/quest arc for one game idea |
 | Engine decision | Chosen build surface and reversibility triggers | Godot/version/tool constraint when earned |

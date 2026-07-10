@@ -1,4 +1,4 @@
-# CLAUDE.md — Tiny Game Factory (Claude Code entry)
+# CLAUDE.md — game-design (Claude Code entry)
 
 Read `AGENTS.md` first — it is the operating procedure. Then `CONTEXT.md` for
 vocabulary. This file exists because `factory.config.toml` lists it as a required
