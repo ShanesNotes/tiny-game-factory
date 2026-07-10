@@ -1,9 +1,9 @@
 {
-  "name": "tiny-game-factory",
+  "name": "game-design",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Tiny Game Factory — a local-first, evidence-first agentic game-design meta-factory. Fertilizes a one-line game seed through a depth-gated thesis and decomposes it into an issue-sliced spec pack for co-development in a clean folder.",
+  "description": "game-design — spec-only discipline repo in game-studio. Fertilizes a one-line game seed through a depth-gated thesis and decomposes it into an issue-sliced spec pack for co-development elsewhere. Formerly tiny-game-factory.",
   "scripts": {
     "verify:tools": "node scripts/verify-local-tools.mjs",
     "init:run": "node scripts/init-game-run.mjs",

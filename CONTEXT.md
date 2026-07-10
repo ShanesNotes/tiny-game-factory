@@ -1,34 +1,34 @@
-# CONTEXT.md — Tiny Game Factory
+# CONTEXT.md — game-design
 
-This is the domain dictionary and single source of truth for what the Tiny Game
-Factory *is*. Prompts, skills, ADRs, and validators all defer to the language here.
-If a term is used elsewhere in the repo, it is defined here.
+This is the domain dictionary and single source of truth for what **game-design**
+*is* (formerly tiny-game-factory). Prompts, skills, ADRs, and validators all defer
+to the language here. If a term is used elsewhere in the repo, it is defined here.
 
 ## What this repo is
 
-The **Tiny Game Factory (TGF)** is a local-first, evidence-first agentic **spec
-factory** for games. It fertilizes a one-sentence game *seed* — or an inherited
-game repo — into a depth-gated **`GAME_THESIS.md`**, decomposes it into an
-issue-sliced **`SPEC.md`**, and exports the result as a **spec pack** for human+AI
-co-development elsewhere. **No game is built in this repo** (ADR 0006).
+**game-design** is a local-first, evidence-first agentic **spec harness** for games.
+It fertilizes a one-sentence game *seed* — or an inherited game repo — into a
+depth-gated **`GAME_THESIS.md`**, decomposes it into an issue-sliced **`SPEC.md`**,
+and exports the result as a **spec pack** for human+AI co-development elsewhere.
+**No game is built in this repo** (ADR 0006).
 
-TGF is **not** a game engine, an asset generator, a content platform, or a
+game-design is **not** a game engine, an asset generator, a content platform, or a
 multi-agent framework. It is an orchestration harness for *finding deep,
 falsifiable game premises* and recording proof.
 
 ## Meta-factory, not a game (ADR 0001)
 
-`/home/ark/tiny-game-factory` is the **meta-factory repository**. It owns reusable
-doctrine, prompts, schemas, hooks, adapters, validators, and run ledgers. It is
-**never** the game. The factory's terminal artifact is the exported spec pack;
-games are co-developed downstream from the pack. The factory is durable process
-memory.
+`/home/ark/game-studio/design` is the **game-design** repository (the meta-factory
+in ADR terms). It owns reusable doctrine, prompts, schemas, hooks, adapters,
+validators, and run ledgers. It is **never** the game. The harness's terminal
+artifact is the exported spec pack; games are co-developed downstream from the
+pack. The harness is durable process memory.
 
 ## Three location strata (ADR 0003)
 
 | Stratum | Path | Holds | Lifecycle |
 |---|---|---|---|
-| Factory repo | `/home/ark/tiny-game-factory/` | reusable doctrine, prompts, schemas, hooks, scripts, skills | durable |
+| Design repo | `/home/ark/game-studio/design/` | reusable doctrine, prompts, schemas, hooks, scripts, skills | durable |
 | Per-seed run state | `.tgf/seeds/{seed-id}/` | one seed's manifest, ledger, thesis, decisions, SPEC, issues, reviews, handoffs | durable temporal truth |
 | Spec pack | `/home/ark/tgf-games/{seed-id}/` (default) | the exported spec + backlog, opened for co-dev | durable deliverable |
 
@@ -87,7 +87,7 @@ not in the § Phase vocabulary. Canonical machine-readable lists of phases, prom
 skills, schemas, and hooks live in `scripts/lib/factory-contract.mjs`; this table is the
 human-friendly view.
 
-| Phase | Prompt | TGF skill | Output |
+| Phase | Prompt | Skill (id) | Output |
 |---|---|---|---|
 | intake | (P00/P01 prelude) | `tgf-office-hours-grill` | `intake/office-hours.md`, ≤1 question |
 | toolchain | `P17_VERIFY_TOOLCHAIN` | `tgf-verify-toolchain` | toolchain ledger from real probes |

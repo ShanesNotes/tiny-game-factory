@@ -1,4 +1,4 @@
-# Initialization Handoff — Tiny Game Factory
+# Initialization Handoff — game-design
 
 > **Historical record (2026-06 init).** For current status see `README.md` and
 > `docs/handoffs/dolphin-tgf-e2e-RESULT.md`. Counts below reflect the tree at

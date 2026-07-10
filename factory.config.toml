@@ -1,4 +1,5 @@
-# Tiny Game Factory — guardrail config (factory v0.2.0; spec-pack pivot, ADR 0006)
+# game-design — guardrail config (harness v0.2.0; spec-pack pivot, ADR 0006)
+# Filename kept as factory.config.toml for path compatibility (scripts + docs).
 # This is a desired/guardrail config, not a claim that every tool exists locally.
 
 [doctrine]

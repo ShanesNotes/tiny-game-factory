@@ -1,4 +1,4 @@
-# Skill wrapper doctrine — the shared contract every TGF wrapper obeys
+# Skill wrapper doctrine — the shared contract every project skill wrapper obeys
 
 The ten project-local wrappers under `.codex/skills/` each bind one phase to one
 prompt/contract. To keep them shallow-by-design — so a wrapper carries only its

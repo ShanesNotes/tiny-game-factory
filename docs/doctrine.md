@@ -1,7 +1,7 @@
 # Doctrine
 
-The non-negotiable rules of the Tiny Game Factory. Prompts and skills cite this
-file. Changing a rule here requires an ADR.
+The non-negotiable rules of **game-design** (formerly tiny-game-factory). Prompts
+and skills cite this file. Changing a rule here requires an ADR.
 
 ## Five principles
 
