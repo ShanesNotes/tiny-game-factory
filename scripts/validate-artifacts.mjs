@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 // Factory artifact validator. Proves the repo matches its own contracts without needing a
 // runtime game. Checks: required-tree | schemas | generated-leakage | no-default-engine |
-// skill-refs | gate | issues | audit | thesis | engine | spec | run | all.
-// `all` runs every repo-wide check; thesis/engine/spec/run are on-demand (require --seed-id).
-// Usage: node scripts/validate-artifacts.mjs --check <mode> [--seed-id <id>]
+// skill-refs | gate | issues | audit | forge-manifest | thesis | engine | spec | run | all.
+// `all` runs every repo-wide check; thesis/engine/spec/run/forge-manifest are on-demand.
+// Usage: node scripts/validate-artifacts.mjs --check <mode> [--seed-id <id>] [--file <path>]
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { validate } from "./lib/validate-json-schema.mjs";
+import { forgeManifestSchemaPath } from "./lib/studio-paths.mjs";
 import * as runState from "./lib/run-state.mjs";
 import * as gate from "./lib/anti-boring-gate.mjs";
 import { specConsistencyErrors } from "./lib/spec-decomposition.mjs";
@@ -431,6 +432,27 @@ function checkAudit() {
   return auditErrors(files, parseAuditLedger(text));
 }
 
+// --- forge-manifest.json against contracts/forge-manifest.schema.json (T06) ---
+// Resolves the contracts schema via STUDIO_ROOT / GAME_CONTRACTS_ROOT (path-registry);
+// never hard-codes absolute studio paths.
+function checkForgeManifest() {
+  const file = arg("file");
+  if (!file) return ["--check forge-manifest requires --file <path-to-forge-manifest.json>"];
+  const abs = path.resolve(file);
+  if (!fs.existsSync(abs)) return [`forge-manifest file missing: ${file}`];
+  let data;
+  try { data = JSON.parse(fs.readFileSync(abs, "utf8")); }
+  catch (e) { return [`forge-manifest does not parse as JSON: ${e.message}`]; }
+  const schemaPath = forgeManifestSchemaPath(REPO);
+  if (!schemaPath) {
+    return ["contracts/forge-manifest.schema.json not found (set STUDIO_ROOT or GAME_CONTRACTS_ROOT)"];
+  }
+  let schema;
+  try { schema = JSON.parse(fs.readFileSync(schemaPath, "utf8")); }
+  catch (e) { return [`contracts schema unreadable: ${e.message}`]; }
+  return validate(schema, data).map((e) => `forge-manifest: ${e}`);
+}
+
 const CHECKS = {
   "required-tree": checkRequiredTree,
   schemas: checkSchemas,
@@ -440,6 +462,7 @@ const CHECKS = {
   gate: checkGate,
   issues: checkIssues,
   audit: checkAudit,
+  "forge-manifest": checkForgeManifest,
   thesis: () => checkEmbeddedArtifact("thesis"),
   engine: () => checkEmbeddedArtifact("engine"),
   spec: () => checkEmbeddedArtifact("spec"),

@@ -41,7 +41,8 @@ sections beneath it are the human view; keep the two in sync.
   },
   "bot_success_criteria": ["60s run without crash", "no stuck state", "random vs skilled bot spread measurable"],
   "taste_gates": ["G1: is the primitive loop worth replaying?"],
-  "kill_conditions": ["fails anti-boring gate after two deepen attempts", "dominant move cannot be removed cheaply"]
+  "kill_conditions": ["fails anti-boring gate after two deepen attempts", "dominant move cannot be removed cheaply"],
+  "out_of_scope": ["content expansion", "high-fidelity art", "multiplayer backend"]
 }
 ```
 

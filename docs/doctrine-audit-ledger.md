@@ -46,8 +46,8 @@ tracked they fail the check.
 | `docs/agents/triage-labels.md` | reaffirmed | Canonical local label set still required for triage skills; no DESIGN-RECORD conflict. |
 | `docs/anti-boring-gate.md` | reaffirmed | Paper ADVANCE design-lock remains design's depth gate (SPEC §1 ADVANCE; DESIGN-RECORD quality). |
 | `docs/borrowed-patterns.md` | reaffirmed | Operational harvest ledger for scout; empty template still needed. |
-| `docs/doctrine.md` | rewritten | Re-derived as studio design discipline; forge destiny; game feel vocabulary (DESIGN-RECORD §2–§5/§8). |
-| `docs/engine-matrix.md` | rewritten | Added Godot-only forge gate plain statement; replaced feel-slang with game feel (DESIGN-RECORD §3; SPEC §3.5). |
+| `docs/doctrine.md` | rewritten | Re-derived as studio design discipline; forge-manifest emission + Godot-gate (SPEC §3.4–§3.5 / T06); game feel vocabulary. |
+| `docs/engine-matrix.md` | rewritten | non-Godot engine decisions remain valid, but only godot-4 packs proceed into forge (SPEC §3.5 / T06 AC6); game feel vocabulary. |
 | `docs/feel-doctrine.md` | rewritten | Studio term game feel; feel-slang scrubbed; forge verify pointer (DESIGN-RECORD §5). |
 | `docs/game-dev-bridge.md` | rewritten | Bridge retargeted to co-dev/forge + games/ lifecycle; dropped tgf-games default (DESIGN-RECORD §2–§3). |
 | `docs/handoffs/antiphon-design-review-HANDOFF.md` | culled | Historical seed-run handoff; process debris, not studio doctrine (DESIGN-RECORD §8). |
@@ -78,24 +78,24 @@ tracked they fail the check.
 | `.factory/prompts/P14_KILL_RESTART.md` | reaffirmed | Kill/restart after failed deepen is still the evidence-over-sunk-cost exit (DESIGN-RECORD quality stance). |
 | `.factory/prompts/P16_REPO_SCOUT.md` | reaffirmed | Scout harvest of primitives still serves design reuse without cargo-cult (discipline ownership test in DESIGN-RECORD §5). |
 | `.factory/prompts/P17_VERIFY_TOOLCHAIN.md` | reaffirmed | Probe-before-assume tool doctrine still binds (design needs verified agent surfaces). |
-| `.factory/prompts/P18_DECOMPOSE_SPEC.md` | rewritten | Removed banned feel-slang wording; feel sliced first-class per DESIGN-RECORD §5. |
-| `.factory/prompts/P19_PACKAGE_SPEC.md` | reaffirmed | Pack export remains terminal design artifact (ADR 0006 / DESIGN-RECORD §3); forge-manifest emission deferred to T06. |
+| `.factory/prompts/P18_DECOMPOSE_SPEC.md` | rewritten | Feel first-class + forge-authoring sections asset_requests/lore_refs/capabilities/verify_plan (SPEC §3.4 / T06). |
+| `.factory/prompts/P19_PACKAGE_SPEC.md` | rewritten | Forge-manifest emission + Godot-gate + --require-manifest (SPEC §3.4–§3.5 / T06). |
 | `hooks/engine_migration_requires_adr.mjs` | reaffirmed | Still enforces seed-scoped engine decision files (DESIGN-RECORD engine phase remains). |
 | `hooks/lib/guard.mjs` | reaffirmed | Shared portable guard plumbing; required for design hooks and shipped pack guards. |
 | `hooks/mcp_mutation_must_emit_text.mjs` | reaffirmed | Code-native-over-opaque still binds design mutations (doctrine principle 4). |
 | `hooks/scope_brake.mjs` | reaffirmed | No game/gameplay edits before thesis; enforces DESIGN-RECORD §3 no-game-code-in-design. |
 | `schemas/asset-provenance.schema.json` | reaffirmed | Shipped-pack provenance recipe still needed for opaque-asset doctrine. |
 | `schemas/depth-vector.schema.json` | reaffirmed | Design-lock depth vector schema still the ADVANCE gate input. |
-| `schemas/engine-profile-decision.schema.json` | reaffirmed | Engine decision artifact still required pre-decompose (DESIGN-RECORD §3). |
+| `schemas/engine-profile-decision.schema.json` | rewritten | Optional godot_min/godot_max/renderer/language for forge-manifest engine block (SPEC §3.4 / T06). |
 | `schemas/execution-ledger-row.schema.json` | reaffirmed | Evidence-backed phase transitions remain run resumption truth. |
-| `schemas/game-thesis.schema.json` | rewritten | Structured feel_targets `{id, statement, metric, budget, unit}` (SPEC §3.3 / T05); ADVANCE ≥1 via checker `feel-target-required-for-ADVANCE`. |
+| `schemas/game-thesis.schema.json` | rewritten | Structured feel_targets (T05) + optional out_of_scope for manifest mapping (SPEC §3.4 / T06). |
 | `schemas/module-card.schema.json` | reaffirmed | Scout module-card still validates harvested primitives before adoption. |
 | `schemas/playtest-report.schema.json` | reaffirmed | Shipped-pack playtest evidence schema still carries bot/human proof obligations. |
 | `schemas/seed-manifest.schema.json` | reaffirmed | Per-seed run manifest still resumption source of truth. |
-| `schemas/spec-decomposition.schema.json` | rewritten | Structured acceptance `{kind ∈ five kinds, statement, check}` (SPEC §3.3 / T05). |
-| `templates/run/decisions/0001-engine-profile.md` | reaffirmed | Engine decision template still required after design-lock. |
+| `schemas/spec-decomposition.schema.json` | rewritten | Structured acceptance (T05) + asset_requests/lore_refs/capabilities/verify_plan (SPEC §3.4 / T06). |
+| `templates/run/decisions/0001-engine-profile.md` | rewritten | Godot version/renderer/language fields for forge-manifest mapping (SPEC §3.4 / T06). |
 | `templates/run/GAME_SEED.md` | reaffirmed | Run-dir seed template still the intake capture surface. |
-| `templates/run/GAME_THESIS.template.md` | reaffirmed | Thesis template still the compile output skeleton; T05 added structured feel_targets worked example. |
+| `templates/run/GAME_THESIS.template.md` | rewritten | Structured feel_targets (T05) + out_of_scope for manifest mapping (T06). |
 | `templates/run/manifest.json` | reaffirmed | Seed manifest template still initializes run state. |
 | `templates/run/README_AGENT_BOOT.md` | reaffirmed | Per-run agent boot still routes by manifest.current_phase. |
 | `templates/run/README_NEXT_ACTIONS.md` | reaffirmed | Next-actions stub still orients cold agents on a run. |

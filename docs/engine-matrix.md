@@ -6,10 +6,12 @@ in `decisions/0001-engine-profile.md`. The "required proof" column lists
 downstream obligations carried by the spec — the proofs run in the co-dev /
 forge path, not in this repo.
 
-**Forge gate (DESIGN-RECORD §3):** engines other than Godot may still be
-*decided* here (2D/3D, perf, platform are real questions). Only **godot-4** packs
-enter forge intake; other engines may export plain co-dev packs, not a forge
-manifest. No silent dual stack.
+**Forge gate (DESIGN-RECORD §3 / SPEC §3.5):** non-Godot engine decisions remain
+valid, but only godot-4 packs proceed into forge. Engines other than Godot may
+still be *decided* here (2D/3D, perf, platform are real questions). Only
+**godot-4** packs enter forge intake; other engines may export plain co-dev packs
+(with stdout `FORGE-GATE:ENGINE <profile>`), not a forge manifest. No silent dual
+stack.
 
 | Profile | Use when | Avoid when | Required proof |
 |---|---|---|---|

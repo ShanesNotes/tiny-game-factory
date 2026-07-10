@@ -5,8 +5,13 @@
 // shipped guards into a staging dir, proves the result leaks no factory state,
 // then writes it to the target folder. Dry-run by default; --write materializes.
 //
-// Usage: node scripts/package-spec.mjs --seed-id <id> [--to <dir>] [--write] [--force]
-//   --to defaults to the run's declared default_spec_pack_root.
+// For godot-4 seeds, also emits a schema-valid forge-manifest.json (SPEC §3.4).
+// Non-godot engines package successfully with no manifest and print
+// `FORGE-GATE:ENGINE <profile>`; --require-manifest upgrades that to a hard fail.
+// Mapping failure aborts BEFORE staging and lists every missing field.
+//
+// Usage: node scripts/package-spec.mjs --seed-id <id> [--to <dir>] [--write]
+//          [--force] [--require-manifest]
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -20,16 +25,32 @@ import {
 import { leakageErrors, listFiles } from "./lib/leakage.mjs";
 import { renderTemplate } from "./lib/template.mjs";
 import { arg, hasFlag } from "./lib/argv.mjs";
+import { validate } from "./lib/validate-json-schema.mjs";
+import {
+  GODOT_PROFILE,
+  forgeGateLine,
+  mapForgeManifest,
+  computePins,
+  computePackDigest
+} from "./lib/manifest-mapper.mjs";
+import {
+  resolveAssetsRoot,
+  resolveLoreRoot,
+  contractsVersion,
+  forgeManifestSchemaPath
+} from "./lib/studio-paths.mjs";
 
 const FACTORY_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const PKG = JSON.parse(fs.readFileSync(path.join(FACTORY_ROOT, "package.json"), "utf8"));
 
 function fail(msg) { console.error(`[package-spec] ERROR: ${msg}`); process.exit(1); }
 
 const seedId = arg("seed-id");
 const write = hasFlag("write");
 const force = hasFlag("force");
+const requireManifest = hasFlag("require-manifest");
 
-if (!seedId) fail("usage: --seed-id <id> [--to <dir>] [--write] [--force]");
+if (!seedId) fail("usage: --seed-id <id> [--to <dir>] [--write] [--force] [--require-manifest]");
 if (!isValidSeedId(seedId)) fail(`invalid --seed-id: ${seedId}`);
 const target = path.resolve(arg("to", specPackRootFor(seedId)));
 
@@ -73,13 +94,67 @@ try {
   fail(e.message);
 }
 
-// The pack doubles as a teaching workspace: MISSION.md and RESOURCES.md (the files
-// a teaching skill boots from) are seeded from the validated thesis so the first
-// co-dev session starts grounded in why this game, not with an empty mission.
 const { obj: thesis, errors: thesisErrors } = readEmbeddedArtifact(thesisPath, "game-thesis");
 if (!thesis) fail(`thesis invalid:\n  ${thesisErrors.join("\n  ")}`);
 
-// --- Assemble in staging, prove cleanliness, only then touch the target ---
+const { obj: engine, errors: engineErrors } = readEmbeddedArtifact(enginePath, "engine-profile-decision");
+if (!engine) fail(`engine decision invalid:\n  ${engineErrors.join("\n  ")}`);
+
+const { obj: spec, errors: specErrors } = readEmbeddedArtifact(specPath, "spec-decomposition");
+if (!spec) fail(`spec invalid:\n  ${specErrors.join("\n  ")}`);
+
+// --- Godot-gate + forge-manifest mapping (BEFORE staging) ---
+const engineProfile = String(engine.profile || "");
+const isGodot = engineProfile === GODOT_PROFILE;
+let pendingManifest = null; // filled for godot-4 after mapping; digest set after content stage
+
+if (!isGodot) {
+  const line = forgeGateLine(engineProfile || "(missing)");
+  console.log(line);
+  if (requireManifest) {
+    fail(`--require-manifest set but engine profile is not ${GODOT_PROFILE} (${line})`);
+  }
+} else {
+  const pinsResult = computePins({
+    assetsRoot: resolveAssetsRoot(FACTORY_ROOT),
+    loreRoot: resolveLoreRoot(FACTORY_ROOT),
+    contractsVersion: contractsVersion(FACTORY_ROOT),
+    forgeTemplate: null
+  });
+  const preMissing = pinsResult.ok ? [] : pinsResult.missing;
+
+  const mapResult = mapForgeManifest({
+    thesis,
+    spec,
+    engine,
+    pins: pinsResult.pins || {
+      contracts_version: "",
+      assets_index: "",
+      lore_index: "",
+      forge_template: null
+    },
+    meta: {
+      game_id: seedId,
+      seed_id: seedId,
+      producer: { name: PKG.name || "game-design", version: PKG.version || "0.0.0" },
+      created: new Date().toISOString(),
+      // placeholder until pack content is staged
+      pack_digest: "0".repeat(64)
+    }
+  });
+
+  const allMissing = [...new Set([...preMissing, ...mapResult.missing])];
+  if (allMissing.length) {
+    fail(
+      `forge-manifest mapping failed (export aborted before staging); missing fields:\n  - ${allMissing.join("\n  - ")}`
+    );
+  }
+  pendingManifest = mapResult.manifest;
+}
+
+// The pack doubles as a teaching workspace: MISSION.md and RESOURCES.md (the files
+// a teaching skill boots from) are seeded from the validated thesis so the first
+// co-dev session starts grounded in why this game, not with an empty mission.
 const tplDir = path.join(FACTORY_ROOT, "templates", "spec-pack");
 const sub = (s) => renderTemplate(s, {
   SEED_ID: seedId, SEED: seedText, PITCH: thesis.pitch, PLAYER_FANTASY: thesis.player_fantasy
@@ -128,6 +203,27 @@ try {
     put(path.join("schemas", `${s}.schema.json`), JSON.stringify(schema, null, 2) + "\n");
   }
   for (const d of ["playtests", "reviews"]) put(path.join(d, ".gitkeep"), "");
+
+  // Forge-manifest: digest over staged content (excluding the manifest itself),
+  // then validate against contracts schema and write.
+  if (pendingManifest) {
+    const entries = listFiles(staging).map((abs) => ({
+      rel: path.relative(staging, abs).split(path.sep).join("/"),
+      contents: fs.readFileSync(abs)
+    }));
+    pendingManifest.pack_digest = computePackDigest(entries);
+
+    const schemaPath = forgeManifestSchemaPath(FACTORY_ROOT);
+    if (!schemaPath) {
+      fail("forge-manifest.schema.json not found via STUDIO_ROOT/contracts (set STUDIO_ROOT or GAME_CONTRACTS_ROOT)");
+    }
+    const schema = JSON.parse(fs.readFileSync(schemaPath, "utf8"));
+    const schemaErrors = validate(schema, pendingManifest);
+    if (schemaErrors.length) {
+      fail(`forge-manifest failed contracts schema validation:\n  ${schemaErrors.join("\n  ")}`);
+    }
+    put("forge-manifest.json", JSON.stringify(pendingManifest, null, 2) + "\n");
+  }
 
   // Separation is absolute (ADR 0003): the assembled pack must carry zero factory
   // state — no .tgf paths, orchestrator names, or absolute source paths — even if
@@ -184,6 +280,9 @@ try {
   appendRunFileSync(process.cwd(), seedId, `${runRel}/execution-ledger.jsonl`, JSON.stringify(row) + "\n");
 
   console.log(`[package-spec] exported ${packFiles.length} files to ${target}`);
+  if (pendingManifest) {
+    console.log(`[package-spec] forge-manifest.json emitted (engine ${GODOT_PROFILE})`);
+  }
   console.log(`[package-spec] next: open ${target} in a fresh session and follow its AGENTS.md`);
 } finally {
   fs.rmSync(staging, { recursive: true, force: true });

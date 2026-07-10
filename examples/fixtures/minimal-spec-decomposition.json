@@ -3,6 +3,22 @@
   "chosen_loop_id": "loop-a",
   "summary": "Tracer-bullet decomposition of the plant/water/rotate loop into falsifiable co-dev slices.",
   "out_of_scope": ["content expansion", "high-fidelity art", "multiplayer"],
+  "asset_requests": [],
+  "lore_refs": [],
+  "capabilities": {
+    "persistence": false,
+    "localization": false,
+    "accessibility": false,
+    "multiplayer": false,
+    "world_gen": false,
+    "modding": false,
+    "telemetry": false
+  },
+  "verify_plan": {
+    "golden_cameras": [],
+    "frame_budget_ms": 16.67,
+    "load_budget_s": 5
+  },
   "slices": [
     {
       "id": "tracer-loop",

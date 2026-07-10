@@ -15,6 +15,10 @@ sections beneath it are the human view; keep the two in sync.
   "date": "TODO",
   "decision": "TODO chosen profile the spec targets",
   "profile": "TODO",
+  "godot_min": "4.6.2",
+  "godot_max": "4.7.0",
+  "renderer": "gl_compatibility",
+  "language": "gdscript",
   "rationale": "TODO two-line rationale",
   "scores": {
     "headless_testability": 2, "iteration_speed": 2, "fantasy_fit": 1, "core_loop_fit": 2,

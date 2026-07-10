@@ -10,6 +10,10 @@
     "date": { "type": "string" },
     "decision": { "type": "string" },
     "profile": { "type": "string" },
+    "godot_min": { "type": "string" },
+    "godot_max": { "type": "string" },
+    "renderer": { "type": "string" },
+    "language": { "type": "string" },
     "rationale": { "type": "string" },
     "scores": {
       "type": "object",

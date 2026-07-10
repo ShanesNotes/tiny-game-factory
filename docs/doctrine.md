@@ -35,7 +35,8 @@ rule here requires an ADR. Provenance of every doctrine surface lives in
   ADRs in `docs/adr/`.
 - The spec pack is the terminal design artifact (`spec_pack_is_terminal_artifact`,
   ADR 0006): produced only by `scripts/package-spec.mjs`, gated by run validation
-  and the leakage scan. (Forge-manifest emission is T06.)
+  and the leakage scan. Godot-4 packs also emit `forge-manifest.json` (SPEC §3.4);
+  non-godot packs print `FORGE-GATE:ENGINE <profile>` and skip the manifest.
 - Completion is verifier evidence, not agent prose.
 - Design harness state (`.tgf/`, ledgers, hooks, skill docs, internal vocabulary)
   must never leak into an exported spec pack.

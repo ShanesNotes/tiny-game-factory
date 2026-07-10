@@ -9,6 +9,85 @@
     "chosen_loop_id": { "type": "string" },
     "summary": { "type": "string" },
     "out_of_scope": { "type": "array", "items": { "type": "string" } },
+    "asset_requests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["request_id", "role", "kind", "constraints", "substitution_policy"],
+        "properties": {
+          "request_id": { "type": "string" },
+          "role": { "type": "string" },
+          "kind": { "enum": ["sprite", "model", "animation", "audio"] },
+          "query": { "type": "string" },
+          "pack_id": { "type": "string" },
+          "name": { "type": "string" },
+          "constraints": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "rig": { "type": "string" },
+              "clips": { "type": "array", "items": { "type": "string" } },
+              "dimensions": { "type": "array", "items": { "type": "number" } },
+              "perspective": { "type": "string" }
+            }
+          },
+          "substitution_policy": { "enum": ["allow", "report", "block"] }
+        }
+      }
+    },
+    "lore_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["motif_id", "affordance_claim", "required"],
+        "properties": {
+          "motif_id": { "type": "string" },
+          "affordance_claim": { "type": "string" },
+          "required": { "type": "boolean", "enum": [false] }
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "persistence", "localization", "accessibility", "multiplayer",
+        "world_gen", "modding", "telemetry"
+      ],
+      "properties": {
+        "persistence": { "type": "boolean" },
+        "localization": { "type": "boolean" },
+        "accessibility": { "type": "boolean" },
+        "multiplayer": { "type": "boolean" },
+        "world_gen": { "type": "boolean" },
+        "modding": { "type": "boolean" },
+        "telemetry": { "type": "boolean" }
+      }
+    },
+    "verify_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["golden_cameras", "frame_budget_ms", "load_budget_s"],
+      "properties": {
+        "golden_cameras": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "position", "target"],
+            "properties": {
+              "id": { "type": "string" },
+              "position": { "type": "array", "items": { "type": "number" } },
+              "target": { "type": "array", "items": { "type": "number" } }
+            }
+          }
+        },
+        "frame_budget_ms": { "type": "number" },
+        "load_budget_s": { "type": "number" }
+      }
+    },
     "slices": {
       "type": "array",
       "minItems": 1,
