@@ -59,6 +59,19 @@ SLICING RULES:
   `loop_verbs_covered` (checker enforces).
 - **Scope is closed.** `out_of_scope` lists what this spec deliberately excludes
   (content expansion, high-fidelity art, multiplayer are the usual suspects).
+- **Forge-authoring sections (required for godot-4 manifest export, SPEC §3.4).**
+  Author these on the SPEC.json block during decompose (empty arrays / false flags
+  are valid; the mapper requires the keys, not content):
+  - `asset_requests[]` — semantic asset needs
+    `{request_id, role, kind ∈ sprite|model|animation|audio, query and/or
+    {pack_id,name}, constraints, substitution_policy ∈ allow|report|block}`.
+    Never resolved filesystem paths.
+  - `lore_refs[]` — `{motif_id, affordance_claim, required: false}` (v1 always false).
+  - `capabilities` — booleans for
+    `persistence | localization | accessibility | multiplayer | world_gen |
+    modding | telemetry`.
+  - `verify_plan` — `{golden_cameras[] {id, position, target}, frame_budget_ms,
+    load_budget_s}`.
 
 VERIFY (completion is evidence, not prose):
 1. `node scripts/validate-artifacts.mjs --check spec --seed-id <id>` passes.

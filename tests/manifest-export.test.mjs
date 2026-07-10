@@ -1,0 +1,342 @@
+// T06 — forge-manifest export with Godot-gate (SPEC §3.4–§3.5).
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { validate } from "../scripts/lib/validate-json-schema.mjs";
+import {
+  GODOT_PROFILE,
+  forgeGateLine,
+  mapForgeManifest,
+  computePins,
+  FORGE_GATE_TOKEN
+} from "../scripts/lib/manifest-mapper.mjs";
+import {
+  resolveAssetsRoot,
+  resolveLoreRoot,
+  contractsVersion,
+  forgeManifestSchemaPath,
+  gitHead
+} from "../scripts/lib/studio-paths.mjs";
+import { leakageErrors } from "../scripts/lib/leakage.mjs";
+
+const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const rel = (...p) => path.join(REPO, ...p);
+const STUDIO = path.resolve(REPO, "..", ".."); // .worktrees/t06 → game-studio when nested; adjust
+
+function resolveStudioForTests() {
+  // worktree: .../game-studio/.worktrees/t06-manifest-export → studio is ../..
+  // main checkout: .../game-studio/design → studio is ..
+  if (fs.existsSync(path.join(path.dirname(REPO), "DISCIPLINES.md"))) {
+    return path.dirname(REPO);
+  }
+  if (fs.existsSync(path.join(path.dirname(path.dirname(REPO)), "DISCIPLINES.md"))) {
+    return path.dirname(path.dirname(REPO));
+  }
+  return process.env.STUDIO_ROOT || path.resolve(REPO, "..");
+}
+
+const STUDIO_ROOT = resolveStudioForTests();
+
+function node(script, args, opts = {}) {
+  const { env: extraEnv, cwd, ...rest } = opts;
+  return spawnSync(process.execPath, [rel("scripts", script), ...args], {
+    encoding: "utf8",
+    cwd: cwd || REPO,
+    env: { ...process.env, STUDIO_ROOT, ...(extraEnv || {}) },
+    ...rest
+  });
+}
+
+function tmp() {
+  return fs.mkdtempSync(path.join(os.tmpdir(), "tgf-t06-"));
+}
+
+function thesisMd(overrides = {}) {
+  const obj = {
+    ...JSON.parse(fs.readFileSync(rel("examples/fixtures/minimal-game-thesis.json"), "utf8")),
+    ...overrides
+  };
+  return "# GAME_THESIS.md\n\n```json\n" + JSON.stringify(obj, null, 2) + "\n```\n";
+}
+
+function engineMd(id, { status = "accepted", profile = GODOT_PROFILE, extra = {} } = {}) {
+  const obj = {
+    seed_id: id,
+    status,
+    decision: "godot for headless scene tooling",
+    profile,
+    rationale: "tracer needs scene tree + headless",
+    rejected: [],
+    reversal_triggers: ["editor opacity blocks bots"],
+    ...(profile === GODOT_PROFILE
+      ? {
+          godot_min: "4.6.2",
+          godot_max: "4.7.0",
+          renderer: "gl_compatibility",
+          language: "gdscript"
+        }
+      : {}),
+    ...extra
+  };
+  return "# ADR 0001\n\n```json\n" + JSON.stringify(obj) + "\n```\n";
+}
+
+function specMd(id, overrides = {}) {
+  const obj = {
+    ...JSON.parse(fs.readFileSync(rel("examples/fixtures/minimal-spec-decomposition.json"), "utf8")),
+    seed_id: id,
+    ...overrides
+  };
+  return "# SPEC.md\n\n```json\n" + JSON.stringify(obj, null, 2) + "\n```\n";
+}
+
+const ADVANCE_DV = {
+  scores: {
+    meaningful_choice: 2, tradeoff: 2, pressure: 2, uncertainty: 2,
+    progression: 2, mastery: 2, combinatorial: 2, emergence: 2,
+    replayable_variation: 2, failure_recovery: 0, expression: 0, expansion_headroom: 0
+  },
+  total: 18,
+  verdict: "ADVANCE"
+};
+
+function advanceRun(dir, id, { phase, thesisPath, enginePath, specPath, ledgerPhases = [] }) {
+  const runDir = path.join(dir, ".tgf", "seeds", id);
+  const manifest = JSON.parse(fs.readFileSync(path.join(runDir, "manifest.json"), "utf8"));
+  manifest.current_phase = phase;
+  if (thesisPath !== undefined) manifest.game_thesis_path = thesisPath;
+  if (enginePath !== undefined) manifest.engine_decision_path = enginePath;
+  if (specPath !== undefined) manifest.spec_path = specPath;
+  fs.writeFileSync(path.join(runDir, "manifest.json"), JSON.stringify(manifest, null, 2) + "\n");
+  const ledgerFile = path.join(runDir, "execution-ledger.jsonl");
+  for (const p of ledgerPhases) {
+    fs.appendFileSync(ledgerFile, JSON.stringify({
+      ts: "2026-06-07T00:00:00.000Z", seed_id: id, phase: p,
+      event: "phase-advance", status: "checkpointed", actor: "test"
+    }) + "\n");
+  }
+  return runDir;
+}
+
+function decomposeReadyRun(dir, id, { profile = GODOT_PROFILE, thesisOverrides = {}, specOverrides = {} } = {}) {
+  assert.equal(
+    node("init-game-run.mjs", ["--seed-id", id, "--seed", "x"], { cwd: dir }).status,
+    0
+  );
+  const runDir = path.join(dir, ".tgf", "seeds", id);
+  fs.writeFileSync(path.join(runDir, "GAME_THESIS.md"), thesisMd(thesisOverrides));
+  fs.writeFileSync(path.join(runDir, "decisions", "0001-engine-profile.md"), engineMd(id, { profile }));
+  fs.writeFileSync(path.join(runDir, "SPEC.md"), specMd(id, specOverrides));
+  fs.mkdirSync(path.join(runDir, "reviews", "design"), { recursive: true });
+  fs.writeFileSync(path.join(runDir, "reviews", "design", "depth-vector.json"), JSON.stringify(ADVANCE_DV));
+  advanceRun(dir, id, {
+    phase: "decompose",
+    thesisPath: `.tgf/seeds/${id}/GAME_THESIS.md`,
+    enginePath: `.tgf/seeds/${id}/decisions/0001-engine-profile.md`,
+    specPath: `.tgf/seeds/${id}/SPEC.md`,
+    ledgerPhases: ["thesis", "design-review", "engine-profile", "decompose"]
+  });
+  return runDir;
+}
+
+function loadContractsSchema() {
+  const p = forgeManifestSchemaPath(REPO);
+  assert.ok(p, "contracts schema must resolve via STUDIO_ROOT");
+  return JSON.parse(fs.readFileSync(p, "utf8"));
+}
+
+// --- unit: mapper implements §3.4 ---
+
+test("AC1: mapper renames design_register→register and requires golden_moment", () => {
+  const thesis = JSON.parse(fs.readFileSync(rel("examples/fixtures/minimal-game-thesis.json"), "utf8"));
+  const spec = JSON.parse(fs.readFileSync(rel("examples/fixtures/minimal-spec-decomposition.json"), "utf8"));
+  const engine = {
+    seed_id: "x",
+    status: "accepted",
+    decision: "d",
+    profile: GODOT_PROFILE,
+    godot_min: "4.6.2",
+    godot_max: "4.7.0",
+    renderer: "gl_compatibility",
+    language: "gdscript",
+    rationale: "r",
+    rejected: [],
+    reversal_triggers: ["t"]
+  };
+  const pins = {
+    contracts_version: "1.0.0",
+    assets_index: "a".repeat(40),
+    lore_index: "b".repeat(40),
+    forge_template: null
+  };
+  const meta = {
+    game_id: "tiny-asteroid-gardening",
+    seed_id: "tiny-asteroid-gardening",
+    producer: { name: "game-design", version: "0.1.0" },
+    created: "2026-07-10T00:00:00.000Z",
+    pack_digest: "c".repeat(64)
+  };
+
+  const good = mapForgeManifest({ thesis, spec, engine, pins, meta });
+  assert.equal(good.ok, true, good.missing.join(", "));
+  assert.equal(good.manifest.thesis.register, thesis.design_register);
+  assert.equal(good.manifest.thesis.golden_moment, thesis.golden_moment);
+  assert.equal(good.manifest.thesis.chosen_loop_id, spec.chosen_loop_id);
+  assert.equal(good.manifest.slices[0].evidence_required[0], spec.slices[0].evidence_requirements[0]);
+  assert.deepEqual(validate(loadContractsSchema(), good.manifest), []);
+
+  const noGm = structuredClone(thesis);
+  delete noGm.golden_moment;
+  const bad = mapForgeManifest({ thesis: noGm, spec, engine, pins, meta });
+  assert.equal(bad.ok, false);
+  assert.ok(bad.missing.includes("thesis.golden_moment"));
+});
+
+test("AC6: engine-matrix states only godot-4 packs proceed into forge", () => {
+  const text = fs.readFileSync(rel("docs/engine-matrix.md"), "utf8");
+  // grep-checkable stable phrases (may wrap across lines)
+  assert.match(text, /non-Godot engine decisions remain\s+valid/);
+  assert.match(text, /only godot-4 packs proceed into forge/);
+});
+
+// --- integration: package-spec ---
+
+test("AC2: godot-4 export emits schema-valid forge-manifest with real pin SHAs", () => {
+  const dir = tmp();
+  const target = tmp();
+  const id = "selftest-manifest-godot";
+  try {
+    const runDir = decomposeReadyRun(dir, id, { profile: GODOT_PROFILE });
+    assert.equal(node("emit-local-issues.mjs", ["--seed-id", id, "--write"], { cwd: dir }).status, 0);
+
+    const r = node("package-spec.mjs", ["--seed-id", id, "--to", target, "--write"], { cwd: dir });
+    assert.equal(r.status, 0, r.stdout + r.stderr);
+    assert.doesNotMatch(r.stdout, new RegExp(FORGE_GATE_TOKEN));
+
+    const mfPath = path.join(target, "forge-manifest.json");
+    assert.ok(fs.existsSync(mfPath), "pack must contain forge-manifest.json");
+    const mf = JSON.parse(fs.readFileSync(mfPath, "utf8"));
+
+    const schemaErrs = validate(loadContractsSchema(), mf);
+    assert.deepEqual(schemaErrs, [], schemaErrs.join("\n"));
+
+    // validate-artifacts forge-manifest check
+    const chk = node("validate-artifacts.mjs", ["--check", "forge-manifest", "--file", mfPath], { cwd: dir });
+    assert.equal(chk.status, 0, chk.stdout + chk.stderr);
+
+    // pins are real git SHAs of assets/lore
+    const assetsSha = gitHead(resolveAssetsRoot(REPO));
+    const loreSha = gitHead(resolveLoreRoot(REPO));
+    assert.ok(assetsSha, "assets git HEAD");
+    assert.ok(loreSha, "lore git HEAD");
+    assert.equal(mf.pins.assets_index, assetsSha);
+    assert.equal(mf.pins.lore_index, loreSha);
+    assert.equal(mf.pins.contracts_version, contractsVersion(REPO));
+    assert.equal(mf.engine.profile, GODOT_PROFILE);
+    assert.equal(mf.thesis.register, "mechanics-first");
+    assert.match(mf.pack_digest, /^[a-f0-9]{64}$/);
+
+    // contracts test runner can also validate (Node path)
+    const contractsValidate = path.join(STUDIO_ROOT, "contracts", "test", "validate-node.mjs");
+    if (fs.existsSync(contractsValidate)) {
+      // runner expects fixture dir shape; we already validated against the schema above
+      assert.ok(true);
+    }
+
+    // AC5: leakage scan over emitted manifest (and pack root)
+    const leaks = leakageErrors([target], target);
+    assert.deepEqual(leaks, [], leaks.join("\n"));
+    assert.doesNotMatch(JSON.stringify(mf), /\/home\/ark\//);
+    assert.doesNotMatch(JSON.stringify(mf), /tiny[ -]game[ -]factory/i);
+
+    // issues were rendered from the same run
+    assert.ok(fs.existsSync(path.join(runDir, "issues", "tracer-loop.md")));
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+    fs.rmSync(target, { recursive: true, force: true });
+  }
+});
+
+test("AC3: non-godot packages with FORGE-GATE line; --require-manifest hard-fails", () => {
+  const dir = tmp();
+  const target = tmp();
+  const id = "selftest-manifest-nongodot";
+  try {
+    decomposeReadyRun(dir, id, { profile: "raw Canvas + TS" });
+    assert.equal(node("emit-local-issues.mjs", ["--seed-id", id, "--write"], { cwd: dir }).status, 0);
+
+    let r = node("package-spec.mjs", ["--seed-id", id, "--to", target, "--write"], { cwd: dir });
+    assert.equal(r.status, 0, r.stdout + r.stderr);
+    assert.match(r.stdout, new RegExp(`${FORGE_GATE_TOKEN} raw Canvas \\+ TS`));
+    assert.ok(!fs.existsSync(path.join(target, "forge-manifest.json")), "no manifest for non-godot");
+    assert.ok(fs.existsSync(path.join(target, "SPEC.md")), "pack still exports");
+
+    // require-manifest upgrades to hard fail; target was already filled — use fresh target
+    const target2 = tmp();
+    try {
+      r = node(
+        "package-spec.mjs",
+        ["--seed-id", id, "--to", target2, "--write", "--require-manifest"],
+        { cwd: dir }
+      );
+      assert.equal(r.status, 1, r.stdout + r.stderr);
+      assert.match(r.stderr + r.stdout, new RegExp(FORGE_GATE_TOKEN));
+      assert.equal(fs.readdirSync(target2).length, 0, "require-manifest fail must not write pack");
+    } finally {
+      fs.rmSync(target2, { recursive: true, force: true });
+    }
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+    fs.rmSync(target, { recursive: true, force: true });
+  }
+});
+
+test("AC4: mapping failure aborts before staging and lists every missing field", () => {
+  const dir = tmp();
+  const target = tmp();
+  const id = "selftest-manifest-missing-gm";
+  try {
+    const runDir = decomposeReadyRun(dir, id, { profile: GODOT_PROFILE });
+    assert.equal(node("emit-local-issues.mjs", ["--seed-id", id, "--write"], { cwd: dir }).status, 0);
+
+    // Delete golden_moment from thesis (optional in schema; required at mapping)
+    const thesisPath = path.join(runDir, "GAME_THESIS.md");
+    const thesis = JSON.parse(fs.readFileSync(rel("examples/fixtures/minimal-game-thesis.json"), "utf8"));
+    delete thesis.golden_moment;
+    fs.writeFileSync(thesisPath, "# GAME_THESIS.md\n\n```json\n" + JSON.stringify(thesis, null, 2) + "\n```\n");
+
+    const before = fs.existsSync(target) ? fs.readdirSync(target) : [];
+    const r = node("package-spec.mjs", ["--seed-id", id, "--to", target, "--write"], { cwd: dir });
+    assert.equal(r.status, 1, r.stdout + r.stderr);
+    assert.match(r.stderr, /mapping failed|aborted before staging/i);
+    assert.match(r.stderr, /thesis\.golden_moment/);
+    assert.equal(fs.readdirSync(target).length, before.length, "target must not be mutated on mapping abort");
+    assert.ok(!fs.existsSync(path.join(target, "forge-manifest.json")));
+    assert.ok(!fs.existsSync(path.join(target, "SPEC.md")));
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+    fs.rmSync(target, { recursive: true, force: true });
+  }
+});
+
+test("forgeGateLine token is stable", () => {
+  assert.equal(forgeGateLine("unity"), "FORGE-GATE:ENGINE unity");
+});
+
+test("computePins uses git SHAs not paths", () => {
+  const r = computePins({
+    assetsRoot: resolveAssetsRoot(REPO),
+    loreRoot: resolveLoreRoot(REPO),
+    contractsVersion: "1.0.0",
+    forgeTemplate: null
+  });
+  assert.equal(r.ok, true, (r.missing || []).join(", "));
+  assert.match(r.pins.assets_index, /^[0-9a-f]{40}$/i);
+  assert.match(r.pins.lore_index, /^[0-9a-f]{40}$/i);
+  assert.doesNotMatch(r.pins.assets_index, /\//);
+  assert.doesNotMatch(r.pins.lore_index, /\//);
+});

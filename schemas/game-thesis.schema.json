@@ -46,6 +46,7 @@
     "first_playable_slice": { "type": "object" },
     "bot_success_criteria": { "type": "array", "items": { "type": "string" } },
     "taste_gates": { "type": "array", "items": { "type": "string" } },
-    "kill_conditions": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+    "kill_conditions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "out_of_scope": { "type": "array", "items": { "type": "string" } }
   }
 }
