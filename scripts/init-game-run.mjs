@@ -51,8 +51,25 @@ manifest.resume_point = {
   artifact_path: `${runRel}/intake/office-hours.md`,
   reason: "Build the portfolio digest and complete the schema-gated intake grill."
 };
-const bootDoc = readTpl("README_AGENT_BOOT.md");
-const nextDoc = readTpl("README_NEXT_ACTIONS.md");
+const bootDoc = readTpl("README_AGENT_BOOT.md").replace(
+  "3. Run `.factory/prompts/P17_VERIFY_TOOLCHAIN.md` (or an equivalent toolchain probe)\n   before any other phase.",
+  "3. At `intake`, build `intake/portfolio-digest.json`, then complete the schema-gated\n   `intake/office-hours.md`; only then advance to `toolchain` and run P17."
+);
+const nextDoc = readTpl("README_NEXT_ACTIONS.md")
+  .replace("Status: initialized (phase: `toolchain`).", "Status: initialized (phase: `intake`).")
+  .replace(
+    /Next agent action:\n\n[\s\S]*?\n\nDo not:/,
+    `Next agent action:
+
+1. Read \`README_AGENT_BOOT.md\` and summarize the manifest.
+2. Run \`node scripts/build-portfolio-digest.mjs --seed-id ${seedId}\`.
+3. Complete \`intake/office-hours.md\` against the digest and
+   \`schemas/intake-grill.schema.json\`.
+4. Advance to \`toolchain\`, run P17 from real probes, then route by the manifest.
+5. Record phase transitions with \`node scripts/advance-run.mjs\`.
+
+Do not:`
+  );
 const seedDoc = `# GAME_SEED.md\n\n${seed}\n`;
 
 const ledgerRow = {

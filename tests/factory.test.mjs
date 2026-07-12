@@ -171,6 +171,12 @@ test("init-game-run creates only .tgf/seeds/{id} with valid manifest + ledger", 
     const ledgerSchema = JSON.parse(fs.readFileSync(rel("schemas/execution-ledger-row.schema.json"), "utf8"));
     assert.deepEqual(validate(ledgerSchema, firstRow), []);
     assert.equal(firstRow.phase, "intake");
+    const boot = fs.readFileSync(path.join(runDir, "README_AGENT_BOOT.md"), "utf8");
+    const next = fs.readFileSync(path.join(runDir, "README_NEXT_ACTIONS.md"), "utf8");
+    assert.match(boot, /portfolio-digest.*office-hours/is);
+    assert.doesNotMatch(boot, /P17_VERIFY_TOOLCHAIN.*before any other phase/is);
+    assert.match(next, /phase: `intake`/);
+    assert.match(next, /build-portfolio-digest/);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 

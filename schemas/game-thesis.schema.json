@@ -59,5 +59,10 @@
     "taste_gates": { "type": "array", "items": { "type": "string" } },
     "kill_conditions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
     "out_of_scope": { "type": "array", "items": { "type": "string" } }
-  }
+  },
+  "if": {
+    "required": ["schema_version"],
+    "properties": { "schema_version": { "enum": ["2.0.0"] } }
+  },
+  "then": { "required": ["schema_version", "portfolio_distinctness"] }
 }

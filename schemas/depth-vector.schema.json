@@ -83,5 +83,10 @@
       }
     },
     "verdict": { "enum": ["ADVANCE", "DEEPEN", "KILL"] }
-  }
+  },
+  "if": {
+    "required": ["schema_version"],
+    "properties": { "schema_version": { "enum": ["2.0.0"] } }
+  },
+  "then": { "required": ["schema_version", "evidence", "review_provenance"] }
 }

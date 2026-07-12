@@ -5,6 +5,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { validate } from "../scripts/lib/validate-json-schema.mjs";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED_AT = "2026-07-12T12:00:00.000Z";
@@ -107,6 +108,18 @@ function prepareIntake(dir, id, withPrior = false) {
   return runDir;
 }
 
+test("v2 thesis and vector schemas conditionally require portfolio fields", () => {
+  const thesisSchema = JSON.parse(fs.readFileSync(path.join(REPO, "schemas/game-thesis.schema.json"), "utf8"));
+  const vectorSchema = JSON.parse(fs.readFileSync(path.join(REPO, "schemas/depth-vector.schema.json"), "utf8"));
+  const badThesis = thesis("schema-conditional");
+  delete badThesis.portfolio_distinctness;
+  assert.ok(validate(thesisSchema, badThesis).some((error) => /portfolio_distinctness/.test(error)));
+  const badVector = { schema_version: "2.0.0", scores: SCORES, total: 17, verdict: "ADVANCE" };
+  const vectorErrors = validate(vectorSchema, badVector);
+  assert.ok(vectorErrors.some((error) => /evidence/.test(error)));
+  assert.ok(vectorErrors.some((error) => /review_provenance/.test(error)));
+});
+
 test("new runs cannot reach toolchain without schema-valid intake evidence", () => {
   const dir = tmp();
   const id = "intake-gate";
@@ -180,6 +193,15 @@ test("new depth vectors require cited thesis paths, provenance, and exact-match 
     assert.match(result.stdout, /not\.a\.thesis\.path/);
 
     evidence.expression = "core_loop_candidates[0].verbs";
+    const distinctScores = { ...SCORES, expression: 2 };
+    writeJson(vectorPath, {
+      schema_version: "2.0.0", scores: distinctScores, total: 18, register: "mechanics-first",
+      evidence, review_provenance: { mode: "independent", reviewer_note: "cold review" }, verdict: "ADVANCE"
+    });
+    result = run("validate-artifacts.mjs", ["--check", "run", "--seed-id", id], dir);
+    assert.equal(result.status, 1, result.stdout + result.stderr);
+    assert.match(result.stdout, /distinctness disposition naming nearest prior seed 'prior-one'/i);
+
     writeJson(vectorPath, {
       schema_version: "2.0.0", scores: SCORES, total: 17, register: "mechanics-first",
       evidence, review_provenance: { mode: "independent", reviewer_note: "cold review" }, verdict: "ADVANCE"

@@ -31,7 +31,7 @@
           "seed_id": { "type": "string" },
           "pitch": { "type": "string" },
           "chosen_loop": {
-            "type": "object",
+            "type": ["object", "null"],
             "additionalProperties": false,
             "required": ["id", "verbs"],
             "properties": {

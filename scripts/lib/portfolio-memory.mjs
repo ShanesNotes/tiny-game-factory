@@ -98,6 +98,12 @@ function thesisPathExists(thesis, fieldPath) {
 
 export function depthVectorPortfolioErrors(vector, thesis, digest, verdictText) {
   const errors = [];
+  const hasDistinctnessDisposition = (seedId) => {
+    const escapedId = seedId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const namedSeed = new RegExp(`(^|[^a-z0-9-])${escapedId}([^a-z0-9-]|$)`, "i");
+    return String(verdictText || "").split("\n")
+      .some((line) => /distinctness/i.test(line) && namedSeed.test(line));
+  };
   if (vector?.schema_version !== "2.0.0") errors.push("depth vector schema_version must be '2.0.0' for portfolio-enabled runs");
   if (!vector?.evidence || Array.isArray(vector.evidence) || typeof vector.evidence !== "object") {
     errors.push("depth vector requires per-axis evidence field paths");
@@ -112,17 +118,17 @@ export function depthVectorPortfolioErrors(vector, thesis, digest, verdictText) 
   if (!vector?.review_provenance || typeof vector.review_provenance !== "object") {
     errors.push("depth vector review_provenance is required");
   }
+  const nearestPrior = thesis?.portfolio_distinctness?.nearest_prior_seed;
+  if (typeof nearestPrior === "string" && !hasDistinctnessDisposition(nearestPrior)) {
+    errors.push(`ANTI_BORING_VERDICT.md needs a distinctness disposition naming nearest prior seed '${nearestPrior}'`);
+  }
 
   const scoreSignature = DEPTH_AXES.map((axis) => vector?.scores?.[axis]).join(",");
   for (const prior of digest?.prior_theses || []) {
     if (prior.depth_vector?.verdict !== "ADVANCE") continue;
     const priorSignature = DEPTH_AXES.map((axis) => prior.depth_vector.scores?.[axis]).join(",");
     if (scoreSignature !== priorSignature) continue;
-    const escapedId = prior.seed_id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const namedSeed = new RegExp(`(^|[^a-z0-9-])${escapedId}([^a-z0-9-]|$)`, "i");
-    const disposition = String(verdictText || "").split("\n")
-      .some((line) => /distinctness/i.test(line) && namedSeed.test(line));
-    if (!disposition) {
+    if (!hasDistinctnessDisposition(prior.seed_id)) {
       errors.push(`depth vector exactly matches prior ADVANCE seed '${prior.seed_id}'; ANTI_BORING_VERDICT.md needs a distinctness disposition naming that seed`);
     }
   }

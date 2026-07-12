@@ -4,7 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { arg } from "./lib/argv.mjs";
 import { extractFencedJson, isValidSeedId } from "./lib/run-state.mjs";
-import { resolveDesignRoot, resolveGamesRoot } from "./lib/studio-paths.mjs";
+import { resolveContractsRoot, resolveDesignRoot, resolveGamesRoot } from "./lib/studio-paths.mjs";
 import { validate } from "./lib/validate-json-schema.mjs";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -51,6 +51,29 @@ function readDepthVector(runDir, priorId) {
   }
 }
 
+function readChosenLoop(runDir, thesis, priorId) {
+  const specFile = path.join(runDir, "SPEC.md");
+  if (!fs.existsSync(specFile)) {
+    skip("chosen-loop", "SPEC.md is missing; no chosen loop is recorded", priorId);
+    return null;
+  }
+  const { obj: spec, error } = extractFencedJson(fs.readFileSync(specFile, "utf8"));
+  if (error || typeof spec?.chosen_loop_id !== "string") {
+    skip("chosen-loop", error || "SPEC.md has no chosen_loop_id", priorId);
+    return null;
+  }
+  const chosen = thesis.core_loop_candidates?.find((candidate) => candidate.id === spec.chosen_loop_id);
+  if (!chosen || !(typeof chosen.verbs === "string" || Array.isArray(chosen.verbs))) {
+    skip("chosen-loop", `chosen_loop_id '${spec.chosen_loop_id}' does not resolve to a thesis candidate`, priorId);
+    return null;
+  }
+  return {
+    id: chosen.id,
+    verbs: chosen.verbs,
+    ...(typeof chosen.description === "string" ? { description: chosen.description } : {})
+  };
+}
+
 const designRoot = resolveDesignRoot(process.cwd());
 const seedsRoot = designRoot && path.join(designRoot, ".tgf", "seeds");
 if (!seedsRoot || !fs.existsSync(seedsRoot)) {
@@ -68,19 +91,10 @@ if (!seedsRoot || !fs.existsSync(seedsRoot)) {
       skip("game-thesis", error, priorId);
       continue;
     }
-    const chosen = thesis.core_loop_candidates?.[0];
-    if (!chosen || typeof chosen.id !== "string" || !(typeof chosen.verbs === "string" || Array.isArray(chosen.verbs))) {
-      skip("game-thesis", "first core_loop_candidates row cannot serve as the thesis-local chosen loop", priorId);
-      continue;
-    }
     digest.prior_theses.push({
       seed_id: priorId,
       pitch: typeof thesis.pitch === "string" ? thesis.pitch : "UNKNOWN",
-      chosen_loop: {
-        id: chosen.id,
-        verbs: chosen.verbs,
-        ...(typeof chosen.description === "string" ? { description: chosen.description } : {})
-      },
+      chosen_loop: readChosenLoop(runDir, thesis, priorId),
       design_register: thesis.design_register ?? "UNKNOWN",
       golden_moment: thesis.golden_moment ?? "UNKNOWN",
       depth_vector: readDepthVector(runDir, priorId)
@@ -92,6 +106,26 @@ const lifecycles = new Set(["skeleton", "active", "candidate", "done", "archived
 const sealedVerdictFields = [
   "schema_version", "ts", "verdict", "by", "game_commit", "manifest_digest", "lock_digest", "report"
 ];
+const contractsRoot = resolveContractsRoot(process.cwd());
+const verdictSchemaFile = contractsRoot && path.join(contractsRoot, "verdict-record.schema.json");
+let verdictSchema = null;
+if (!verdictSchemaFile || !fs.existsSync(verdictSchemaFile)) {
+  skip("verdict-contract", "contracts/verdict-record.schema.json is missing");
+} else {
+  try { verdictSchema = JSON.parse(fs.readFileSync(verdictSchemaFile, "utf8")); }
+  catch (error) { skip("verdict-contract", `verdict schema is unreadable: ${error.message}`); }
+}
+
+function sealedVerdictErrors(record) {
+  const errors = verdictSchema ? validate(verdictSchema, record) : ["sealed verdict contract unavailable"];
+  if (sealedVerdictFields.some((field) => !(field in record))) errors.push("required sealed fields are missing");
+  for (const field of ["ts", "by", "game_commit", "manifest_digest", "lock_digest"]) {
+    if (typeof record[field] !== "string" || !record[field].trim()) errors.push(`${field} must be non-empty`);
+  }
+  if (typeof record.ts === "string" && Number.isNaN(Date.parse(record.ts))) errors.push("ts must be a date-time");
+  if (typeof record.report?.digest !== "string" || !record.report.digest.trim()) errors.push("report.digest must be non-empty");
+  return errors;
+}
 const gamesRoot = resolveGamesRoot(process.cwd());
 const indexFile = gamesRoot && path.join(gamesRoot, "INDEX.md");
 if (!indexFile || !fs.existsSync(indexFile)) {
@@ -110,25 +144,31 @@ if (!indexFile || !fs.existsSync(indexFile)) {
     if (!fs.existsSync(verdictDir)) {
       skip("human-verdict", "no sealed verdict record", gameId);
     } else {
-      const files = fs.readdirSync(verdictDir).filter((name) => name.endsWith(".json")).sort();
+      const files = fs.readdirSync(verdictDir).filter((name) => name.endsWith(".json")).sort().reverse();
       if (!files.length) {
         skip("human-verdict", "no sealed verdict record", gameId);
       } else {
-        try {
-          const record = JSON.parse(fs.readFileSync(path.join(verdictDir, files.at(-1)), "utf8"));
-          if (sealedVerdictFields.some((field) => !(field in record))
-              || !["done", "notes", "hold"].includes(record.verdict)
-              || !record.report || !["pass", "fail"].includes(record.report.overall)) {
-            throw new Error("record does not match the sealed human-verdict shape");
+        let record = null;
+        for (const file of files) {
+          try {
+            const candidate = JSON.parse(fs.readFileSync(path.join(verdictDir, file), "utf8"));
+            const errors = sealedVerdictErrors(candidate);
+            if (errors.length) throw new Error(errors.join("; "));
+            record = candidate;
+            break;
+          } catch (error) {
+            skip("human-verdict", `invalid sealed verdict ${file}: ${error.message}`, gameId);
           }
+        }
+        if (record) {
           humanVerdict = {
             verdict: record.verdict,
             ...(typeof record.ts === "string" ? { ts: record.ts } : {}),
             ...(typeof record.by === "string" ? { by: record.by } : {}),
             ...(typeof record.notes_rel === "string" ? { notes_rel: record.notes_rel } : {})
           };
-        } catch (error) {
-          skip("human-verdict", `unreadable sealed verdict: ${error.message}`, gameId);
+        } else {
+          skip("human-verdict", "no schema-valid sealed verdict record", gameId);
         }
       }
     }

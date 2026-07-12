@@ -51,8 +51,12 @@ test("portfolio digest records prior design evidence and sealed human verdicts",
       pitch: "A prior pitch",
       design_register: "mechanics-first",
       golden_moment: "A prior golden moment",
-      core_loop_candidates: [{ id: "loop-a", verbs: ["plant", "turn"] }]
+      core_loop_candidates: [
+        { id: "loop-a", verbs: ["plant", "turn"] },
+        { id: "loop-b", verbs: ["graft", "reroute"] }
+      ]
     });
+    writeThesis(path.join(design, ".tgf/seeds/prior-one/SPEC.md"), { chosen_loop_id: "loop-b" });
     writeJson(path.join(design, ".tgf/seeds/prior-one/reviews/depth-vector.json"), {
       scores,
       total: 17,
@@ -63,13 +67,35 @@ test("portfolio digest records prior design evidence and sealed human verdicts",
       core_loop_candidates: [{ id: "loop-current", verbs: ["skip"] }]
     });
     fs.mkdirSync(path.join(studio, "games"), { recursive: true });
+    writeJson(path.join(studio, "contracts/verdict-record.schema.json"), {
+      $schema: "https://json-schema.org/draft/2020-12/schema",
+      title: "verdict-record",
+      type: "object",
+      additionalProperties: false,
+      required: ["schema_version", "ts", "verdict", "by", "game_commit", "manifest_digest", "lock_digest", "report"],
+      properties: {
+        schema_version: { enum: ["1.0.0"] },
+        ts: { type: "string" },
+        verdict: { enum: ["done", "notes", "hold"] },
+        by: { type: "string" },
+        game_commit: { type: "string" },
+        manifest_digest: { type: "string" },
+        lock_digest: { type: "string" },
+        report: {
+          type: "object",
+          additionalProperties: false,
+          required: ["digest", "overall"],
+          properties: { digest: { type: "string" }, overall: { enum: ["pass", "fail"] } }
+        }
+      }
+    });
     fs.writeFileSync(path.join(studio, "games/INDEX.md"), `
 | game | lifecycle | origin | note |
 |---|---|---|---|
 | prior-one | done | fixture | sealed |
 | no-verdict | active | fixture | none |
 `);
-    writeJson(path.join(studio, "games/prior-one/playtests/verdicts/2026-07-12T12-00-00Z.json"), {
+    writeJson(path.join(studio, "games/prior-one/playtests/verdicts/2026-07-12T11-00-00Z.json"), {
       schema_version: "1.0.0",
       ts: "2026-07-12T12:00:00.000Z",
       verdict: "done",
@@ -78,6 +104,11 @@ test("portfolio digest records prior design evidence and sealed human verdicts",
       manifest_digest: "manifest",
       lock_digest: "lock",
       report: { digest: "report", overall: "pass" }
+    });
+    writeJson(path.join(studio, "games/prior-one/playtests/verdicts/2026-07-12T12-00-00Z.json"), {
+      schema_version: "1.0.0",
+      ts: "not-a-date",
+      verdict: "done"
     });
 
     const result = spawnSync(process.execPath, [
@@ -94,9 +125,10 @@ test("portfolio digest records prior design evidence and sealed human verdicts",
     const schema = JSON.parse(fs.readFileSync(path.join(REPO, "schemas/portfolio-digest.schema.json"), "utf8"));
     assert.deepEqual(validate(schema, digest), []);
     assert.deepEqual(digest.prior_theses.map((row) => row.seed_id), ["prior-one"]);
-    assert.equal(digest.prior_theses[0].chosen_loop.id, "loop-a");
+    assert.equal(digest.prior_theses[0].chosen_loop.id, "loop-b");
     assert.deepEqual(digest.prior_theses[0].depth_vector.scores, scores);
     assert.equal(digest.games.find((row) => row.game_id === "prior-one").human_verdict.verdict, "done");
+    assert.equal(digest.games.find((row) => row.game_id === "prior-one").human_verdict.ts, "2026-07-12T12:00:00.000Z");
     assert.equal(digest.games.find((row) => row.game_id === "no-verdict").human_verdict.verdict, "UNKNOWN");
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
