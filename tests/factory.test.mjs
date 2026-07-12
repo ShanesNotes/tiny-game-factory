@@ -39,6 +39,9 @@ query = sys.argv[2]
 if query == "known tree model":
     print(json.dumps({"pack_id": "nature", "model_matches": [{"name": "Tree", "path": "tree.glb"}]}))
     raise SystemExit(0)
+if query == "finder-error":
+    print("finder unavailable", file=sys.stderr)
+    raise SystemExit(2)
 print(json.dumps({"no_match": True, "query": query, "nearest": []}))
 raise SystemExit(1)
 `);
@@ -867,7 +870,8 @@ test("availability probe reports one known asset hit and exactly two zero-hit ro
       specOverrides: {
         asset_requests: [
           { request_id: "known-tree", role: "world", kind: "model", query: "known tree model", constraints: {}, substitution_policy: "allow" },
-          { request_id: "nonsense-asset", role: "world", kind: "model", query: "xyzzynonsense", constraints: {}, substitution_policy: "allow" }
+          { request_id: "nonsense-asset", role: "world", kind: "model", query: "xyzzynonsense", constraints: {}, substitution_policy: "allow" },
+          { request_id: "finder-error", role: "world", kind: "model", query: "finder-error", constraints: {}, substitution_policy: "allow" }
         ],
         lore_refs: [
           { motif_id: "unknown-motif", affordance_claim: "A deliberately absent motif.", required: false }
@@ -886,6 +890,7 @@ test("availability probe reports one known asset hit and exactly two zero-hit ro
     const rows = [...Object.values(report.asset_requests), ...Object.values(report.lore_refs)];
     assert.equal(rows.filter((row) => row.hits === 0).length, 2);
     assert.deepEqual(report.asset_requests["nonsense-asset"], { hits: 0, top3: [] });
+    assert.ok(!("finder-error" in report.asset_requests), "finder failures are skipped, not false zero hits");
     assert.deepEqual(report.lore_refs["unknown-motif"], { hits: 0, top3: [] });
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });

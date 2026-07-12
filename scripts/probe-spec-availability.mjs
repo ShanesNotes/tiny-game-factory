@@ -64,14 +64,14 @@ function probeAsset(root, request) {
       .map((line) => JSON.parse(line));
   } catch (error) {
     console.warn(`[spec-probe] WARN asset request ${request.request_id}: invalid finder JSONL (${error.message})`);
-    return { hits: 0, top3: [] };
+    return null;
   }
   if (result.status === 1 && rows.length === 1 && rows[0].no_match === true) {
     return { hits: 0, top3: [] };
   }
   if (result.status !== 0) {
     console.warn(`[spec-probe] WARN asset request ${request.request_id}: ${String(result.stderr || `finder exited ${result.status}`).trim()}`);
-    return { hits: 0, top3: [] };
+    return null;
   }
   const top3 = assetTop3(rows.filter((row) => row.no_match !== true), request);
   const field = MATCH_FIELD[request.kind];
@@ -108,7 +108,8 @@ if (spec.asset_requests.length) {
   if (missing.length) missing.forEach((file) => warnSkipped(file || "GAME_ASSETS_ROOT"));
   else {
     for (const request of spec.asset_requests) {
-      report.asset_requests[request.request_id] = probeAsset(assetsRoot, request);
+      const result = probeAsset(assetsRoot, request);
+      if (result) report.asset_requests[request.request_id] = result;
     }
   }
 }
