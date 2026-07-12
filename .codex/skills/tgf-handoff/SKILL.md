@@ -21,7 +21,7 @@ Read `.factory/prompts/P19_PACKAGE_SPEC.md` and execute it exactly.
 **Outputs** (emit before summarizing)
 - the exported spec pack folder (default: the run's `default_spec_pack_root`)
 - ledger row `spec-pack-exported`; manifest `spec_pack_path`; run advanced toward `complete`
-- `.tgf/seeds/{seed-id}/handoffs/{seed-id}.md` when a human/agent continuation note is needed
+  (ledger + `manifest.spec_pack_path` carry handoff truth — no separate run-dir handoff file)
 
 **Borrowed behaviours** (wrapped or referenced — never vendor a generic skill body)
 - the upstream `handoff` pattern, adapted to repo-local paths instead of OS temp

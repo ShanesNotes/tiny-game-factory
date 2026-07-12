@@ -41,8 +41,8 @@ Agents communicate by files, not chat:
 - `SPEC.md` — the decomposition (P18); carries a `json` block validating against
   `schemas/spec-decomposition`.
 - `issues/*.md` — one issue per slice, rendered only by `emit-local-issues.mjs`.
-- `handoffs/{seed-id}.md` — durable next-agent transfer; the exported spec pack
-  itself is the terminal artifact.
+- handoff truth lives in the run ledger + `manifest.spec_pack_path` (no separate
+  run-dir handoff file); the exported spec pack itself is the terminal artifact.
 
 ## Runtime components
 

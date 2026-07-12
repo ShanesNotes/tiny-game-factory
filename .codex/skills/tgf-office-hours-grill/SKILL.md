@@ -40,7 +40,8 @@ graph: `intake → toolchain` only).
   against `schemas/intake-grill.schema.json` (Slice A owns the schema; the
   block is the machine surface the checker gates)
 - a question-log entry appended to the manifest when a question was asked
-  (question, recommended default, answer, artifact field decided, rejected options)
+  (schema-legal fields only: question, recommended_default, answer, phase_asked,
+  actor — fold any rejected options into answer / recommended_default prose)
 - advance `manifest.current_phase` from `intake` to **`toolchain`** when the
   seed direction is stable; else a `resume_point` blocker. Never set phase to
   `thesis` from this skill.

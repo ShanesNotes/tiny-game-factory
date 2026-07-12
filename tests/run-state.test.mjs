@@ -151,7 +151,9 @@ test("questionBudgetErrors enforces <=1 direction-changing question before the s
   assert.deepEqual(rs.questionBudgetErrors({ current_phase: "thesis", questions_asked: q(1) }), []);
   assert.ok(rs.questionBudgetErrors({ current_phase: "thesis", questions_asked: q(2) }).length > 0);
   assert.ok(rs.questionBudgetErrors({ current_phase: "decompose", questions_asked: q(2) }).length > 0);
-  assert.deepEqual(rs.questionBudgetErrors({ current_phase: "toolchain", questions_asked: q(5) }), []); // not yet gated
+  assert.ok(rs.questionBudgetErrors({ current_phase: "intake", questions_asked: q(2) }).length > 0); // intake is the default question site
+  assert.ok(rs.questionBudgetErrors({ current_phase: "toolchain", questions_asked: q(2) }).length > 0);
+  assert.deepEqual(rs.questionBudgetErrors({ current_phase: "intake", questions_asked: q(1) }), []);
   assert.deepEqual(rs.questionBudgetErrors({ current_phase: "handoff", questions_asked: q(5) }), []); // spec already cut
   assert.deepEqual(rs.questionBudgetErrors({ current_phase: "decompose" }), []); // no field -> 0
 });

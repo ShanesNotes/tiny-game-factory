@@ -407,7 +407,7 @@ export function phaseArtifactConstraintErrors(manifest) {
 // Doctrine: at most one direction-changing taste question before the spec is
 // decomposed (factory.config.toml human_questions_max_before_decompose). Returns
 // error strings.
-const BEFORE_DECOMPOSE = ["thesis", "design-review", "deepen", "engine-profile", "decompose"];
+const BEFORE_DECOMPOSE = ["intake", "toolchain", "thesis", "design-review", "deepen", "engine-profile", "decompose"];
 export function questionBudgetErrors(manifest) {
   const asked = Array.isArray(manifest.questions_asked) ? manifest.questions_asked.length : 0;
   if (BEFORE_DECOMPOSE.includes(manifest.current_phase) && asked > 1) {
