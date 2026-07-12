@@ -7,8 +7,8 @@ You are resuming a Tiny Game Factory seed run. State lives in this folder; the
 
 1. Read the factory `AGENTS.md`, `CONTEXT.md`, and this run's `manifest.json`.
 2. Summarize state: `node scripts/summarize-run.mjs --seed-id {{SEED_ID}}`.
-3. Run `.factory/prompts/P17_VERIFY_TOOLCHAIN.md` (or an equivalent toolchain probe)
-   before any other phase.
+3. At `intake`, build `intake/portfolio-digest.json`, then complete the schema-gated
+   `intake/office-hours.md`; only then advance to `toolchain` and run P17.
 4. Do not write game code — the factory produces a spec pack, never a game.
    `GAME_THESIS.md` is generated from `GAME_SEED.md` (P01) and must pass the paper
    design review (P07) before anything is decomposed.

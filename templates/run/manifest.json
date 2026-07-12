@@ -1,7 +1,7 @@
 {
   "seed_id": "{{SEED_ID}}",
-  "factory_version": "0.1.0",
-  "current_phase": "toolchain",
+  "factory_version": "0.3.0",
+  "current_phase": "intake",
   "seed_path": ".tgf/seeds/{{SEED_ID}}/GAME_SEED.md",
   "game_thesis_path": null,
   "engine_decision_path": null,
@@ -15,9 +15,9 @@
   "questions_asked": [],
   "deepen_attempt_count": 0,
   "resume_point": {
-    "phase": "toolchain",
-    "artifact_path": ".tgf/seeds/{{SEED_ID}}/README_AGENT_BOOT.md",
-    "reason": "Run P17_VERIFY_TOOLCHAIN before seed thesis or implementation."
+    "phase": "intake",
+    "artifact_path": ".tgf/seeds/{{SEED_ID}}/intake/office-hours.md",
+    "reason": "Build the portfolio digest and complete the schema-gated intake grill."
   },
   "last_verified_at": "{{ISO}}"
 }

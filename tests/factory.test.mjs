@@ -168,6 +168,7 @@ test("init-game-run creates only .tgf/seeds/{id} with valid manifest + ledger", 
     assert.match(manifest.default_spec_pack_root, /[/\\]games[/\\]selftest-create$/);
     assert.ok(!manifest.default_spec_pack_root.includes("tgf-games"));
     assert.equal(manifest.current_phase, "intake");
+    assert.equal(manifest.factory_version, "0.3.0");
 
     const firstRow = JSON.parse(fs.readFileSync(path.join(runDir, "execution-ledger.jsonl"), "utf8").trim().split("\n")[0]);
     const ledgerSchema = JSON.parse(fs.readFileSync(rel("schemas/execution-ledger-row.schema.json"), "utf8"));
