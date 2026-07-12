@@ -67,6 +67,11 @@ SLICING RULES:
     {pack_id,name}, constraints, substitution_policy ∈ allow|report|block}`.
     Never resolved filesystem paths.
   - `lore_refs[]` — `{motif_id, affordance_claim, required: false}` (v1 always false).
+    Resolve each `motif_id` from sibling `lore/` (or `<STUDIO_ROOT>/lore`): from
+    that repo root run `python3 _tools/find_lore.py find "<free text>"`; take
+    `motif_id` from a result row; read `_pages/<motif_id>.md` before any
+    `affordance_claim`. A `no_match` result → report the gap, never invent an
+    id. Values must exist in `lore/_indexes/motifs.jsonl`.
   - `capabilities` — booleans for
     `persistence | localization | accessibility | multiplayer | world_gen |
     modding | telemetry`.
