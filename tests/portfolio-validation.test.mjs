@@ -118,6 +118,12 @@ test("v2 thesis and vector schemas conditionally require portfolio fields", () =
   const vectorErrors = validate(vectorSchema, badVector);
   assert.ok(vectorErrors.some((error) => /evidence/.test(error)));
   assert.ok(vectorErrors.some((error) => /review_provenance/.test(error)));
+  const arrayEvidence = {
+    ...badVector,
+    evidence: [],
+    review_provenance: { mode: "same-context", reviewer_note: "fixture" }
+  };
+  assert.ok(validate(vectorSchema, arrayEvidence).some((error) => /evidence|object/.test(error)));
 });
 
 test("new runs cannot reach toolchain without schema-valid intake evidence", () => {

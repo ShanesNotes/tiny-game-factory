@@ -88,5 +88,8 @@
     "required": ["schema_version"],
     "properties": { "schema_version": { "enum": ["2.0.0"] } }
   },
-  "then": { "required": ["schema_version", "evidence", "review_provenance"] }
+  "then": {
+    "required": ["schema_version", "evidence", "review_provenance"],
+    "properties": { "evidence": { "type": "object" } }
+  }
 }
