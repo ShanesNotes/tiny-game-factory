@@ -1,7 +1,8 @@
 // Minimal JSON Schema validator — supports the draft-2020-12 subset used by TGF schemas.
 // Intentionally tiny and dependency-free. Supports: type (incl. integer/number/array/null
 // and arrays of types), enum, pattern, required, properties, additionalProperties:false,
-// items, minItems, minimum, maximum. Returns an array of error strings ([] means valid).
+// items, minItems, minimum, maximum, and if/then/else. Returns an array of error
+// strings ([] means valid).
 // This is NOT a general-purpose validator; it covers exactly what schemas/*.json use.
 
 function jsType(v) {
@@ -75,6 +76,12 @@ export function validate(schema, data, path = "$") {
         if (!(key in schema.properties)) errors.push(`${path}: additional property '${key}' not allowed`);
       }
     }
+  }
+
+  if (schema.if) {
+    const conditionMatches = validate(schema.if, data, path).length === 0;
+    const branch = conditionMatches ? schema.then : schema.else;
+    if (branch) errors.push(...validate(branch, data, path));
   }
 
   return errors;
