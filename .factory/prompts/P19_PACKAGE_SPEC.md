@@ -22,6 +22,11 @@ TASK:
      (`godot_min`/`godot_max`/`renderer`/`language`), and the SPEC authored
      sections (`asset_requests`, `lore_refs`, `capabilities`, `verify_plan`).
      Mapping failure aborts before staging and lists every missing field.
+     For any `lore_refs` row: resolve `motif_id` from sibling `lore/` (or
+     `<STUDIO_ROOT>/lore`) via `python3 _tools/find_lore.py find "<free text>"`
+     at that repo root; take `motif_id` from a hit; read `_pages/<motif_id>.md`
+     before any affordance claim. `no_match` → report the gap, never invent.
+     Ids must exist in `lore/_indexes/motifs.jsonl`.
    - **Non-godot:** pack exports without a manifest; stdout contains the stable
      token `FORGE-GATE:ENGINE <profile>`. Pass `--require-manifest` to hard-fail
      non-godot exports (CI gate for forge-bound seeds).
