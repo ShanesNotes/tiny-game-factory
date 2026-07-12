@@ -67,7 +67,10 @@
                   "expansion_headroom": { "type": "integer", "minimum": 0, "maximum": 2 }
                 }
               }
-            }
+            },
+            "if": { "properties": { "verdict": { "enum": ["UNKNOWN"] } } },
+            "then": { "properties": { "scores": { "type": "null" } } },
+            "else": { "properties": { "scores": { "type": "object" } } }
           }
         }
       }
