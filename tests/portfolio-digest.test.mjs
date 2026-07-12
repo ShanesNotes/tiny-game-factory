@@ -89,11 +89,23 @@ test("portfolio digest records prior design evidence and sealed human verdicts",
         }
       }
     });
-    fs.writeFileSync(path.join(studio, "games/INDEX.md"), `
+    fs.writeFileSync(path.join(studio, "games/INDEX.md"), `# games/ — lifecycle index
+
+| From → To | Writer | Trigger |
+|---|---|---|
+| worldgen-002 | active | forge intake |
+
+Lifecycle enum: fixture.
+
 | game | lifecycle | origin | note |
 |---|---|---|---|
 | prior-one | done | fixture | sealed |
 | no-verdict | active | fixture | none |
+| ../secret | active | fixture | traversal attempt |
+
+| game | lifecycle | origin | note |
+|---|---|---|---|
+| decoy-after-table | active | fixture | must be ignored |
 `);
     writeJson(path.join(studio, "games/prior-one/playtests/verdicts/2026-07-12T11-00-00Z.json"), {
       schema_version: "1.0.0",
@@ -109,6 +121,16 @@ test("portfolio digest records prior design evidence and sealed human verdicts",
       schema_version: "1.0.0",
       ts: "not-a-date",
       verdict: "done"
+    });
+    writeJson(path.join(studio, "secret/playtests/verdicts/attacker.json"), {
+      schema_version: "1.0.0",
+      ts: "2026-07-12T12:00:00.000Z",
+      verdict: "done",
+      by: "attacker",
+      game_commit: "outside",
+      manifest_digest: "outside",
+      lock_digest: "outside",
+      report: { digest: "outside", overall: "pass" }
     });
 
     const result = spawnSync(process.execPath, [
@@ -130,6 +152,10 @@ test("portfolio digest records prior design evidence and sealed human verdicts",
     assert.equal(digest.games.find((row) => row.game_id === "prior-one").human_verdict.verdict, "done");
     assert.equal(digest.games.find((row) => row.game_id === "prior-one").human_verdict.ts, "2026-07-12T12:00:00.000Z");
     assert.equal(digest.games.find((row) => row.game_id === "no-verdict").human_verdict.verdict, "UNKNOWN");
+    assert.equal(digest.games.some((row) => row.game_id === "worldgen-002"), false);
+    assert.equal(digest.games.some((row) => row.game_id === "decoy-after-table"), false);
+    assert.equal(digest.games.some((row) => row.game_id === "../secret"), false);
+    assert.ok(digest.skipped.some((row) => row.id === "../secret" && row.reason === "invalid game id"));
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }

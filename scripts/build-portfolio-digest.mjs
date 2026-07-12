@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { arg } from "./lib/argv.mjs";
+import { enumeratePriorTheses } from "./lib/portfolio-memory.mjs";
 import { extractFencedJson, isValidSeedId } from "./lib/run-state.mjs";
 import { resolveContractsRoot, resolveDesignRoot, resolveGamesRoot } from "./lib/studio-paths.mjs";
 import { validate } from "./lib/validate-json-schema.mjs";
@@ -81,16 +82,9 @@ if (!seedsRoot || !fs.existsSync(seedsRoot)) {
   skip("design-runs", "design seed root is missing");
 } else {
   digest.sources.push({ source: "design-runs", status: "read" });
-  for (const priorId of fs.readdirSync(seedsRoot).sort()) {
-    if (priorId === seedId) continue;
-    const runDir = path.join(seedsRoot, priorId);
-    const thesisFile = path.join(runDir, "GAME_THESIS.md");
-    if (!fs.existsSync(thesisFile)) continue;
-    const { obj: thesis, error } = extractFencedJson(fs.readFileSync(thesisFile, "utf8"));
-    if (error) {
-      skip("game-thesis", error, priorId);
-      continue;
-    }
+  const enumeration = enumeratePriorTheses(seedsRoot, seedId);
+  for (const row of enumeration.skipped) skip("game-thesis", row.error, row.seedId);
+  for (const { seedId: priorId, runDir, thesis } of enumeration.priors) {
     digest.prior_theses.push({
       seed_id: priorId,
       pitch: typeof thesis.pitch === "string" ? thesis.pitch : "UNKNOWN",
@@ -126,6 +120,30 @@ function sealedVerdictErrors(record) {
   if (typeof record.report?.digest !== "string" || !record.report.digest.trim()) errors.push("report.digest must be non-empty");
   return errors;
 }
+
+function markdownCells(line) {
+  if (!line.trimStart().startsWith("|")) return null;
+  return line.trim().split("|").slice(1, -1).map((cell) => cell.trim());
+}
+
+function canonicalGameRows(markdown) {
+  const lines = markdown.split("\n");
+  const headerIndex = lines.findIndex((line) => {
+    const cells = markdownCells(line);
+    return cells && cells.map((cell) => cell.toLowerCase()).join("|") === "game|lifecycle|origin|note";
+  });
+  if (headerIndex < 0) return [];
+  const separator = markdownCells(lines[headerIndex + 1] || "");
+  if (!separator || separator.length !== 4 || separator.some((cell) => !/^:?-{3,}:?$/.test(cell))) return [];
+  const rows = [];
+  for (const line of lines.slice(headerIndex + 2)) {
+    const cells = markdownCells(line);
+    if (!cells) break;
+    if (cells.length >= 2 && lifecycles.has(cells[1])) rows.push({ gameId: cells[0], lifecycle: cells[1] });
+  }
+  return rows.sort((a, b) => a.gameId.localeCompare(b.gameId));
+}
+
 const gamesRoot = resolveGamesRoot(process.cwd());
 const indexFile = gamesRoot && path.join(gamesRoot, "INDEX.md");
 if (!indexFile || !fs.existsSync(indexFile)) {
@@ -133,13 +151,15 @@ if (!indexFile || !fs.existsSync(indexFile)) {
   skip("games-index", "games/INDEX.md is missing");
 } else {
   digest.sources.push({ source: "games-index", status: "read" });
-  const rows = fs.readFileSync(indexFile, "utf8").split("\n")
-    .map((line) => line.split("|").slice(1, -1).map((cell) => cell.trim()))
-    .filter((cells) => cells.length >= 2 && lifecycles.has(cells[1]))
-    .map(([gameId, lifecycle]) => ({ gameId, lifecycle }))
-    .sort((a, b) => a.gameId.localeCompare(b.gameId));
+  const rows = canonicalGameRows(fs.readFileSync(indexFile, "utf8"));
   for (const { gameId, lifecycle } of rows) {
-    const verdictDir = path.join(gamesRoot, gameId, "playtests", "verdicts");
+    const gameDir = path.resolve(gamesRoot, gameId);
+    const gamesRootPrefix = `${path.resolve(gamesRoot)}${path.sep}`;
+    if (!isValidSeedId(gameId) || !gameDir.startsWith(gamesRootPrefix)) {
+      skip("games-index", "invalid game id", gameId);
+      continue;
+    }
+    const verdictDir = path.join(gameDir, "playtests", "verdicts");
     let humanVerdict = { verdict: "UNKNOWN" };
     if (!fs.existsSync(verdictDir)) {
       skip("human-verdict", "no sealed verdict record", gameId);

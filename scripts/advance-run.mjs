@@ -19,6 +19,7 @@ import {
   isValidSeedId, writeRunFileSync, appendRunFileSync
 } from "./lib/run-state.mjs";
 import { arg, multi, hasFlag } from "./lib/argv.mjs";
+import { isPortfolioRun, readIntakeEvidence } from "./lib/portfolio-memory.mjs";
 
 function fail(msg) { console.error(`[advance-run] ERROR: ${msg}`); process.exit(1); }
 
@@ -54,6 +55,10 @@ currentLedger.rows.forEach((row, i) => {
 const from = manifest.current_phase;
 if (!isLegalTransition(from, to)) {
   fail(`illegal transition ${from} -> ${to}. legal next: ${legalNextPhases(from).join(", ") || "(none — terminal)"}`);
+}
+if (from === "intake" && to === "toolchain" && isPortfolioRun(manifest)) {
+  const intakeErrors = readIntakeEvidence(runDir, seedId).errors;
+  if (intakeErrors.length) fail(`intake evidence invalid:\n  ${intakeErrors.join("\n  ")}`);
 }
 
 const iso = new Date().toISOString();

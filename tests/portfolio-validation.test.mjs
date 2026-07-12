@@ -103,6 +103,9 @@ function thesis(id, nearest = "prior-one") {
 function prepareIntake(dir, id, withPrior = false) {
   assert.equal(run("init-game-run.mjs", ["--seed-id", id, "--seed", "x"], dir).status, 0);
   const runDir = path.join(dir, ".tgf", "seeds", id);
+  if (withPrior) {
+    writeEmbedded(path.join(dir, ".tgf/seeds/prior-one/GAME_THESIS.md"), "Prior Thesis", { pitch: "prior" });
+  }
   writeJson(path.join(runDir, "intake/portfolio-digest.json"), digest(id, withPrior));
   writeEmbedded(path.join(runDir, "intake/office-hours.md"), "Office Hours", intake(id));
   return runDir;
@@ -124,6 +127,47 @@ test("v2 thesis and vector schemas conditionally require portfolio fields", () =
     review_provenance: { mode: "same-context", reviewer_note: "fixture" }
   };
   assert.ok(validate(vectorSchema, arrayEvidence).some((error) => /evidence|object/.test(error)));
+});
+
+test("portfolio digest schema rejects scored verdicts with null scores", () => {
+  const schema = JSON.parse(fs.readFileSync(path.join(REPO, "schemas/portfolio-digest.schema.json"), "utf8"));
+  const invalid = digest("schema-null-scores", true);
+  invalid.prior_theses[0].depth_vector = { verdict: "ADVANCE", scores: null };
+  assert.ok(validate(schema, invalid).some((error) => /scores.*object/.test(error)));
+  invalid.prior_theses[0].depth_vector = { verdict: "UNKNOWN", scores: null };
+  assert.deepEqual(validate(schema, invalid), []);
+});
+
+test("fabricated empty portfolio digest is rejected when a sibling thesis exists", () => {
+  const dir = tmp();
+  const id = "dishonest-digest";
+  try {
+    const runDir = prepareIntake(dir, id, true);
+    writeJson(path.join(runDir, "intake/portfolio-digest.json"), digest(id, false));
+    appendPhase(runDir, id, "toolchain");
+    const result = run("validate-artifacts.mjs", ["--check", "run", "--seed-id", id], dir);
+    assert.equal(result.status, 1, result.stdout + result.stderr);
+    assert.match(result.stdout, /digest stale\/dishonest — regenerate via npm run portfolio:digest/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("advance-run refuses portfolio intake to toolchain without intake artifacts", () => {
+  const dir = tmp();
+  const id = "advance-intake-gate";
+  try {
+    assert.equal(run("init-game-run.mjs", ["--seed-id", id, "--seed", "x"], dir).status, 0);
+    const result = run("advance-run.mjs", [
+      "--seed-id", id, "--to", "toolchain", "--event", "skip-intake", "--status", "passed"
+    ], dir);
+    assert.equal(result.status, 1, result.stdout + result.stderr);
+    assert.match(result.stderr, /intake evidence invalid/);
+    const manifest = JSON.parse(fs.readFileSync(path.join(dir, ".tgf/seeds", id, "manifest.json"), "utf8"));
+    assert.equal(manifest.current_phase, "intake");
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test("new runs cannot reach toolchain without schema-valid intake evidence", () => {

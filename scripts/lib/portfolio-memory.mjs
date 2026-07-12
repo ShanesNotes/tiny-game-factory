@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { validate } from "./validate-json-schema.mjs";
 import { extractFencedJson } from "./run-state.mjs";
+import { resolveDesignRoot } from "./studio-paths.mjs";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const schema = (name) => JSON.parse(fs.readFileSync(path.join(REPO, "schemas", `${name}.schema.json`), "utf8"));
@@ -16,6 +17,30 @@ export const DEPTH_AXES = [
 
 export function isPortfolioRun(manifest) {
   return manifest?.factory_version === PORTFOLIO_FACTORY_VERSION;
+}
+
+export function enumeratePriorTheses(seedsRoot, seedId) {
+  const priors = [];
+  const skipped = [];
+  if (!seedsRoot || !fs.existsSync(seedsRoot)) return { priors, skipped };
+  for (const priorId of fs.readdirSync(seedsRoot).sort()) {
+    if (priorId === seedId) continue;
+    const runDir = path.join(seedsRoot, priorId);
+    const thesisPath = path.join(runDir, "GAME_THESIS.md");
+    if (!fs.existsSync(thesisPath)) continue;
+    const { obj: thesis, error } = extractFencedJson(fs.readFileSync(thesisPath, "utf8"));
+    if (error) {
+      skipped.push({ seedId: priorId, error });
+      continue;
+    }
+    priors.push({ seedId: priorId, runDir, thesis });
+  }
+  return { priors, skipped };
+}
+
+function portfolioSeedsRoot(runDir) {
+  const designRoot = resolveDesignRoot(process.cwd());
+  return designRoot ? path.join(designRoot, ".tgf", "seeds") : path.dirname(runDir);
 }
 
 export function readIntakeEvidence(runDir, seedId) {
@@ -32,6 +57,13 @@ export function readIntakeEvidence(runDir, seedId) {
       digest = JSON.parse(fs.readFileSync(digestPath, "utf8"));
       validate(schema("portfolio-digest"), digest).forEach((error) => errors.push(`intake portfolio digest ${error}`));
       if (digest.seed_id !== seedId) errors.push(`intake portfolio digest seed_id '${digest.seed_id}' does not match '${seedId}'`);
+      const actualIds = enumeratePriorTheses(portfolioSeedsRoot(runDir), seedId).priors.map((row) => row.seedId);
+      const digestIds = Array.isArray(digest.prior_theses)
+        ? [...new Set(digest.prior_theses.map((row) => row?.seed_id).filter((id) => typeof id === "string"))].sort()
+        : [];
+      if (actualIds.length !== digestIds.length || actualIds.some((id, index) => id !== digestIds[index])) {
+        errors.push("intake portfolio digest stale/dishonest — regenerate via npm run portfolio:digest");
+      }
     } catch (error) {
       errors.push(`intake portfolio digest is not parseable JSON: ${error.message}`);
     }
