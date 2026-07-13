@@ -187,6 +187,26 @@ landed later in FUE W2-B; pigeonhole doctrine lives in
 | `docs/reference-games/genre-index/slay-the-spire.json` | rewritten | Sourced Tier-2 pilot row for Slay the Spire with Tier-1 card navigation. |
 | `docs/reference-games/genre-index/stardew-valley.json` | rewritten | Sourced Tier-2 pilot row for Stardew Valley with Tier-1 card navigation. |
 | `docs/reference-games/genre-index/terraria.json` | rewritten | Sourced Tier-2 pilot row for Terraria under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/age-of-empires-2.json` | rewritten | Sourced Tier-2 fill row for Age of Empires II with Tier-1 card navigation. |
+| `docs/reference-games/genre-index/baldurs-gate-3.json` | rewritten | Sourced Tier-2 fill row for Baldur's Gate 3 under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/call-of-duty.json` | rewritten | Sourced Tier-2 fill row for Call of Duty with Tier-1 card navigation. |
+| `docs/reference-games/genre-index/counter-strike-2.json` | rewritten | Sourced Tier-2 fill row for Counter-Strike 2 under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/cuphead.json` | rewritten | Sourced Tier-2 fill row for Cuphead under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/disco-elysium.json` | rewritten | Sourced Tier-2 fill row for Disco Elysium with Tier-1 card navigation. |
+| `docs/reference-games/genre-index/doom-eternal.json` | rewritten | Sourced Tier-2 fill row for DOOM Eternal under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/elden-ring.json` | rewritten | Sourced Tier-2 fill row for ELDEN RING under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/frostpunk.json` | rewritten | Sourced Tier-2 fill row for Frostpunk under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/it-takes-two.json` | rewritten | Sourced Tier-2 fill row for It Takes Two under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/kerbal-space-program.json` | rewritten | Sourced Tier-2 fill row for Kerbal Space Program under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/megabonk.json` | rewritten | Sourced Tier-2 fill row for Megabonk with Tier-1 card navigation. |
+| `docs/reference-games/genre-index/return-of-the-obra-dinn.json` | rewritten | Sourced Tier-2 fill row for Return of the Obra Dinn under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/rocket-league.json` | rewritten | Sourced Tier-2 fill row for Rocket League under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/street-fighter-6.json` | rewritten | Sourced Tier-2 fill row for Street Fighter 6 under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/subnautica.json` | rewritten | Sourced Tier-2 fill row for Subnautica under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/tetris-effect.json` | rewritten | Sourced Tier-2 fill row for Tetris Effect: Connected under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/the-witness.json` | rewritten | Sourced Tier-2 fill row for The Witness under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/vampire-survivors.json` | rewritten | Sourced Tier-2 fill row for Vampire Survivors with Tier-1 card navigation. |
+| `docs/reference-games/genre-index/xcom-2.json` | rewritten | Sourced Tier-2 fill row for XCOM 2 under frozen taxonomy v1. |
 | `schemas/reference-card.schema.json` | rewritten | Draft 2020-12 card shape (moat, loop, depth mechanisms, system BOM, status draft\|audited) for the reference-game canon (FUE e3). |
 | `schemas/genre-index-row.schema.json` | rewritten | Draft 2020-12 Tier-2 row contract for design facets, market memberships, typed evidence, hypotheses, and optional Tier-1 navigation. |
 
