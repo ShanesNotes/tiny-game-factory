@@ -218,6 +218,13 @@ test("init-game-run accepts yolo stop lines and rejects invalid lane flags", () 
 
     assert.equal(node("init-game-run.mjs", ["--seed-id", "bad-mode", "--seed", "x", "--mode", "fast"], { cwd: dir }).status, 1);
     assert.equal(node("init-game-run.mjs", ["--seed-id", "bad-stop", "--seed", "x", "--mode", "yolo", "--stop", "forge"], { cwd: dir }).status, 1);
+    assert.equal(node("init-game-run.mjs", ["--seed-id", "bad-auto", "--seed", "x", "--origination", "auto"], { cwd: dir }).status, 1);
+    r = node("init-game-run.mjs", ["--seed-id", "auto-yolo", "--seed", "x", "--mode", "yolo", "--origination", "auto"], { cwd: dir });
+    assert.equal(r.status, 0, r.stderr);
+    assert.deepEqual(
+      JSON.parse(fs.readFileSync(path.join(dir, ".tgf/seeds/auto-yolo/manifest.json"), "utf8")).design_lane,
+      { mode: "yolo", stop_line: "pack", origination: "auto" }
+    );
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
@@ -990,6 +997,32 @@ test("package-spec exports a leakage-clean pack and records the handoff", () => 
     r = node("package-spec.mjs", ["--seed-id", id, "--to", target, "--write"], { cwd: dir });
     assert.equal(r.status, 1, r.stdout + r.stderr);
     assert.match(r.stderr, /pass --force/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+    fs.rmSync(target, { recursive: true, force: true });
+  }
+});
+
+test("package-spec stages the G1 brief only for yolo packs", () => {
+  const dir = tmp();
+  const target = tmp();
+  const id = "selftest-yolo-g1-pack";
+  try {
+    const runDir = decomposeReadyRun(dir, id);
+    const manifestPath = path.join(runDir, "manifest.json");
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    manifest.design_lane = { mode: "yolo", stop_line: "pack", origination: "auto" };
+    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
+    assert.equal(node("emit-local-issues.mjs", ["--seed-id", id, "--write"], { cwd: dir }).status, 0);
+
+    let result = node("package-spec.mjs", ["--seed-id", id, "--to", target], { cwd: dir });
+    assert.equal(result.status, 1, result.stdout + result.stderr);
+    assert.match(result.stderr, /yolo pack requires reviews\/G1_BRIEF\.md/);
+
+    fs.writeFileSync(path.join(runDir, "reviews", "G1_BRIEF.md"), "# G1 Brief\n\nJudge the loop and its cuts.\n");
+    result = node("package-spec.mjs", ["--seed-id", id, "--to", target, "--write"], { cwd: dir });
+    assert.equal(result.status, 0, result.stdout + result.stderr);
+    assert.equal(fs.readFileSync(path.join(target, "G1_BRIEF.md"), "utf8"), "# G1 Brief\n\nJudge the loop and its cuts.\n");
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
     fs.rmSync(target, { recursive: true, force: true });

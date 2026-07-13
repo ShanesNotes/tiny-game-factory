@@ -15,7 +15,7 @@
         "additionalProperties": false,
         "required": ["source", "status"],
         "properties": {
-          "source": { "enum": ["design-runs", "games-index"] },
+          "source": { "enum": ["design-runs", "proposals", "games-index"] },
           "status": { "enum": ["read", "skipped"] },
           "reason": { "type": "string" }
         }
@@ -42,6 +42,8 @@
           },
           "design_register": { "enum": ["mechanics-first", "narrative-first", "hybrid", "world-first", "UNKNOWN"] },
           "golden_moment": { "type": "string" },
+          "parked": { "type": "boolean" },
+          "candidate_loop_verbs": { "type": "array", "items": { "type": "string" } },
           "depth_vector": {
             "type": "object",
             "additionalProperties": false,

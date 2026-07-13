@@ -72,6 +72,9 @@ tracked they fail the check.
 | `.factory/prompts/attic/README.md` | culled | Attic default-culled (T04/SPEC §3.2); retired build-phase TGF v0.1 surface, not re-derived under DESIGN-RECORD §8. |
 | `.factory/prompts/P00_ORCHESTRATOR_ULTRAGOAL.md` | rewritten | Routes `intake` + `deepen` and manifest-first grill/yolo attention semantics, including yolo hard-stop behavior without weakening gates (ADR 0011/0012). |
 | `.factory/prompts/P01_SEED_COMPILE.md` | rewritten | Thesis compile remains the design entry gate before engine; MAY cite audited reference ids as contrast only — pigeonhole doctrine forbids reference-as-target (FUE W2-B). |
+
+| `.factory/prompts/P00_ORCHESTRATOR_ULTRAGOAL.md` | rewritten | Routes `intake` + `deepen`, auto-originated yolo runs, and G1 brief generation at ADVANCE before either yolo stop behavior (ADR 0011/0012). |
+| `.factory/prompts/P01_SEED_COMPILE.md` | reaffirmed | Thesis compile remains the design entry gate before engine (DESIGN-RECORD §3; no default engine). |
 | `.factory/prompts/P02_ENGINE_PROFILE.md` | reaffirmed | Engine decision phase remains; forge gate is export-time not decision-time (DESIGN-RECORD §3). |
 | `.factory/prompts/P07_DEPTH_RED_TEAM.md` | rewritten | Paper anti-boring / ADVANCE design-lock remains; audited reference cards supply depth_mechanisms/anti_lessons attack vectors (findings, not depth points) with SKIPPED when empty (FUE W2-B). |
 | `.factory/prompts/P13_EXISTING_PROJECT_RESCUE.md` | reaffirmed | Inherited-repo intake still valid; existing projects are evidence not destiny (doctrine + DESIGN-RECORD openness). |
@@ -140,7 +143,7 @@ section adds only **new** universe paths. Out-of-universe surfaces also touched:
 | `docs/adr/0011-portfolio-at-front-door.md` | rewritten | New ADR: intake default entry, portfolio distinctness, depth evidence/provenance, both consult positions on default-entry (grill-refresh B). |
 
 | `schemas/intake-grill.schema.json` | rewritten | New schema: ten office-hours pressure fields + digest ref as the intake artifact machine surface (ADR 0011 / grill-refresh A). |
-| `schemas/portfolio-digest.schema.json` | rewritten | New schema: portfolio memory — prior theses, lifecycle, sealed human verdicts (UNKNOWN when absent), honest skipped rows (ADR 0011 / grill-refresh A). |
+| `schemas/portfolio-digest.schema.json` | rewritten | Portfolio memory includes prior theses, parked proposals, lifecycle, sealed human verdicts (UNKNOWN when absent), and honest source/skipped rows (ADR 0011/0012). |
 
 ## Design lanes (2026-07-12)
 

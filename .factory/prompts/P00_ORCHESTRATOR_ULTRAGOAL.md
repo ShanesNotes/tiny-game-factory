@@ -37,13 +37,15 @@ DESIGN LANES (route by `manifest.design_lane` when present; absence is legacy):
   same ten office-hours fields silently from seed evidence and the portfolio
   digest; turn unresolved uncertainty into explicit prototype hypotheses. Every
   agent gate, depth floor, feel finding, and verifier runs at full strength.
+- `origination: auto` is always `yolo`; it changes seed provenance, not the phase
+  spine, evidence floor, or stop behavior.
 - `yolo` + `stop_line: pack` runs through handoff export, then parks pre-forge.
   `yolo` + `stop_line: design-lock` parks after the P07 `ADVANCE` transition at
-  `engine-profile`, with G1 represented by `reviews/G1_BRIEF.md`; do not run P02
+  `engine-profile`, after generating `reviews/G1_BRIEF.md`; do not run P02
   or advance again until the execution ledger contains a prior
   `{phase:"engine-profile", event:"stop-line-released", status:"passed",
-  actor:"Shane"}` row. G1 brief generation is owned by a later slice; reference
-  the path here but do not synthesize it.
+  actor:"Shane"}` row. A `stop_line: pack` yolo run also generates the same brief
+  at design-lock, then continues; handoff stages it as top-level `G1_BRIEF.md`.
 
 PHASES (route by `manifest.current_phase`):
 1. `intake` — **DEFAULT entry for every new run.** Office-hours grill
@@ -56,8 +58,9 @@ PHASES (route by `manifest.current_phase`):
 2. `toolchain` — verify local tools (P17) and update docs/toolchain-verification-ledger.md.
 3. `thesis` — compile the seed into GAME_THESIS.md using P01 (consumes the intake
    grill + portfolio distinctness).
-4. `design-review` — red-team the thesis on paper using P07. ADVANCE = design-lock;
-   DEEPEN opens `deepen`; KILL ends the run.
+4. `design-review` — red-team the thesis on paper using P07. ADVANCE = design-lock:
+   immediately run `npm run g1:brief -- --seed-id <id>` in every lane, then apply
+   any yolo stop line. DEEPEN opens `deepen`; KILL ends the run.
 5. `deepen` — DEEPEN verdict path: apply **exactly one** named transform, then
    re-enter `thesis` for re-review (≤2 attempts; after two failures, kill).
 6. `engine-profile` — score engine candidates against the locked design using P02.
@@ -71,6 +74,7 @@ OUTPUT:
 - intake/office-hours.md (+ intake/portfolio-digest.json)
 - GAME_THESIS.md
 - reviews/ANTI_BORING_VERDICT.md + reviews/depth-vector.json
+- reviews/G1_BRIEF.md after ADVANCE
 - decisions/0001-engine-profile.md
 - SPEC.md + issues/*.md
 - an exported spec pack folder (the terminal artifact)

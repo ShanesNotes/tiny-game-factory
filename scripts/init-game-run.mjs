@@ -18,6 +18,7 @@ const seedId = arg("seed-id");
 const seed = arg("seed");
 const mode = arg("mode", "grill");
 const stop = arg("stop", "pack");
+const origination = arg("origination", "user");
 const dryRun = hasFlag("dry-run");
 const force = hasFlag("force");
 
@@ -38,8 +39,14 @@ if (!["grill", "yolo"].includes(mode)) {
 if (!["pack", "design-lock"].includes(stop)) {
   fail(`--stop must be pack or design-lock (got "${stop}")`);
 }
+if (!["user", "auto"].includes(origination)) {
+  fail(`--origination must be user or auto (got "${origination}")`);
+}
 if (hasFlag("stop") && mode !== "yolo") {
   fail("--stop is only legal with --mode yolo");
+}
+if (origination === "auto" && mode !== "yolo") {
+  fail("--origination auto requires --mode yolo");
 }
 
 const runRel = runRelFor(seedId);
@@ -55,7 +62,7 @@ const readTpl = (name) =>
 const manifest = JSON.parse(readTpl("manifest.json"));
 // Path-registry default: $STUDIO_ROOT/games/{seed-id} (not legacy ~/tgf-games).
 manifest.default_spec_pack_root = specPackRoot;
-manifest.design_lane = { mode, stop_line: stop, origination: "user" };
+manifest.design_lane = { mode, stop_line: stop, origination };
 const bootDoc = readTpl("README_AGENT_BOOT.md");
 const nextDoc = readTpl("README_NEXT_ACTIONS.md");
 const seedDoc = `# GAME_SEED.md\n\n${seed}\n`;
