@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "id": "vampire-survivors",
   "title": "Vampire Survivors",
-  "edition_pinned": "Vampire Survivors Patch 1.0 full release (poncle / Luca Galante; left Steam Early Access 20 October 2022) \u2014 auto-attack + gold meta as design-canonical; later DLC character packs are out of pin.",
+  "edition_pinned": "Vampire Survivors Patch 1.0 full release (poncle / Luca Galante; left Steam Early Access 20 October 2022) — auto-attack + gold meta as design-canonical; later DLC character packs are out of pin.",
   "genre_tags": [
     "survivor-like",
     "roguelite",
@@ -19,12 +19,12 @@
       "survive-timer",
       "spend-gold"
     ],
-    "description": "Move through a timed stage while weapons fire on cooldowns, collect XP gems to choose weapons and passives, evolve combos, die or hit the stage timer, then spend gold between runs to unlock characters and permanent power."
+    "description": "Move through a timed stage while weapons fire on cooldowns, collect XP gems to choose weapons and passives, evolve combos, die or hit the stage timer, then spend gold between runs to unlock characters and permanent PowerUps (weapons and stages also unlock via challenges)."
   },
   "depth_mechanisms": [
     {
       "name": "auto-attack strips aim",
-      "mechanism": "Attacks fire on fixed timers without a fire button. Targeting is weapon-specific (facing cones, orbits, area pulses, directed projectiles) so player skill is position, pathing, and reading attack cadence \u2014 not twin-stick aim.",
+      "mechanism": "Attacks fire on fixed timers without a fire button. Targeting is weapon-specific (facing cones, orbits, area pulses, directed projectiles) so player skill is position, pathing, and reading attack cadence — not twin-stick aim.",
       "falsifiable_claim": "If manual aiming is required for every shot, the exercise-bike and chat-while-playing use case (creator intent) fails because attention cannot leave the aim stick."
     },
     {
@@ -34,24 +34,24 @@
     },
     {
       "name": "gold meta unlock ladder",
-      "mechanism": "Gold earned in runs buys permanent PowerUp upgrades and unlocks characters and weapons; free re-spec of PowerUps lets players reallocate gold paths without a new save.",
+      "mechanism": "Gold earned in runs buys permanent PowerUp upgrades and unlocks characters between sessions; many weapons, stages, and modifiers unlock by completing challenges rather than by gold purchase alone. Free re-spec of PowerUps lets players reallocate gold paths without a new save.",
       "falsifiable_claim": "If gold cannot buy permanent unlocks between runs, a failed run produces no lasting progress and return after first death falls."
     }
   ],
   "feel_signature": "A move commit repositions the character while weapons auto-fire on timers; a level-up pause forces a pick among offered upgrades that rewrite the next minutes of swarm control.",
-  "second_session_answer": "Players return to spend gold on PowerUps and try a newly unlocked character or weapon evolution path, not to re-watch cutscenes.",
+  "second_session_answer": "Players return to spend gold on PowerUps and try a newly unlocked character or challenge-unlocked weapon evolution path, not to re-watch cutscenes.",
   "packaging_lessons": [
-    "Inference: ship one stage, a handful of weapons, and gold unlocks before multiplayer or narrative arcs \u2014 creator designed for short bike sessions.",
+    "Inference: ship one stage, a handful of weapons, and gold unlocks before multiplayer or narrative arcs — creator designed for short bike sessions.",
     "Keep attack automatic from day one so the skill surface is pathing and build picks only."
   ],
   "anti_lessons": [
-    "Do not add real-money gacha to the gold ladder \u2014 the gambling-inspired balance is about run reward pacing, not cash shops.",
+    "Do not add real-money gacha to the gold ladder — the gambling-inspired balance is about run reward pacing, not cash shops.",
     "Do not copy survivor-likes by only adding auto-fire to an existing twin-stick without timed swarm pressure and evolution recipes."
   ],
   "system_bom": [
     {
       "system": "play-loop",
-      "note": "move \u2192 auto-hit \u2192 XP gem \u2192 level pick is the in-run cycle that either ends in death or timer survival"
+      "note": "move → auto-hit → XP gem → level pick is the in-run cycle that either ends in death or timer survival"
     },
     {
       "system": "loot",
@@ -67,7 +67,7 @@
     },
     {
       "system": "meta-progression",
-      "note": "gold PowerUps and character unlocks persist across deaths so failed runs still buy permanent progress"
+      "note": "gold PowerUps and character unlocks persist across deaths; challenge unlocks also expand weapons/stages so failed runs still buy permanent progress"
     },
     {
       "system": "win-loss-death",
@@ -75,17 +75,21 @@
     },
     {
       "system": "economy",
-      "note": "gold is the between-run currency that structures unlock order"
+      "note": "gold is the between-run currency for characters and PowerUps; weapons commonly unlock via challenges"
     }
   ],
   "citations": [
+    {
+      "claim": "Edition pin: full Mac/Windows release 20 October 2022 after Early Access; gold between sessions unlocks characters and persistent power-ups; challenges unlock stages, weapons, characters.",
+      "source": "https://en.wikipedia.org/wiki/Vampire_Survivors"
+    },
     {
       "claim": "Edition pin: Patch 1.0 / content-complete Steam release date 20 October 2022 ends Early Access baseline for this card.",
       "source": "https://www.eurogamer.net/vampire-survivors-gets-10-release-date"
     },
     {
-      "claim": "Edition pin announcement: v1.0 release date posted 29 September 2022 for 20 October landing.",
-      "source": "https://vampire.survivors.wiki/w/Updates/v1.0_Release_Date_%26_Information"
+      "claim": "Edition pin announcement: full 1.0 release scheduled for 20 October 2022, ending Early Access baseline for this card.",
+      "source": "https://www.rockpapershotgun.com/vampire-survivors-will-hit-10-on-october-20th-move-to-new-engine-by-end-of-year"
     },
     {
       "claim": "Moat and auto-attack: Galante designed attacks as automatic so the player could concentrate on something else (bike, chat).",
@@ -104,8 +108,8 @@
       "source": "https://vampire.survivors.wiki/w/Evolution"
     },
     {
-      "claim": "Gold meta unlock ladder: coins from battle spend between runs to unlock weapons and characters.",
-      "source": "https://www.rockpapershotgun.com/vampire-survivors-interview-creator-wanted-something-to-play-at-the-weekend"
+      "claim": "Gold meta unlock ladder (narrowed): between sessions, accumulated gold spends on new characters and persistent power-ups; challenges unlock additional stages, weapons, and characters.",
+      "source": "https://en.wikipedia.org/wiki/Vampire_Survivors"
     },
     {
       "claim": "Gold meta re-spec: PowerUps can be reset so gold paths can be reallocated without a new save.",
@@ -116,7 +120,7 @@
       "source": "https://en.wikipedia.org/wiki/Vampire_Survivors"
     },
     {
-      "claim": "Feel signature and Pac-Man power cadence inspiration (safe \u2192 empowered \u2192 safe) cited by creator.",
+      "claim": "Feel signature and Pac-Man power cadence inspiration (safe → empowered → safe) cited by creator.",
       "source": "https://www.rockpapershotgun.com/vampire-survivors-interview-creator-wanted-something-to-play-at-the-weekend"
     },
     {

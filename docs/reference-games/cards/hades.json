@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "id": "hades",
   "title": "Hades",
-  "edition_pinned": "Hades 1.0 (Supergiant Games, full release September 2020) \u2014 House hub + boon run structure as shipped; not Hades II.",
+  "edition_pinned": "Hades 1.0 (Supergiant Games, full release September 2020) — House hub + boon run structure as shipped; not Hades II.",
   "genre_tags": [
     "roguelike",
     "action",
@@ -24,8 +24,8 @@
   "depth_mechanisms": [
     {
       "name": "death-as-narrative tick",
-      "mechanism": "Failed and successful runs both unlock House dialogue branches keyed to conditions (weapon used, gifts given, bosses seen). Death is a story event, not only a soft reset.",
-      "falsifiable_claim": "If dialogue no longer advances on death or mid-run conditions, second-session return rate falls because failed runs stop producing new story beats."
+      "mechanism": "Failed and successful runs both return Zagreus to the House hub, where dialogue and meta unlocks advance across returns. Death is a story-and-hub event, not only a soft reset; exact branch keys (weapon, gifts, bosses) are not pinned.",
+      "falsifiable_claim": "If dialogue and hub state no longer advance across deaths and returns, second-session return rate falls because failed runs stop producing new story beats."
     },
     {
       "name": "boon build rewrite",
@@ -45,13 +45,13 @@
     "Gate permanent power behind House systems (Mirror, weapons, keepsakes) while keeping boons run-temporary so death still costs power."
   ],
   "anti_lessons": [
-    "Do not copy death-as-story without a large modular dialogue condition graph \u2014 a single linear cutscene on death is not the mechanism.",
+    "Do not copy death-as-story without a large modular dialogue condition graph — a single linear cutscene on death is not the mechanism.",
     "Do not strip run-temporary power entirely into meta unlocks; if nothing is lost on death, the run ceases to be a decision space."
   ],
   "system_bom": [
     {
       "system": "play-loop",
-      "note": "room clear \u2192 boon or reward choice \u2192 deeper biome rooms is the run core that feeds either escape or death return"
+      "note": "room clear → boon or reward choice → deeper biome rooms is the run core that feeds either escape or death return"
     },
     {
       "system": "meta-progression",
@@ -59,7 +59,7 @@
     },
     {
       "system": "loot",
-      "note": "boons rewrite kit mid-run; hammers alter weapon moves; poms rank-up boons; keepsakes bias god offers \u2014 each choice branches the next combat"
+      "note": "boons rewrite kit mid-run; hammers alter weapon moves; poms rank-up boons; keepsakes equip for run bonuses — each choice branches the next combat"
     },
     {
       "system": "win-loss-death",
@@ -75,7 +75,7 @@
     },
     {
       "system": "ui",
-      "note": "boon rarity, Heat/Pact settings, and relationship meters must be readable in run and in hub so choices stay legible"
+      "note": "boon rarity tiers are readable mid-run choice inputs; hub relationship and Heat/Pact surfaces are separate House systems"
     }
   ],
   "citations": [
@@ -88,7 +88,7 @@
       "source": "https://gdconf.com/article/roguelikes-and-narrative-design-with-hades-creative-director-greg-kasavin-gdc-podcast-ep-16/"
     },
     {
-      "claim": "Death-as-narrative tick: hub after death for permanent upgrades and NPC dialogue; failure is progress.",
+      "claim": "Death-as-narrative tick: hub after death for permanent upgrades and NPC dialogue; failure is progress. Exact dialogue keys (weapon used, gifts given, bosses seen) are not claimed.",
       "source": "https://natalia-nazeem.medium.com/failure-is-death-and-death-is-progress-the-use-of-repetition-replayability-and-narrative-673cfa4e2e8"
     },
     {
@@ -124,11 +124,11 @@
       "source": "https://web.archive.org/web/2024/https://hades.fandom.com/wiki/Darkness"
     },
     {
-      "claim": "Loot BOM: poms increase boon ranks; hammers alter weapon moves; keepsakes bias god offers.",
+      "claim": "Loot BOM — poms: Pom of Power increases existing boon ranks mid-run.",
       "source": "https://web.archive.org/web/2024/https://hades.fandom.com/wiki/Pom_of_Power"
     },
     {
-      "claim": "Loot loop service: Daedalus Hammers rewrite weapon moves mid-run, branching combat options.",
+      "claim": "Loot BOM — hammers: Daedalus Hammers rewrite weapon moves mid-run, branching combat options.",
       "source": "https://web.archive.org/web/2024/https://hades.fandom.com/wiki/Daedalus_Hammer"
     },
     {
@@ -140,19 +140,19 @@
       "source": "https://web.archive.org/web/2024/https://hades.fandom.com/wiki/Nectar"
     },
     {
-      "claim": "Skills BOM: weapon aspects unlock alternate kits spent with Titan Blood between runs.",
-      "source": "https://www.ign.com/wikis/hades/How_to_Find_Duo_Boons"
+      "claim": "Skills BOM: weapons and Mirror talents change base kit between runs; weapon-aspect unlocking specifics are not claimed from Duo Boons guides.",
+      "source": "https://web.archive.org/web/2024/https://hades.fandom.com/wiki/Mirror_of_Night"
     },
     {
       "claim": "Skills BOM Mirror talents change base combat stats between runs.",
       "source": "https://web.archive.org/web/2024/https://hades.fandom.com/wiki/Mirror_of_Night"
     },
     {
-      "claim": "Play-loop BOM: chamber clear \u2192 reward door \u2192 deeper Underworld rooms is the run structure.",
+      "claim": "Play-loop BOM: chamber clear → reward door → deeper Underworld rooms is the run structure.",
       "source": "https://www.ign.com/wikis/hades/How_to_Find_Duo_Boons"
     },
     {
-      "claim": "UI BOM: boon rarity tiers and Pact of Punishment/Heat settings are exposed as readable mid-run choice inputs.",
+      "claim": "UI BOM (narrowed): boon rarity tiers are exposed as readable mid-run choice inputs; Pact/Heat settings and relationship meters are not claimed from the Boons page alone.",
       "source": "https://web.archive.org/web/2024/https://hades.fandom.com/wiki/Boons"
     },
     {
@@ -164,7 +164,7 @@
       "source": "https://web.archive.org/web/2024/https://hades.fandom.com/wiki/Mirror_of_Night"
     },
     {
-      "claim": "Anti-lesson modular dialogue: condition-keyed House lines, not a single death cutscene, carry the narrative tick.",
+      "claim": "Anti-lesson modular dialogue: condition-sensitive House lines across returns, not a single death cutscene, carry the narrative tick; exact condition keys are not enumerated here.",
       "source": "https://natalia-nazeem.medium.com/failure-is-death-and-death-is-progress-the-use-of-repetition-replayability-and-narrative-673cfa4e2e8"
     },
     {
@@ -172,8 +172,12 @@
       "source": "https://web.archive.org/web/2024/https://hades.fandom.com/wiki/Boons"
     },
     {
-      "claim": "BOM \u2014 win-loss-death: death is expected; it ends run power but advances House dialogue and meta currency.",
+      "claim": "BOM — win-loss-death: death is expected; it ends run power but advances House dialogue and meta currency.",
       "source": "https://natalia-nazeem.medium.com/failure-is-death-and-death-is-progress-the-use-of-repetition-replayability-and-narrative-673cfa4e2e8"
+    },
+    {
+      "claim": "Loot BOM — keepsakes: equipable House keepsakes provide run bonuses (bias of god offers is not claimed).",
+      "source": "https://web.archive.org/web/2024/https://hades.fandom.com/wiki/Nectar"
     }
   ],
   "status": "draft"

@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "id": "call-of-duty",
   "title": "Call of Duty",
-  "edition_pinned": "Call of Duty 4: Modern Warfare (Infinity Ward, November 2007) \u2014 design-canonical multiplayer: create-a-class, XP unlocks, Prestige, killstreaks (3/5/7). Later scorestreaks and specialists are descendants, not the pin.",
+  "edition_pinned": "Call of Duty 4: Modern Warfare (Infinity Ward, November 2007) — design-canonical multiplayer: create-a-class, XP unlocks, Prestige, killstreaks (3/5/7). Later scorestreaks and specialists are descendants, not the pin.",
   "genre_tags": [
     "fps",
     "multiplayer",
@@ -39,13 +39,13 @@
     }
   ],
   "feel_signature": "A life is a short commit from spawn; each kill without dying ticks a streak meter toward a map-scale reward; death zeroes the meter and returns the player to spawn with the same class.",
-  "second_session_answer": "Players return to finish the next weapon unlock or Prestige rank and to practice maps and classes \u2014 goals that persist outside any single match outcome.",
+  "second_session_answer": "Players return to finish the next weapon unlock or Prestige rank and to practice maps and classes — goals that persist outside any single match outcome.",
   "packaging_lessons": [
     "Ship deathmatch-readable maps and preset classes before mode bloat; COD4 maps were built around deathmatch layouts first.",
-    "Put mid-match power on no-death chains (killstreaks), not on map pickups that stall flow."
+    "Put mid-match power on no-death chains (killstreaks), not on contested air-support trigger zones that stall deathmatch flow."
   ],
   "anti_lessons": [
-    "Do not copy killstreaks into a PvE campaign without redesign \u2014 the mechanism assumes respawn-based multiplayer opponents.",
+    "Do not copy killstreaks into a PvE campaign without redesign — the mechanism assumes respawn-based multiplayer opponents.",
     "Do not layer pay-to-unlock weapons onto the XP ladder if the design goal is skill-and-time progression (later remaster microtransactions are a negative lesson)."
   ],
   "system_bom": [
@@ -75,11 +75,11 @@
     },
     {
       "system": "ui",
-      "note": "create-a-class screens and streak callouts must stay readable during short lives so loadout and streak state stay visible"
+      "note": "combat HUD exposes objectives, ammo, stance, grenades, and damage direction during short lives; create-a-class is a pre-match loadout surface (not claimed from the combat manual alone)"
     },
     {
       "system": "leaderboards",
-      "note": "rank and kill/death comparison sustain social return beyond a single match win"
+      "note": "personal performance and kill/death ratio emphasis sustain return beyond a single match win; platform leaderboard functionality is not claimed"
     }
   ],
   "citations": [
@@ -120,7 +120,7 @@
       "source": "https://www.gamesradar.com/call-of-duty-4-modern-warfare-review/"
     },
     {
-      "claim": "Xbox 360 manual: HUD shows objectives, ammo, stance, grenades, and damage direction during combat.",
+      "claim": "Xbox 360 manual: HUD shows objectives, ammo, stance, grenades, and damage direction during combat (create-a-class screens and streak callouts are not claimed from this manual).",
       "source": "https://www.videogamemanual.com/xbox360/Call%20of%20Duty%204-%20Modern%20Warfare.pdf"
     },
     {
@@ -144,11 +144,11 @@
       "source": "https://en.wikipedia.org/wiki/Call_of_Duty_4:_Modern_Warfare"
     },
     {
-      "claim": "UI BOM: create-a-class and combat HUD expose loadout and combat state during short lives.",
+      "claim": "UI BOM (narrowed): combat HUD exposes combat state during short lives per the manual; create-a-class is documented on multiplayer overview sources, not the combat HUD manual.",
       "source": "https://www.videogamemanual.com/xbox360/Call%20of%20Duty%204-%20Modern%20Warfare.pdf"
     },
     {
-      "claim": "Leaderboards BOM: retrospective coverage notes renewed emphasis on personal performance and kill-to-death ratio alongside unlock progression.",
+      "claim": "Personal-performance BOM: retrospective coverage notes renewed emphasis on personal performance and kill-to-death ratio alongside unlock progression; leaderboard functionality is not claimed.",
       "source": "https://en.wikipedia.org/wiki/Call_of_Duty_4:_Modern_Warfare"
     },
     {
@@ -156,7 +156,7 @@
       "source": "https://en.wikipedia.org/wiki/Call_of_Duty_4:_Modern_Warfare"
     },
     {
-      "claim": "Packaging lesson 2: mid-match power on no-death chains rather than zone pickups.",
+      "claim": "Packaging lesson 2: mid-match power on no-death killstreaks rather than contested air-support trigger zones that hurt deathmatch flow.",
       "source": "https://en.wikipedia.org/wiki/Call_of_Duty_4:_Modern_Warfare"
     },
     {

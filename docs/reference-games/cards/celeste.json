@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "id": "celeste",
   "title": "Celeste",
-  "edition_pinned": "Celeste (Maddy Makes Games / Extremely OK Games, 25 January 2018 launch with Assist Mode as shipped) \u2014 Farewell DLC is optional post-content, not the pin.",
+  "edition_pinned": "Celeste (Maddy Makes Games / Extremely OK Games, 25 January 2018 launch with Assist Mode as shipped) — Farewell DLC is optional post-content, not the pin.",
   "genre_tags": [
     "precision-platformer",
     "single-player",
@@ -18,7 +18,7 @@
       "climb",
       "retry-screen"
     ],
-    "description": "Enter a screen, spend the single air dash and climb stamina to chain geometry, die on contact with hazards, respawn at the screen entrance with full resources, repeat until the screen exits."
+    "description": "Enter a screen, spend the single air dash and limited climb stamina to chain geometry, die on contact with hazards, respawn at the current screen checkpoint, repeat until the screen exits."
   },
   "depth_mechanisms": [
     {
@@ -28,23 +28,23 @@
     },
     {
       "name": "screen-scoped infinite retry",
-      "mechanism": "Death restarts the current screen with full dash and stamina; progress is room-exit, not a lives currency. The mountain map chains hundreds of screens so failure cost is local time, not chapter restarts.",
+      "mechanism": "Death restarts the current single-screen challenge at the local checkpoint; progress is room-exit, not a lives currency. The mountain map chains hundreds of screens so failure cost is local time, not chapter restarts. Per-death resource restore of dash and climb stamina is not claimed from overview sources.",
       "falsifiable_claim": "If death forces a multi-screen checkpoint rollback, completion rate for mid-game chapters drops because retry cost exceeds learning gain."
     },
     {
       "name": "assist mode opt-in break",
-      "mechanism": "Assist Mode lets players change game speed, grant infinite dashes, invincibility, and other toggles without a separate story path. Designer intent treats Assist as breaking the fine-tuned difficulty by design so more players can finish.",
+      "mechanism": "Assist Mode lets players change game speed, grant infinite dashes, invincibility, and other toggles without a separate story path. Coverage treats Assist as accessibility options that keep the same story path available.",
       "falsifiable_claim": "If Assist Mode is removed and no equivalent toggles exist, players who need those options never reach the ending on the default ruleset."
     }
   ],
-  "feel_signature": "Input commits a dash or stamina slice within one screen; failure is a full-resource retry at the screen door, so the decision is always the next frame sequence, not inventory or loadout.",
-  "second_session_answer": "Players return to clear the next chapter screens or collect strawberries they skipped, using the same dash budget on harder geometry \u2014 not to spend meta currency.",
+  "feel_signature": "Input commits a dash or climb-stamina slice within one screen; failure is a local screen retry, so the decision is always the next frame sequence, not inventory or loadout.",
+  "second_session_answer": "Players return to clear the next chapter screens or collect strawberries they skipped, using the same dash budget on harder geometry — not to spend meta currency.",
   "packaging_lessons": [
     "Inference: ship chapter 1 with dash, climb, and screen-scoped retry before any collectible economy; level-design tooling centers on hundreds of precision stages.",
     "Expose Assist toggles as player-owned breaks of the design, not as a hidden difficulty-tier flag that strips story."
   ],
   "anti_lessons": [
-    "Do not bolt an XP or loadout layer onto a dash-budget platformer \u2014 it hides which inputs failed.",
+    "Do not bolt an XP or loadout layer onto a dash-budget platformer — it hides which inputs failed.",
     "Do not replace screen-scoped retry with long checkpoint gaps; the depth is high death count at low time cost."
   ],
   "system_bom": [
@@ -54,15 +54,15 @@
     },
     {
       "system": "win-loss-death",
-      "note": "death is the primary feedback; there is no lives counter \u2014 only local retry cost"
+      "note": "death is the primary feedback and is expected to be frequent; failure cost is local screen time, not a long rollback"
     },
     {
       "system": "save-state",
-      "note": "screen and chapter progress persist so cleared geometry stays cleared while retries remain local; strawberries are optional persistence"
+      "note": "chapters chain single-screen challenges with checkpoints; strawberries and B-sides are optional collectible goals on the same verbs"
     },
     {
       "system": "ui",
-      "note": "dash-ready hair color and stamina bar must stay readable without menus so the scarce commit stays visible mid-air"
+      "note": "dash-ready hair color must stay readable without menus so the scarce dash commit stays visible mid-air; climb stamina is a limited resource without a claimed ordinary on-screen stamina bar"
     },
     {
       "system": "progression",
@@ -71,7 +71,7 @@
   ],
   "citations": [
     {
-      "claim": "Edition pin: Celeste released 25 January 2018; Assist Mode is part of the shipped accessibility design.",
+      "claim": "Edition pin context: Maddy Thorson retrospective on Celeste years after the 2018 launch (Assist Mode details are not claimed from this essay).",
       "source": "https://maddythorson.medium.com/four-years-of-celeste-7dccdcc3f7f4"
     },
     {
@@ -87,19 +87,19 @@
       "source": "https://www.youtube.com/watch?v=4RlpMhBKNr0"
     },
     {
-      "claim": "Screen-scoped retry: death returns the player to the current room rather than a distant checkpoint; high death counts are expected.",
+      "claim": "Screen-scoped retry: levels are single-screen challenges with checkpoints; high death counts are expected. Per-death full dash/stamina restore is not claimed.",
       "source": "https://en.wikipedia.org/wiki/Celeste_(video_game)"
     },
     {
-      "claim": "Assist Mode: alter speed, infinite dashes, invincibility; designer framing treats Assist as breaking the game by design to empower players.",
-      "source": "https://www.youtube.com/watch?v=NInNVEHj_G4"
-    },
-    {
-      "claim": "Assist Mode written coverage: optional accessibility settings ship with the game and preserve story access.",
+      "claim": "Assist Mode: alter speed, infinite dashes, invincibility; optional accessibility settings ship with the game.",
       "source": "https://en.wikipedia.org/wiki/Celeste_(video_game)"
     },
     {
-      "claim": "Feel signature: limited dash and stamina per screen; death resets the room resources for another attempt.",
+      "claim": "Assist Mode written coverage: optional accessibility settings (speed, infinite dash, invincibility) ship with the game and preserve story access.",
+      "source": "https://en.wikipedia.org/wiki/Celeste_(video_game)"
+    },
+    {
+      "claim": "Feel signature: limited dash and climb stamina per screen; death returns the player to the local screen challenge for another attempt.",
       "source": "https://web.archive.org/web/2024/https://celestegame.fandom.com/wiki/Madeline"
     },
     {
@@ -107,19 +107,19 @@
       "source": "https://en.wikipedia.org/wiki/Celeste_(video_game)"
     },
     {
-      "claim": "Save-state BOM: strawberries collect only after landing and persist as optional progress; screen progress is local until exit.",
+      "claim": "Save-state BOM: strawberries are optional collectibles; chapters contain branching paths and hidden collectibles. Exact screen-exit persistence semantics are not claimed beyond single-screen challenges with checkpoints.",
       "source": "https://en.wikipedia.org/wiki/Celeste_(video_game)"
     },
     {
-      "claim": "Save-state loop service: cleared rooms and chapter unlocks remain while deaths retry only the current room.",
+      "claim": "Save-state loop service: B-sides and chapter structure gate harder geometry using the same verbs; deaths retry local screens.",
       "source": "https://en.wikipedia.org/wiki/Celeste_(video_game)"
     },
     {
-      "claim": "Win-loss-death BOM: no lives system; death count is tracked as feedback, not a fail currency.",
+      "claim": "Win-loss-death BOM (narrowed): death is frequent and local to screens/checkpoints; no-lives-counter and death-count-tracking claims are not asserted from this overview source.",
       "source": "https://en.wikipedia.org/wiki/Celeste_(video_game)"
     },
     {
-      "claim": "UI BOM: Madeline's hair color signals dash readiness during play.",
+      "claim": "UI BOM: Madeline's hair color signals dash readiness during play; an ordinary on-screen stamina bar is not claimed.",
       "source": "https://web.archive.org/web/2024/https://celestegame.fandom.com/wiki/Madeline"
     },
     {

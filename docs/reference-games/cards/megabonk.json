@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "id": "megabonk",
   "title": "Megabonk",
-  "edition_pinned": "Megabonk Steam release 18 September 2025 (vedinad; Windows & Linux) \u2014 pins the 3D survivor-like loop documented by early post-launch sources (Sep\u2013Oct 2025): procedural maps, auto combat, random upgrades, Silver meta, quests. Later December 2025 content updates are out of pin.",
+  "edition_pinned": "Megabonk current Steam build as of 2026-07 (vedinad; Windows & Linux; first released 18 September 2025). Pins the 3D survivor-like loop documented on the live Steam page and early post-launch coverage: procedural maps, auto combat, random upgrades that vary in rarity, Silver meta, quests. Launch-day exact counts/mechanics are not preservable from mutable store/wiki material — later content updates may diverge.",
   "genre_tags": [
     "survivor-like",
     "roguelike",
@@ -31,12 +31,12 @@
     },
     {
       "name": "random upgrade synergy offers",
-      "mechanism": "Level-ups present random rarity-weighted upgrade offers across weapons and items so runs assemble different weapon-and-item synergies rather than a fixed unlock order.",
+      "mechanism": "Level-ups present random upgrade offers that vary in rarity across weapons and items so runs assemble different weapon-and-item synergies rather than a fixed unlock order. Selection is not claimed as rarity-weighted sampling.",
       "falsifiable_claim": "If upgrade offers are fixed sequential unlocks with no random forks, run-to-run builds converge and second-session motive to try another synergy weakens."
     },
     {
       "name": "scarce silver meta",
-      "mechanism": "Silver is uncommon meta currency earned from challenges, silvery-blue pots, and Silver Tome upgrades; it permanently unlocks characters, weapons, and tomes rather than flooding every run with permanent power.",
+      "mechanism": "Silver is uncommon meta currency earned from challenges, silvery-blue pots, and Silver Tome upgrades; it permanently unlocks characters, weapons, and tomes rather than flooding every run with permanent power. Quests gate roster/content separately and are not claimed as the primary Silver source.",
       "falsifiable_claim": "If Silver drops at the same rate as common gold every run, challenge-gated unlock goals stop structuring second-session play."
     },
     {
@@ -45,14 +45,14 @@
       "falsifiable_claim": "If all characters unlock by cumulative XP only, players stop hunting quest objectives as the path to new roster options."
     }
   ],
-  "feel_signature": "A slide or jump commits a 3D path while auto-weapons fire; a level-up pause forces a rarity-weighted pick that changes how the next wave is cleared.",
-  "second_session_answer": "Players return to complete quests for Silver and unlock the next character or tome, then test a new mobility-and-weapon synergy on procedural maps.",
+  "feel_signature": "A slide or jump commits a 3D path while auto-weapons fire; a level-up pause forces a random rarity-varying pick that changes how the next wave is cleared.",
+  "second_session_answer": "Players return to earn scarce Silver (challenges, pots, Silver Tome) and complete quests that gate the next character or tome, then test a new mobility-and-weapon synergy on procedural maps.",
   "packaging_lessons": [
     "Inference: ship auto-combat first, then add 3D movement (jump/slide/speed) as the differentiator from 2D survivor-likes.",
-    "Inference: keep meta currency scarce and quest-linked so unlocks remain session goals after the first clear."
+    "Inference: keep meta currency scarce (challenge/pot/tome-linked) and quests task-shaped so unlocks remain session goals after the first clear."
   ],
   "anti_lessons": [
-    "Do not treat Megabonk as a skin of Vampire Survivors \u2014 copying auto-attack without 3D vertical mobility misses the moat.",
+    "Do not treat Megabonk as a skin of Vampire Survivors — copying auto-attack without 3D vertical mobility misses the moat.",
     "Do not flood Silver; scarcity is load-bearing for quest-driven return."
   ],
   "system_bom": [
@@ -70,7 +70,7 @@
     },
     {
       "system": "leveling",
-      "note": "random rarity upgrades are the decision points that assemble run synergies"
+      "note": "random upgrades that vary in rarity are the decision points that assemble run synergies"
     },
     {
       "system": "meta-progression",
@@ -91,11 +91,11 @@
   ],
   "citations": [
     {
-      "claim": "Edition pin: released 18 September 2025 for Windows and Linux by vedinad as a 3D Vampire Survivors\u2013like with procedural maps, auto combat, and random upgrades.",
-      "source": "https://en.wikipedia.org/wiki/Megabonk"
+      "claim": "Edition pin: first released 18 September 2025 for Windows and Linux by vedinad as a 3D survivor-like with procedural maps, auto combat, and random upgrades; card pins current Steam build as of 2026-07 because launch-state evidence is not preservable from mutable store/wiki material.",
+      "source": "https://store.steampowered.com/app/3405340/Megabonk/"
     },
     {
-      "claim": "Edition pin excludes later December mega-update content as proof of launch mechanics; pin rests on Sep\u2013Oct 2025 documentation.",
+      "claim": "Edition pin caveat: later content updates (e.g. December mega-update coverage) are out of pin; mechanics rest on current Steam description plus early post-launch docs, not a frozen launch dump.",
       "source": "https://www.gamingonlinux.com/2025/12/the-popular-megabonk-gets-a-mega-update-with-new-content/"
     },
     {
@@ -103,11 +103,11 @@
       "source": "https://www.thegamer.com/megabonk-game-of-the-year/"
     },
     {
-      "claim": "Random upgrade synergy offers: fight hordes, loot, level up, random upgrade rarity, unlock characters (Steam store loop).",
+      "claim": "Random upgrade synergy offers: each upgrade offer is random and will vary in rarity (Steam); not claimed as rarity-weighted selection.",
       "source": "https://store.steampowered.com/app/3405340/Megabonk/"
     },
     {
-      "claim": "Scarce silver meta: Silver via challenges, pots, Silver Tome; permanent unlocks; not common.",
+      "claim": "Scarce silver meta: Silver via challenges, pots, Silver Tome; permanent unlocks; not common. Quests not claimed as Silver source.",
       "source": "https://web.archive.org/web/20251003192749/https://www.thegamer.com/megabonk-farm-silver-currency-tips-guide/"
     },
     {
@@ -127,11 +127,11 @@
       "source": "https://www.thegamer.com/megabonk-game-of-the-year/"
     },
     {
-      "claim": "Feel signature / loop comparison as 3D survivor-like with Risk of Rain 2 \u00d7 Vampire Survivors framing (early coverage).",
+      "claim": "Feel signature / loop comparison as 3D survivor-like with Risk of Rain 2 × Vampire Survivors framing (early coverage).",
       "source": "https://www.gamesradar.com/games/roguelike/i-cant-pry-myself-from-the-computer-new-roguelike-hailed-as-a-mix-of-vampire-survivors-and-risk-of-rain-2-and-im-starting-to-see-why-it-has-4-000-very-positive-steam-reviews-after-just-one-week/"
     },
     {
-      "claim": "Second-session answer: Silver and unlocks structure return after runs.",
+      "claim": "Second-session answer: scarce Silver (challenges, pots, Silver Tome) and permanent unlocks structure return; quests are a separate content-gating surface.",
       "source": "https://web.archive.org/web/20251003192749/https://www.thegamer.com/megabonk-farm-silver-currency-tips-guide/"
     },
     {
@@ -143,7 +143,7 @@
       "source": "https://www.ign.com/wikis/megabonk/Best_Items_Tier_List"
     },
     {
-      "claim": "XP and leveling BOM: gems and random rarity upgrades are decision points.",
+      "claim": "XP and leveling BOM: gems and random upgrades that vary in rarity are decision points.",
       "source": "https://store.steampowered.com/app/3405340/Megabonk/"
     },
     {
@@ -167,7 +167,7 @@
       "source": "https://www.thegamer.com/megabonk-game-of-the-year/"
     },
     {
-      "claim": "Packaging lesson 2 (labeled Inference): scarce Silver and quests keep unlock goals after first clear.",
+      "claim": "Packaging lesson 2 (labeled Inference): scarce Silver and quest-gated roster keep unlock goals after first clear; quests are not claimed as the Silver source.",
       "source": "https://web.archive.org/web/20251003192749/https://www.thegamer.com/megabonk-farm-silver-currency-tips-guide/"
     },
     {

@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "id": "mario-odyssey",
   "title": "Super Mario Odyssey",
-  "edition_pinned": "Super Mario Odyssey (Nintendo Switch, October 2017 launch) \u2014 Capture and Power Moon kingdom structure as shipped; not post-launch costume DLC focus.",
+  "edition_pinned": "Super Mario Odyssey (Nintendo Switch, October 2017 launch) — Capture and Power Moon kingdom structure as shipped; not post-launch costume DLC focus.",
   "genre_tags": [
     "3d-platformer",
     "collectathon",
@@ -24,7 +24,7 @@
   "depth_mechanisms": [
     {
       "name": "capture move-set swap",
-      "mechanism": "Throwing Cappy onto a legal target replaces Mario's actions with that target's kit (swim, fly, roll, possess object). Most captures last until the player releases them or a capture-specific end condition fires; only some captures are time-limited. Moons are authored around capture tools as first-class solutions, with many also solvable by advanced base movement.",
+      "mechanism": "Throwing Cappy onto a legal target temporarily replaces Mario's actions with that target's kit (swim, fly, roll, possess object). Moons are authored around capture tools as first-class solutions, with many also solvable by advanced base movement. General per-capture duration/release rules are not pinned beyond temporary control.",
       "falsifiable_claim": "If Capture is removed and only Mario's base kit remains, moons that require a capture-specific action cannot be completed by the base kit alone."
     },
     {
@@ -45,7 +45,7 @@
     "Set exit moon costs below available moon supply so the first clear teaches choice, not completionism."
   ],
   "anti_lessons": [
-    "Do not treat Capture as a skin swap \u2014 if the captured form does not change legal routes or attacks, it is costume, not depth.",
+    "Do not treat Capture as a skin swap — if the captured form does not change legal routes or attacks, it is costume, not depth.",
     "Do not copy moon spam without multi-solution placement; quantity without alternate solves is checklist padding."
   ],
   "system_bom": [
@@ -63,25 +63,25 @@
     },
     {
       "system": "ui",
-      "note": "kingdom map and moon list support optional tracking; uncollected moons are not universally marked until hints or list checks are used"
+      "note": "Power Moon collection is the visible travel/progress meter; moons are optional among surplus options rather than a single forced path"
     },
     {
       "system": "save-state",
-      "note": "banked moons, story flags, and checkpoint progress persist; captures are not a persistent unlocked roster"
+      "note": "Power Moon totals and kingdom travel progress structure multi-session collection; captures remain world-local temporary tools rather than a permanent unlock roster"
     },
     {
       "system": "win-loss-death",
-      "note": "fall or damage returns Mario with partial coin loss; moons already banked stay banked"
+      "note": "death costs up to ten coins as the main penalty (unlimited lives); the card does not claim separate banked-moon loss on death"
     }
   ],
   "citations": [
     {
-      "claim": "Moat and capture move-set swap: Capture controls enemies, creatures, and objects via Cappy to gain new abilities and reach Power Moons.",
-      "source": "https://web.archive.org/web/2024/https://mario.fandom.com/wiki/Capture"
+      "claim": "Moat and capture move-set swap: Capture temporarily controls enemies, creatures, and objects via Cappy to gain new abilities and reach Power Moons.",
+      "source": "https://en.wikipedia.org/wiki/Super_Mario_Odyssey"
     },
     {
-      "claim": "Capture duration: captures generally last until release or capture-specific end conditions, not a universal timed window for every target.",
-      "source": "https://web.archive.org/web/2024/https://mario.fandom.com/wiki/Capture"
+      "claim": "Capture is temporary control of enemies, creatures, and objects via Cappy; general duration/release rules beyond temporary capture are not claimed.",
+      "source": "https://en.wikipedia.org/wiki/Super_Mario_Odyssey"
     },
     {
       "claim": "Over-supplied moon threshold: Power Moons power the Odyssey; kingdoms contain more moons than the exit requirement.",
@@ -97,11 +97,11 @@
     },
     {
       "claim": "Feel signature: Cappy throw enables Capture, which changes movement and combat options used to reach moons.",
-      "source": "https://web.archive.org/web/2024/https://mario.fandom.com/wiki/Capture"
+      "source": "https://en.wikipedia.org/wiki/Super_Mario_Odyssey"
     },
     {
       "claim": "Feel signature moon bank advances kingdom exit: collected Power Moons fund Odyssey travel.",
-      "source": "https://web.archive.org/web/2024/https://mario.fandom.com/wiki/Power_Moon"
+      "source": "https://en.wikipedia.org/wiki/Super_Mario_Odyssey"
     },
     {
       "claim": "Second-session answer: surplus moons and post-story collection remain in kingdoms; captures remain world-local targets rather than a permanent unlock roster.",
@@ -109,18 +109,18 @@
     },
     {
       "claim": "Skills BOM: Capture expands move-sets per target without a traditional skill tree.",
-      "source": "https://web.archive.org/web/2024/https://mario.fandom.com/wiki/Capture"
-    },
-    {
-      "claim": "UI BOM: moon lists and maps support tracking, but moons are not all forced into a single ordered path.",
-      "source": "https://web.archive.org/web/2024/https://mario.fandom.com/wiki/Power_Moon"
-    },
-    {
-      "claim": "Save-state BOM: banked moons and kingdom progress persist across sessions; captures are not stored as unlocked abilities.",
       "source": "https://en.wikipedia.org/wiki/Super_Mario_Odyssey"
     },
     {
-      "claim": "Win-loss-death BOM: death costs coins while previously collected Power Moons remain collected.",
+      "claim": "UI BOM (narrowed): Power Moons power the Odyssey and kingdoms offer surplus moons; conditional moon lists/hints/uncollected-moon visibility are not claimed.",
+      "source": "https://en.wikipedia.org/wiki/Super_Mario_Odyssey"
+    },
+    {
+      "claim": "Save-state BOM (narrowed): multi-session moon collection and kingdom travel are the documented structure; captures are temporary world-local tools, not a permanent unlock roster. Exact story-flag/checkpoint save semantics are not claimed.",
+      "source": "https://en.wikipedia.org/wiki/Super_Mario_Odyssey"
+    },
+    {
+      "claim": "Win-loss-death BOM: unlimited lives; dying costs up to ten coins. Banked-moon retention through death is not claimed from this source.",
       "source": "https://en.wikipedia.org/wiki/Super_Mario_Odyssey"
     },
     {
@@ -129,11 +129,11 @@
     },
     {
       "claim": "Packaging lesson 1 (labeled Inference): one kingdom plus Capture roster is the minimal vertical slice before post-game moon variants.",
-      "source": "https://web.archive.org/web/2024/https://mario.fandom.com/wiki/Capture"
+      "source": "https://en.wikipedia.org/wiki/Super_Mario_Odyssey"
     },
     {
       "claim": "Packaging lesson 2: exit costs sit below available moons so the first clear teaches selection among surplus moons.",
-      "source": "https://web.archive.org/web/2024/https://mario.fandom.com/wiki/Power_Moon"
+      "source": "https://en.wikipedia.org/wiki/Super_Mario_Odyssey"
     },
     {
       "claim": "Director interview context: Power Moons hidden throughout kingdoms and Capture as a core exploration tool.",
@@ -141,7 +141,7 @@
     },
     {
       "claim": "Anti-lesson Capture-as-costume: Capture is defined by gained abilities and new routes, not appearance alone.",
-      "source": "https://web.archive.org/web/2024/https://mario.fandom.com/wiki/Capture"
+      "source": "https://en.wikipedia.org/wiki/Super_Mario_Odyssey"
     },
     {
       "claim": "Anti-lesson moon quantity without multi-solution: designer coverage stresses experiences and Capture solves, not checklist count alone.",

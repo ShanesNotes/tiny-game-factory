@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "id": "zelda-botw",
   "title": "The Legend of Zelda: Breath of the Wild",
-  "edition_pinned": "The Legend of Zelda: Breath of the Wild (Nintendo Switch / Wii U, March 2017 launch) \u2014 chemistry+physics open-world rules as shipped; not Tears of the Kingdom.",
+  "edition_pinned": "The Legend of Zelda: Breath of the Wild (Nintendo Switch / Wii U, March 2017 launch) — chemistry+physics open-world rules as shipped; not Tears of the Kingdom.",
   "genre_tags": [
     "open-world",
     "action-adventure",
@@ -35,24 +35,24 @@
     },
     {
       "name": "stamina-gated vertical traversal",
-      "mechanism": "Climbing, gliding, swimming, and sprinting draw from one stamina wheel. Most climbable surfaces are legal until stamina empties; rain makes climbing slip and weather zones demand resistance food or gear, so route choice is a stamina and preparation decision rather than a pathfinder unlock.",
-      "falsifiable_claim": "If climb and glider costs no stamina, second-session route planning that budgets rest, food, and weather preparation stops mattering for major landmarks."
+      "mechanism": "Climbing, gliding, swimming, and running draw from one stamina pool. Most surfaces are climbable until stamina empties; cooking and gear can fund stamina and resistance buffs (heat/cold), so route choice is a stamina and preparation decision rather than a pathfinder unlock.",
+      "falsifiable_claim": "If climb and glider cost no stamina, second-session route planning that budgets rest, food, and environmental preparation stops mattering for major landmarks."
     }
   ],
-  "feel_signature": "A climb, glider launch, or weapon swing spends a named resource (stamina or weapon durability); success is a player-composed route or element interaction, not a scripted set-piece completion.",
+  "feel_signature": "A climb or glider path spends stamina; weapons and shields degrade through combat use and can shatter; success is a player-composed route or element interaction, not a scripted set-piece completion.",
   "second_session_answer": "Players return to restock weapons and food, then re-route through known chemistry interactions (metal+lightning, fire+grass) toward unexplored towers and shrines rather than to grind a skill tree.",
   "packaging_lessons": [
     "Inference: ship a small closed test bed of chemistry and physics rules (Great Plateau style) before full open-world scale so rule consistency can be proven where failure is cheap.",
     "Inference: make default tools (climb, glider, breakable weapons with field restock) legal across most of the map before adding special-case dungeon keys as the main gate."
   ],
   "anti_lessons": [
-    "Do not copy weapon durability without flooding the world with restock points and alternate tool types \u2014 durability alone without abundance only produces inventory anxiety.",
+    "Do not copy weapon durability without flooding the world with restock points and alternate tool types — durability alone without abundance only produces inventory anxiety.",
     "Do not treat open world as content volume; without consistent state rules, the map is a checklist of one-off scripts."
   ],
   "system_bom": [
     {
       "system": "play-loop",
-      "note": "exploration, combat, and shrine solves share chemistry and physics; stamina gates climb/glide while cooking and gear feed the next route push"
+      "note": "exploration, combat, and shrine solves share chemistry and physics; stamina gates climb/glide/swim/run while cooking funds hearts, stamina, and resistance for the next push"
     },
     {
       "system": "inventory",
@@ -64,15 +64,15 @@
     },
     {
       "system": "quests",
-      "note": "shrines grant Spirit Orbs for heart/stamina vessels; towers reveal map sectors and enable fast travel \u2014 both gate options without linear story order"
+      "note": "shrines grant Spirit Orbs for heart/stamina vessels; towers reveal map sectors and enable fast travel — both gate options without linear story order"
     },
     {
       "system": "save-state",
-      "note": "durable inventory, quest flags, and map progress persist; transient object and chemistry states commonly reset on reload or area reload"
+      "note": "open-world progression (map reveal via towers, shrine completion, inventory loadout) is structured for multi-session play; the card does not claim durable material/chemistry object-state persistence across reloads"
     },
     {
       "system": "win-loss-death",
-      "note": "death reloads the last autosave or manual save; banked inventory and map progress remain, while uncommitted route time is lost"
+      "note": "failed combat can end an attempt; banked inventory and map/shrine progress continue to structure the next push, while uncommitted exploration time is lost"
     }
   ],
   "citations": [
@@ -97,8 +97,8 @@
       "source": "https://web.archive.org/web/2024/https://zelda.fandom.com/wiki/Stamina_Vessel"
     },
     {
-      "claim": "Stamina upgrades fund longer climbs and glides; Spirit Orbs come from completing shrines.",
-      "source": "https://www.shacknews.com/article/99236/how-to-get-hearts-and-stamina-breath-of-the-wild"
+      "claim": "Shared stamina pool: Link is limited by stamina while running, climbing, swimming, and gliding; Spirit Orbs expand health or stamina.",
+      "source": "https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_Breath_of_the_Wild"
     },
     {
       "claim": "Feel signature experimental solutions emerge from interconnected physics and chemistry rules rather than scripted paths.",
@@ -129,15 +129,15 @@
       "source": "https://www.shacknews.com/article/99236/how-to-get-hearts-and-stamina-breath-of-the-wild"
     },
     {
-      "claim": "Save-state BOM: durable progression (inventory, map, quest flags) persists; the card deliberately does not claim full world material/chemistry persistence across reloads.",
+      "claim": "Save-state BOM (narrowed): multi-session open-world progression via map reveal, shrines, and inventory is the documented structure; durable chemistry/material world-state across reloads is not claimed.",
       "source": "https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_Breath_of_the_Wild"
     },
     {
-      "claim": "Win-loss-death BOM: death returns the player to the last save point with retained inventory and map progress.",
+      "claim": "Win-loss-death BOM (narrowed): inventory and map/shrine progress structure continued play after failed attempts; exact last-autosave/manual-save restore semantics are not claimed from this overview source.",
       "source": "https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_Breath_of_the_Wild"
     },
     {
-      "claim": "Play-loop BOM: exploration and combat share chemistry/physics while stamina and cooking feed the next push (paired GDC chemistry+physics design).",
+      "claim": "Play-loop BOM chemistry/physics share: exploration and combat use the same chemistry and physics rules for player-authored solutions.",
       "source": "https://gamesbeat.com/the-legend-of-zelda-breath-of-the-wild-makes-chemistry-just-as-important-as-physics/"
     },
     {
@@ -155,6 +155,10 @@
     {
       "claim": "Anti-lesson open-world volume: GDC coverage stresses consistent chemistry/physics lies over one-off scripts.",
       "source": "https://www.thumbsticks.com/gdc-17-breath-of-the-wild-science-lies/"
+    },
+    {
+      "claim": "Play-loop BOM stamina and cooking: stamina limits climb/glide/swim/run; cooking restores health/stamina and grants resistance buffs.",
+      "source": "https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_Breath_of_the_Wild"
     }
   ],
   "status": "draft"
