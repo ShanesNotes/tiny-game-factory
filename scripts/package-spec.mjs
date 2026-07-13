@@ -244,6 +244,11 @@ try {
     }, null, 2) + "\n");
   put("GAME_SEED.md", fs.readFileSync(path.join(runDir, "GAME_SEED.md"), "utf8"));
   put("GAME_THESIS.md", fs.readFileSync(thesisPath, "utf8"));
+  if (manifest.design_lane?.mode === "yolo") {
+    const g1Path = path.join(runDir, "reviews", "G1_BRIEF.md");
+    if (!fs.existsSync(g1Path)) fail("yolo pack requires reviews/G1_BRIEF.md; run npm run g1:brief first");
+    put("G1_BRIEF.md", fs.readFileSync(g1Path, "utf8"));
+  }
   put("SPEC.md", fs.readFileSync(specPath, "utf8"));
   put(path.join("decisions", path.basename(enginePath)), fs.readFileSync(enginePath, "utf8"));
   for (const f of issueFiles) {

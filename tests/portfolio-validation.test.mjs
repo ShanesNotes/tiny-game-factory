@@ -214,6 +214,43 @@ test("readIntakeEvidence rejects forged prior ADVANCE scores", () => {
   }
 });
 
+test("readIntakeEvidence rejects omitted parked proposal rows", () => {
+  const dir = tmp();
+  const id = "omitted-proposal";
+  const previousStudioRoot = process.env.STUDIO_ROOT;
+  const previousDesignRoot = process.env.GAME_DESIGN_ROOT;
+  try {
+    assert.equal(run("init-game-run.mjs", ["--seed-id", id, "--seed", "x"], dir).status, 0);
+    const runDir = path.join(dir, ".tgf", "seeds", id);
+    writeEmbedded(path.join(dir, "games/_proposals/parked-one/GAME_THESIS.md"), "Parked Thesis", {
+      pitch: "parked",
+      design_register: "hybrid",
+      golden_moment: "a route closes",
+      core_loop_candidates: [{ id: "loop-a", verbs: ["bind", "turn"] }]
+    });
+    const built = run("build-portfolio-digest.mjs", ["--seed-id", id], dir);
+    assert.equal(built.status, 0, built.stdout + built.stderr);
+    const digestPath = path.join(runDir, "intake", "portfolio-digest.json");
+    const stored = JSON.parse(fs.readFileSync(digestPath, "utf8"));
+    assert.equal(stored.prior_theses.find((row) => row.seed_id === "parked-one").parked, true);
+    stored.prior_theses = stored.prior_theses.filter((row) => row.seed_id !== "parked-one");
+    writeJson(digestPath, stored);
+
+    process.env.STUDIO_ROOT = dir;
+    process.env.GAME_DESIGN_ROOT = dir;
+    assert.match(
+      readIntakeEvidence(runDir, id).errors.join("\n"),
+      /digest stale\/dishonest — regenerate via npm run portfolio:digest/
+    );
+  } finally {
+    if (previousStudioRoot === undefined) delete process.env.STUDIO_ROOT;
+    else process.env.STUDIO_ROOT = previousStudioRoot;
+    if (previousDesignRoot === undefined) delete process.env.GAME_DESIGN_ROOT;
+    else process.env.GAME_DESIGN_ROOT = previousDesignRoot;
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("advance-run refuses portfolio intake to toolchain without intake artifacts", () => {
   const dir = tmp();
   const id = "advance-intake-gate";

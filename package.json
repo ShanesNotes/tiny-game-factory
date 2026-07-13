@@ -8,6 +8,8 @@
     "verify:tools": "node scripts/verify-local-tools.mjs",
     "init:run": "node scripts/init-game-run.mjs",
     "portfolio:digest": "node scripts/build-portfolio-digest.mjs",
+    "g1:brief": "node scripts/generate-g1-brief.mjs",
+    "seed:auto": "node scripts/generate-seed-brief.mjs",
     "idea:walk": "node scripts/walk-game-idea.mjs",
     "emit:issues": "node scripts/emit-local-issues.mjs",
     "spec:probe": "node scripts/probe-spec-availability.mjs",

@@ -25,7 +25,7 @@ export function enumeratePriorTheses(seedsRoot, seedId) {
   const skipped = [];
   if (!seedsRoot || !fs.existsSync(seedsRoot)) return { priors, skipped };
   for (const priorId of fs.readdirSync(seedsRoot).sort()) {
-    if (priorId === seedId) continue;
+    if (seedId && priorId === seedId) continue;
     const runDir = path.join(seedsRoot, priorId);
     const thesisPath = path.join(runDir, "GAME_THESIS.md");
     if (!fs.existsSync(thesisPath)) continue;
@@ -160,6 +160,27 @@ export function buildPortfolioDigestContent(seedId, startDir = process.cwd()) {
   };
 
   const gamesRoot = resolveGamesRoot(startDir);
+  const proposalsRoot = gamesRoot && path.join(gamesRoot, "_proposals");
+  if (!proposalsRoot || !fs.existsSync(proposalsRoot)) {
+    content.sources.push({ source: "proposals", status: "skipped", reason: "games/_proposals is missing" });
+    skip("proposals", "games/_proposals is missing");
+  } else {
+    content.sources.push({ source: "proposals", status: "read" });
+    const enumeration = enumeratePriorTheses(proposalsRoot, null);
+    for (const row of enumeration.skipped) skip("proposal-thesis", row.error, row.seedId);
+    for (const { seedId: proposalId, runDir, thesis } of enumeration.priors) {
+      content.prior_theses.push({
+        seed_id: proposalId,
+        pitch: typeof thesis.pitch === "string" ? thesis.pitch : "UNKNOWN",
+        chosen_loop: readChosenLoop(runDir, thesis, proposalId),
+        design_register: thesis.design_register ?? "UNKNOWN",
+        golden_moment: thesis.golden_moment ?? "UNKNOWN",
+        depth_vector: readDepthVector(runDir, proposalId),
+        parked: true
+      });
+    }
+    content.prior_theses.sort((a, b) => a.seed_id.localeCompare(b.seed_id));
+  }
   const indexFile = gamesRoot && path.join(gamesRoot, "INDEX.md");
   if (!indexFile || !fs.existsSync(indexFile)) {
     content.sources.push({ source: "games-index", status: "skipped", reason: "games/INDEX.md is missing" });

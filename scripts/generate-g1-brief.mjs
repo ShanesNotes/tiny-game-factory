@@ -1,0 +1,141 @@
+#!/usr/bin/env node
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { arg } from "./lib/argv.mjs";
+import { depthVectorConsistencyErrors, feelTargetRequiredForAdvanceErrors } from "./lib/anti-boring-gate.mjs";
+import { DEPTH_AXES } from "./lib/portfolio-memory.mjs";
+import {
+  isValidSeedId, readEmbeddedArtifact, readManifest, resolveRunPath,
+  runDirFor, runRelFor, writeRunFileSync
+} from "./lib/run-state.mjs";
+import { validate } from "./lib/validate-json-schema.mjs";
+
+const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const seedId = arg("seed-id");
+
+function fail(message) {
+  console.error(`[g1-brief] ERROR: ${message}`);
+  process.exit(1);
+}
+
+if (!seedId || !isValidSeedId(seedId)) {
+  fail("usage: node scripts/generate-g1-brief.mjs --seed-id <kebab-id>");
+}
+
+const runDir = runDirFor(process.cwd(), seedId);
+const runRel = runRelFor(seedId);
+let manifest;
+try { manifest = readManifest(runDir, seedId, process.cwd()); }
+catch (error) { fail(`manifest rejected: ${error.message}`); }
+if (!manifest?.game_thesis_path) fail("manifest has no game_thesis_path");
+
+let thesisPath;
+try { thesisPath = resolveRunPath(process.cwd(), seedId, manifest.game_thesis_path, "game_thesis_path"); }
+catch (error) { fail(error.message); }
+const { obj: thesis, errors: thesisErrors } = readEmbeddedArtifact(thesisPath, "game-thesis");
+if (!thesis) fail(`thesis invalid:\n  ${thesisErrors.join("\n  ")}`);
+
+const reviewsDir = path.join(runDir, "reviews");
+const vectors = [];
+function collectVectors(dir) {
+  if (!fs.existsSync(dir)) return;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const file = path.join(dir, entry.name);
+    if (entry.isDirectory()) collectVectors(file);
+    else if (entry.name === "depth-vector.json") vectors.push(file);
+  }
+}
+collectVectors(reviewsDir);
+vectors.sort((a, b) => {
+  const canonical = path.join(reviewsDir, "depth-vector.json");
+  if (a === canonical) return -1;
+  if (b === canonical) return 1;
+  return a.localeCompare(b);
+});
+
+const vectorSchema = JSON.parse(fs.readFileSync(path.join(REPO, "schemas", "depth-vector.schema.json"), "utf8"));
+let depthVector = null;
+for (const file of vectors) {
+  let candidate;
+  try { candidate = JSON.parse(fs.readFileSync(file, "utf8")); }
+  catch { continue; }
+  const register = candidate.register ?? "mechanics-first";
+  const thesisRegister = thesis.design_register ?? "mechanics-first";
+  const errors = [
+    ...validate(vectorSchema, candidate),
+    ...depthVectorConsistencyErrors(candidate),
+    ...feelTargetRequiredForAdvanceErrors(thesis, candidate.verdict)
+  ];
+  if (candidate.verdict === "ADVANCE" && register === thesisRegister && errors.length === 0) {
+    depthVector = candidate;
+    break;
+  }
+}
+if (!depthVector) fail("no gate-passing ADVANCE depth vector exists under reviews/");
+
+const verdictPath = path.join(reviewsDir, "ANTI_BORING_VERDICT.md");
+if (!fs.existsSync(verdictPath) || !/\bADVANCE\b/.test(fs.readFileSync(verdictPath, "utf8"))) {
+  fail("reviews/ANTI_BORING_VERDICT.md is missing an ADVANCE verdict");
+}
+
+const pitchSentences = String(thesis.pitch || "")
+  .match(/[^.!?]+[.!?]+|[^.!?]+$/g)?.slice(0, 3).map((sentence) => sentence.trim()) ?? [];
+const weakest = DEPTH_AXES
+  .map((axis, order) => ({ axis, order, score: depthVector.scores[axis], evidence: depthVector.evidence?.[axis] }))
+  .sort((a, b) => a.score - b.score || a.order - b.order)
+  .slice(0, 2);
+const distinctness = thesis.portfolio_distinctness;
+const cuts = Array.isArray(thesis.out_of_scope) && thesis.out_of_scope.length
+  ? thesis.out_of_scope
+  : (Array.isArray(thesis.first_playable_slice?.excluded) ? thesis.first_playable_slice.excluded : []);
+const feelTargets = Array.isArray(thesis.feel_targets) ? thesis.feel_targets : [];
+const nearest = distinctness?.nearest_prior_seed ?? "none";
+
+const lines = [
+  "# G1 Brief",
+  "",
+  "## Pitch",
+  "",
+  pitchSentences.join(" "),
+  "",
+  "## Register",
+  "",
+  thesis.design_register ?? "mechanics-first",
+  "",
+  "## Golden moment",
+  "",
+  thesis.golden_moment ?? "Not recorded.",
+  "",
+  "## Evidence",
+  "",
+  `Verdict: ${depthVector.verdict}. Total: ${depthVector.total}/24.`,
+  "",
+  ...weakest.map((row) => `- ${row.axis}: ${row.score}/2 — ${row.evidence ?? "not recorded"}`),
+  "",
+  "## Difference",
+  "",
+  distinctness
+    ? `Nearest prior: ${nearest}. Disposition: ${distinctness.falsifying_difference}`
+    : "Nearest prior: none. Disposition: no prior disposition was recorded.",
+  "",
+  "## Feel targets",
+  "",
+  ...(feelTargets.length
+    ? feelTargets.map((target) => `- ${target.statement} (${target.metric}: ${target.budget} ${target.unit})`)
+    : ["- No feel target was recorded."]),
+  "",
+  "## Cuts",
+  "",
+  ...(cuts.length ? cuts.map((cut) => `- ${cut}`) : ["- No cuts were recorded."]),
+  "",
+  "## What Shane is being asked to taste-judge",
+  "",
+  `Judge whether this moment warrants decomposition, whether the cuts protect it, and whether the difference from ${nearest} survives play.`,
+  ""
+];
+
+const outputRel = `${runRel}/reviews/G1_BRIEF.md`;
+try { writeRunFileSync(process.cwd(), seedId, outputRel, lines.join("\n")); }
+catch (error) { fail(error.message); }
+console.log(`[g1-brief] wrote ${outputRel}`);

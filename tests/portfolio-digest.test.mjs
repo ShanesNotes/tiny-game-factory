@@ -67,6 +67,12 @@ test("portfolio digest records prior design evidence and sealed human verdicts",
       core_loop_candidates: [{ id: "loop-current", verbs: ["skip"] }]
     });
     fs.mkdirSync(path.join(studio, "games"), { recursive: true });
+    writeThesis(path.join(studio, "games/_proposals/parked-one/GAME_THESIS.md"), {
+      pitch: "A parked pitch",
+      design_register: "world-first",
+      golden_moment: "A route closes after the player marks it",
+      core_loop_candidates: [{ id: "parked-loop", verbs: ["mark", "reroute"] }]
+    });
     writeJson(path.join(studio, "contracts/verdict-record.schema.json"), {
       $schema: "https://json-schema.org/draft/2020-12/schema",
       title: "verdict-record",
@@ -146,9 +152,15 @@ Lifecycle enum: fixture.
     const digest = JSON.parse(fs.readFileSync(digestPath, "utf8"));
     const schema = JSON.parse(fs.readFileSync(path.join(REPO, "schemas/portfolio-digest.schema.json"), "utf8"));
     assert.deepEqual(validate(schema, digest), []);
-    assert.deepEqual(digest.prior_theses.map((row) => row.seed_id), ["prior-one"]);
-    assert.equal(digest.prior_theses[0].chosen_loop.id, "loop-b");
-    assert.deepEqual(digest.prior_theses[0].depth_vector.scores, scores);
+    assert.deepEqual(digest.prior_theses.map((row) => row.seed_id), ["parked-one", "prior-one"]);
+    const prior = digest.prior_theses.find((row) => row.seed_id === "prior-one");
+    const parked = digest.prior_theses.find((row) => row.seed_id === "parked-one");
+    assert.equal(prior.chosen_loop.id, "loop-b");
+    assert.deepEqual(prior.depth_vector.scores, scores);
+    assert.equal(parked.parked, true);
+    assert.equal(parked.chosen_loop, null);
+    assert.deepEqual(parked.depth_vector, { verdict: "UNKNOWN", scores: null });
+    assert.ok(digest.sources.some((row) => row.source === "proposals" && row.status === "read"));
     assert.equal(digest.games.find((row) => row.game_id === "prior-one").human_verdict.verdict, "done");
     assert.equal(digest.games.find((row) => row.game_id === "prior-one").human_verdict.ts, "2026-07-12T12:00:00.000Z");
     assert.equal(digest.games.find((row) => row.game_id === "no-verdict").human_verdict.verdict, "UNKNOWN");
@@ -175,6 +187,7 @@ test("portfolio digest makes missing portfolio roots explicit", () => {
     assert.equal(result.status, 0, result.stderr);
     const digest = JSON.parse(fs.readFileSync(path.join(root, ".tgf/seeds/missing-roots/intake/portfolio-digest.json"), "utf8"));
     assert.ok(digest.skipped.some((row) => row.source === "design-runs"));
+    assert.ok(digest.skipped.some((row) => row.source === "proposals"));
     assert.ok(digest.skipped.some((row) => row.source === "games-index"));
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
