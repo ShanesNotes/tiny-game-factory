@@ -165,7 +165,30 @@ landed later in FUE W2-B; pigeonhole doctrine lives in
 | `docs/reference-games/cards/.gitkeep` | rewritten | Keeps empty cards/ tree tracked until real research cards land. |
 | `docs/reference-games/cards/_example.json` | rewritten | Fictional fixture card proving schema/validator path; not research, not citable. |
 | `docs/reference-games/index.jsonl` | rewritten | Generated summary index (id/title/genre_tags/register_mapping/status) refreshed by validate-reference-cards. |
+| `docs/reference-games/TAXONOMY.md` | rewritten | Frozen Tier-2 design-shape ontology, storefront-derived market vocabulary, evidence thresholds, and completeness rules for the reference canon pilot. |
+| `docs/reference-games/genre-index.jsonl` | rewritten | Generated greppable Tier-2 navigation summary; coverage counts remain derived rather than stored. |
+| `docs/reference-games/genre-index/baba-is-you.json` | rewritten | Sourced Tier-2 pilot row for Baba Is You under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/balatro.json` | rewritten | Sourced Tier-2 pilot row for Balatro under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/celeste.json` | rewritten | Sourced Tier-2 pilot row for Celeste with Tier-1 card navigation. |
+| `docs/reference-games/genre-index/civilization-6.json` | rewritten | Sourced Tier-2 pilot row for Sid Meier's Civilization VI under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/dead-cells.json` | rewritten | Sourced Tier-2 pilot row for Dead Cells under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/dont-starve-together.json` | rewritten | Sourced Tier-2 pilot row for Don't Starve Together under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/dredge.json` | rewritten | Sourced Tier-2 pilot row for DREDGE under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/factorio.json` | rewritten | Sourced Tier-2 pilot row for Factorio under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/hades.json` | rewritten | Sourced Tier-2 pilot row for Hades with Tier-1 card navigation. |
+| `docs/reference-games/genre-index/hollow-knight.json` | rewritten | Sourced Tier-2 pilot row for Hollow Knight under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/inscryption.json` | rewritten | Sourced Tier-2 pilot row for Inscryption under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/into-the-breach.json` | rewritten | Sourced Tier-2 pilot row for Into the Breach with Tier-1 card navigation. |
+| `docs/reference-games/genre-index/outer-wilds.json` | rewritten | Sourced Tier-2 pilot row for Outer Wilds under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/overcooked-2.json` | rewritten | Sourced Tier-2 pilot row for Overcooked! 2 under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/papers-please.json` | rewritten | Sourced Tier-2 pilot row for Papers, Please under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/portal-2.json` | rewritten | Sourced Tier-2 pilot row for Portal 2 under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/rimworld.json` | rewritten | Sourced Tier-2 pilot row for RimWorld under frozen taxonomy v1. |
+| `docs/reference-games/genre-index/slay-the-spire.json` | rewritten | Sourced Tier-2 pilot row for Slay the Spire with Tier-1 card navigation. |
+| `docs/reference-games/genre-index/stardew-valley.json` | rewritten | Sourced Tier-2 pilot row for Stardew Valley with Tier-1 card navigation. |
+| `docs/reference-games/genre-index/terraria.json` | rewritten | Sourced Tier-2 pilot row for Terraria under frozen taxonomy v1. |
 | `schemas/reference-card.schema.json` | rewritten | Draft 2020-12 card shape (moat, loop, depth mechanisms, system BOM, status draft\|audited) for the reference-game canon (FUE e3). |
+| `schemas/genre-index-row.schema.json` | rewritten | Draft 2020-12 Tier-2 row contract for design facets, market memberships, typed evidence, hypotheses, and optional Tier-1 navigation. |
 
 ## FUE cards batch Grok (2026-07-12) — draft research cards (8/16)
 
