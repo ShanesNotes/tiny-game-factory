@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -183,4 +184,31 @@ test("critic passes three-row facet coverage spanning two market genres", () => 
 test("critic rejects an empty corpus", () => {
   const result = critiqueGenreIndex([]);
   assert.ok(result.findings.some((f) => /empty corpus/.test(f)), result.report);
+});
+
+test("repo pilot validates, generates 20 rows, and demonstrates Tier-1 navigation", () => {
+  const result = validateGenreIndex({
+    rowsDir: rel("docs/reference-games/genre-index"),
+    indexPath: rel("docs/reference-games/genre-index.jsonl"),
+    schemaPath: rel("schemas/genre-index-row.schema.json"),
+    cardsDir: rel("docs/reference-games/cards"),
+    today: "2026-07-13"
+  });
+  assert.deepEqual(result.errors, [], result.errors.join("\n"));
+  assert.equal(result.rows.length, 20);
+  assert.ok(result.rows.filter((row) => row.card_ref).length >= 4);
+  assert.equal(new Set(result.rows.map((row) => row.id)).size, result.rows.length);
+});
+
+test("repo critic has deterministic clean CLI output", () => {
+  const run = () => spawnSync(process.execPath, [rel("scripts/genre-index-critic.mjs")], {
+    cwd: REPO,
+    encoding: "utf8"
+  });
+  const first = run();
+  const second = run();
+  assert.equal(first.status, 0, first.stdout + first.stderr);
+  assert.equal(second.status, 0, second.stdout + second.stderr);
+  assert.equal(first.stdout, second.stdout);
+  assert.match(first.stdout, /RESULT CLEAN/);
 });

@@ -18,8 +18,10 @@
     "gates": "node scripts/run-gates.mjs --dry-run",
     "validate": "node scripts/validate-artifacts.mjs --check all",
     "validate:reference-cards": "node scripts/validate-reference-cards.mjs",
+    "validate:genre-index": "node scripts/validate-genre-index.mjs",
+    "critic:genre-index": "node scripts/genre-index-critic.mjs",
     "test": "node --test \"tests/**/*.test.mjs\"",
     "lint": "node scripts/lint.mjs",
-    "verify": "npm run lint && npm run validate && npm run validate:reference-cards && npm run gates && npm test"
+    "verify": "npm run lint && npm run validate && npm run validate:reference-cards && npm run validate:genre-index && npm run critic:genre-index && npm run gates && npm test"
   }
 }
