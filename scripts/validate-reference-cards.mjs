@@ -64,9 +64,9 @@ export function validateReferenceCards({
     for (const e of schemaErrs) errors.push(`${file}: ${e}`);
     if (schemaErrs.length) continue;
 
-    // README contract: cards/<id>.json. Underscore-prefixed files are fixtures
-    // (e.g. _example.json) and may keep a synthetic name.
-    const isFixture = file.startsWith("_");
+    // README contract: cards/<id>.json. Only the documented fixture is exempt
+    // from the filename rule — any other underscore name is a smuggled card.
+    const isFixture = file === "_example.json";
     if (!isFixture && file !== `${card.id}.json`) {
       errors.push(
         `${file}: filename must be '${card.id}.json' (got '${file}')`

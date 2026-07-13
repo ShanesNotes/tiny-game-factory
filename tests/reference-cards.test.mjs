@@ -156,6 +156,37 @@ test("filename must equal <id>.json for non-fixture cards", () => {
   }
 });
 
+test("underscore prefix does not exempt a real card from the filename rule", () => {
+  const dir = tmp();
+  try {
+    const cardsDir = path.join(dir, "cards");
+    const canonPath = path.join(dir, "CANON.md");
+    const indexPath = path.join(dir, "index.jsonl");
+    fs.mkdirSync(cardsDir, { recursive: true });
+    const card = validCard({ id: "age-of-empires-2" });
+    fs.writeFileSync(
+      path.join(cardsDir, "_wrong-name.json"),
+      JSON.stringify(card, null, 2) + "\n"
+    );
+    fs.writeFileSync(
+      canonPath,
+      "| id | title |\n|----|-------|\n| age-of-empires-2 | Age of Empires II |\n"
+    );
+    const { errors } = validateReferenceCards({
+      cardsDir,
+      canonPath,
+      indexPath,
+      schemaPath: rel("schemas/reference-card.schema.json")
+    });
+    assert.ok(
+      errors.some((e) => /filename must be 'age-of-empires-2\.json'/.test(e)),
+      errors.join("\n")
+    );
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("CANON membership requires a data-row id column, not header/prose tokens", () => {
   const dir = tmp();
   try {
