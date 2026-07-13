@@ -179,6 +179,14 @@ Eight draft research cards for the Shane-ratified canon. Status remains
 | `docs/reference-games/cards/hades.json` | rewritten | Draft reference card; death-as-narrative + boons + God Mode (orch/fue-cards-grok). |
 | `docs/reference-games/cards/mario-odyssey.json` | rewritten | Draft reference card; Capture + over-supplied moons (orch/fue-cards-grok). |
 | `docs/reference-games/cards/megabonk.json` | rewritten | Draft reference card; 2025 3D survivor-like + Silver meta (orch/fue-cards-grok). |
+| `docs/reference-games/cards/age-of-empires-2.json` | rewritten | Draft reference card; AoE II DE four-resource timing + scouting (orch/fue-cards-codex). |
+| `docs/reference-games/cards/league-of-legends.json` | rewritten | Draft reference card; LoL 12.22 fog/income/objective economy (orch/fue-cards-codex). |
+| `docs/reference-games/cards/diablo-2.json` | rewritten | Draft reference card; D2 LoD 1.14d drop-routed builds (orch/fue-cards-codex). |
+| `docs/reference-games/cards/slay-the-spire.json` | rewritten | Draft reference card; StS 2.3.4 intent-priced cards (orch/fue-cards-codex). |
+| `docs/reference-games/cards/into-the-breach.json` | rewritten | Draft reference card; ItB AE intent+displacement (orch/fue-cards-codex). |
+| `docs/reference-games/cards/disco-elysium.json` | rewritten | Draft reference card; DE Final Cut skills-as-dialogue (orch/fue-cards-codex). |
+| `docs/reference-games/cards/minecraft.json` | rewritten | Draft reference card; Java 1.21 block economy (orch/fue-cards-codex). |
+| `docs/reference-games/cards/rust.json` | rewritten | Draft reference card; Rust 2025 upkeep/raid contested gains (orch/fue-cards-codex). |
 | `docs/reference-games/cards/stardew-valley.json` | rewritten | Draft reference card; day energy + seasons + bundles (orch/fue-cards-grok). |
 | `docs/reference-games/cards/vampire-survivors.json` | rewritten | Draft reference card; auto-attack + level forks + gold meta (orch/fue-cards-grok). |
 | `docs/reference-games/cards/zelda-botw.json` | rewritten | Draft reference card; chemistry engine + durability + stamina (orch/fue-cards-grok). |
