@@ -36,4 +36,9 @@ Read `.factory/prompts/P01_SEED_COMPILE.md` and execute it exactly.
 - `nearest_prior_seed` must name a digest seed (`none` only for an empty digest),
   with one falsifiable mechanical/topological/state-transition difference and
   the digest's exact generation timestamp. Generate this comparison; do not ask.
+- **Reference pigeonhole** (docs/reference-games/README.md): MAY cite audited
+  index ids as contrast evidence in `portfolio_distinctness` prose; MUST NOT set
+  a reference as target ("like X but Y" → deepen/kill until the difference is
+  mechanical). Draft/fixture/unknown ids are non-citable; zero audited rows →
+  invent nothing.
 - Never create a spec pack folder from this skill, never copy `.tgf`/`.omx`/ledgers/skill docs into generated output, and never assume an unverified tool.

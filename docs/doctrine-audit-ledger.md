@@ -46,7 +46,7 @@ tracked they fail the check.
 | `docs/agents/triage-labels.md` | reaffirmed | Canonical local label set still required for triage skills; no DESIGN-RECORD conflict. |
 | `docs/anti-boring-gate.md` | reaffirmed | Paper ADVANCE design-lock remains design's depth gate (SPEC §1 ADVANCE; DESIGN-RECORD quality). |
 | `docs/borrowed-patterns.md` | reaffirmed | Operational harvest ledger for scout; empty template still needed. |
-| `docs/doctrine.md` | rewritten | Studio design discipline + forge gate (SPEC §3.4–§3.5); intake default entry; revision side-path; asset-library seam; portfolio-at-front-door (ADR 0011); equal-rigor grill/yolo attention lanes + hard stop line (ADR 0012). |
+| `docs/doctrine.md` | rewritten | Studio design discipline + forge gate (SPEC §3.4–§3.5); intake default entry; revision side-path; asset-library seam; portfolio-at-front-door (ADR 0011); equal-rigor grill/yolo attention lanes + hard stop line (ADR 0012); reference-game canon pointer (audited-only phase-tier + pigeonhole; FUE W2-B). |
 | `docs/engine-matrix.md` | rewritten | non-Godot engine decisions remain valid, but only godot-4 packs proceed into forge (SPEC §3.5 / T06 AC6); game feel vocabulary. |
 | `docs/feel-doctrine.md` | rewritten | Studio term game feel; feel-slang scrubbed; forge verify pointer (DESIGN-RECORD §5). |
 | `docs/game-dev-bridge.md` | rewritten | Bridge retargeted to co-dev/forge + games/ lifecycle; dropped tgf-games default (DESIGN-RECORD §2–§3). |
@@ -71,14 +71,14 @@ tracked they fail the check.
 | `.factory/prompts/attic/P15_RELEASE_CANDIDATE.md` | culled | Attic default-culled (T04/SPEC §3.2); retired build-phase TGF v0.1 surface, not re-derived under DESIGN-RECORD §8. |
 | `.factory/prompts/attic/README.md` | culled | Attic default-culled (T04/SPEC §3.2); retired build-phase TGF v0.1 surface, not re-derived under DESIGN-RECORD §8. |
 | `.factory/prompts/P00_ORCHESTRATOR_ULTRAGOAL.md` | rewritten | Routes `intake` + `deepen` and manifest-first grill/yolo attention semantics, including yolo hard-stop behavior without weakening gates (ADR 0011/0012). |
-| `.factory/prompts/P01_SEED_COMPILE.md` | reaffirmed | Thesis compile remains the design entry gate before engine (DESIGN-RECORD §3; no default engine). |
+| `.factory/prompts/P01_SEED_COMPILE.md` | rewritten | Thesis compile remains the design entry gate before engine; MAY cite audited reference ids as contrast only — pigeonhole doctrine forbids reference-as-target (FUE W2-B). |
 | `.factory/prompts/P02_ENGINE_PROFILE.md` | reaffirmed | Engine decision phase remains; forge gate is export-time not decision-time (DESIGN-RECORD §3). |
-| `.factory/prompts/P07_DEPTH_RED_TEAM.md` | reaffirmed | Paper anti-boring / ADVANCE design-lock is still design's quality gate (DESIGN-RECORD §5 game-feel companion; SPEC ADVANCE). |
+| `.factory/prompts/P07_DEPTH_RED_TEAM.md` | rewritten | Paper anti-boring / ADVANCE design-lock remains; audited reference cards supply depth_mechanisms/anti_lessons attack vectors (findings, not depth points) with SKIPPED when empty (FUE W2-B). |
 | `.factory/prompts/P13_EXISTING_PROJECT_RESCUE.md` | reaffirmed | Inherited-repo intake still valid; existing projects are evidence not destiny (doctrine + DESIGN-RECORD openness). |
 | `.factory/prompts/P14_KILL_RESTART.md` | reaffirmed | Kill/restart after failed deepen is still the evidence-over-sunk-cost exit (DESIGN-RECORD quality stance). |
 | `.factory/prompts/P16_REPO_SCOUT.md` | reaffirmed | Scout harvest of primitives still serves design reuse without cargo-cult (discipline ownership test in DESIGN-RECORD §5). |
 | `.factory/prompts/P17_VERIFY_TOOLCHAIN.md` | reaffirmed | Probe-before-assume tool doctrine still binds (design needs verified agent surfaces). |
-| `.factory/prompts/P18_DECOMPOSE_SPEC.md` | rewritten | Feel first-class + forge-authoring (SPEC §3.4 / T06); optional ext.disciplines (GB01); post-issue fail-fast `spec:package --require-manifest` dry-run (grill-refresh B / ADR 0011). |
+| `.factory/prompts/P18_DECOMPOSE_SPEC.md` | rewritten | Feel first-class + forge-authoring (SPEC §3.4 / T06); optional ext.disciplines (GB01); post-issue fail-fast `spec:package --require-manifest` dry-run (grill-refresh B / ADR 0011); audited reference packaging_lessons + system_bom disposition checklist with SKIPPED when empty (FUE W2-B). |
 | `.factory/prompts/P19_PACKAGE_SPEC.md` | rewritten | Forge-manifest emission + Godot-gate + --require-manifest (SPEC §3.4–§3.5 / T06). |
 | `hooks/engine_migration_requires_adr.mjs` | reaffirmed | Still enforces seed-scoped engine decision files (DESIGN-RECORD engine phase remains). |
 | `hooks/lib/guard.mjs` | reaffirmed | Shared portable guard plumbing; required for design hooks and shipped pack guards. |
@@ -153,8 +153,9 @@ tests.
 
 ## FUE e3 (2026-07-12) — reference-game card substrate
 
-Machine substrate only (schema, canon, validator, index). No P01/P07/P18
-hooks yet; pigeonhole doctrine lives in `docs/reference-games/README.md`.
+Machine substrate only (schema, canon, validator, index). Pipeline cite hooks
+landed later in FUE W2-B; pigeonhole doctrine lives in
+`docs/reference-games/README.md`.
 
 | path | disposition | rationale |
 | --- | --- | --- |
@@ -164,3 +165,12 @@ hooks yet; pigeonhole doctrine lives in `docs/reference-games/README.md`.
 | `docs/reference-games/cards/_example.json` | rewritten | Fictional fixture card proving schema/validator path; not research, not citable. |
 | `docs/reference-games/index.jsonl` | rewritten | Generated summary index (id/title/genre_tags/register_mapping/status) refreshed by validate-reference-cards. |
 | `schemas/reference-card.schema.json` | rewritten | Draft 2020-12 card shape (moat, loop, depth mechanisms, system BOM, status draft\|audited) for the reference-game canon (FUE e3). |
+
+## FUE W2-B (2026-07-12) — reference-game pipeline hooks
+
+Phase-tiered cite hooks on existing in-universe rows above (P01 / P07 / P18 /
+`docs/doctrine.md`). Audited-only; empty canon → SKIPPED evidence rows; no card
+authoring. Out-of-universe surfaces also touched:
+`.codex/skills/tgf-office-hours-grill/SKILL.md` (intake vocabulary),
+`tgf-seed-compile/SKILL.md`, `tgf-depth-redteam/SKILL.md`,
+`tgf-decompose/SKILL.md`.

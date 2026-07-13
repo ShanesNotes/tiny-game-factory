@@ -59,6 +59,20 @@ SLICING RULES:
   `loop_verbs_covered` (checker enforces).
 - **Scope is closed.** `out_of_scope` lists what this spec deliberately excludes
   (content expansion, high-fidelity art, multiplayer are the usual suspects).
+- **Reference packaging + system-BOM checklist** (docs/reference-games/;
+  audited cards only). For every canon id named as near by the thesis or intake
+  and present in `docs/reference-games/index.jsonl` with `status` exactly
+  `audited`, read `docs/reference-games/cards/<id>.json` and:
+  1. Use `packaging_lessons[]` to inform pack boundaries and slice order
+     (constraints — never silently imported features).
+  2. Treat each `system_bom[]` row as a dependency the SPEC must disposition:
+     map `system` to a slice id or seam id, **or** put it in `out_of_scope` as a
+     CUT DECISION sentence that names the system and why it is cut (the cut list
+     is design). A BOM system with neither a map nor a cut sentence is incomplete;
+     never import a BOM row silently.
+  Zero named-and-audited cards → write exactly one SPEC.md prose line:
+  `Reference packaging: SKIPPED (reference canon empty)`. Draft/fixture/unknown
+  ids are non-citable.
 - **Forge-authoring sections (required for godot-4 manifest export, SPEC §3.4).**
   Author these on the SPEC.json block during decompose (empty arrays / false flags
   are valid; the mapper requires the keys, not content):

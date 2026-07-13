@@ -38,10 +38,19 @@ at-most-one-question procedure):
 2. Read that digest before filling pressure fields. **Status quo** and
    **Reviewer concern** (derivative risk) **must cite digest rows** (prior
    seed ids, pitches, lifecycle) — not free-floating genre guesses.
+3. **Reference vocabulary (audited only)** — after the digest exists, read
+   `docs/reference-games/index.jsonl`. Cite only rows with `status` exactly
+   `audited`. When Status-quo or Reviewer-concern names a near prior fantasy,
+   append a nearest-canon clause using index `id`s only, form:
+   `nearest canon: <id>[, <id>…]`. If zero audited rows exist (or none are near),
+   write `nearest canon: SKIPPED (reference canon empty)`. Never invent an id;
+   never require the user to know a reference — references orient agent
+   questions only (docs/reference-games/README.md phase-tier: intake = vocabulary).
 
 **Inputs**
 - `GAME_SEED.md` or the raw seed
 - `intake/portfolio-digest.json` (required; produced by the digest step)
+- `docs/reference-games/index.jsonl` (vocabulary; audited rows only)
 - TGF doctrine and any existing run evidence
 - optional owner `BRIEF.md` in the run dir (intent only; not a second grill channel)
 
@@ -78,7 +87,7 @@ at-most-one-question procedure):
 
 ## Ten office-hours pressure fields (each a TGF game-loop question)
 1. **Demand reality** — why would a player voluntarily retry this loop?
-2. **Status quo** — what existing game fantasy (including prior studio seeds in the digest) already satisfies this?
+2. **Status quo** — what existing game fantasy (including prior studio seeds in the digest) already satisfies this? Append `nearest canon: …` from audited index ids (or SKIPPED) per Evidence first §3.
 3. **Desperate specificity** — what narrow player fantasy creates a wedge?
 4. **Narrow playable wedge** — what loop can a bot play for 60s?
 5. **Observation evidence** — what telemetry would prove skill, pressure, variation, or boredom?
@@ -86,4 +95,4 @@ at-most-one-question procedure):
 7. **Alternatives** — what adjacent loop might be better?
 8. **Future-fit** — what expansion is allowed only after the co-dev repo reaches fun-lock?
 9. **Store/positioning** — what phrase makes the game legible later (defer, do not chase polish)?
-10. **Reviewer concern** — what would make a playtester call this boring or derivative? (cite digest rows when portfolio overlap is the risk)
+10. **Reviewer concern** — what would make a playtester call this boring or derivative? (cite digest rows when portfolio overlap is the risk; append `nearest canon: …` or SKIPPED per Evidence first §3)

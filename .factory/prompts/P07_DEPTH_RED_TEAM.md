@@ -98,6 +98,20 @@ PORTFOLIO DISTINCTNESS (named finding, independent of the depth floor):
   a tripwire: the disposition must name every matching seed and explain why the
   evidence paths support distinct scores or why identical scores remain honest.
 
+REFERENCE FALSIFIER (docs/reference-games/ — audited cards only; findings, not depth points):
+- Collect every canon id named as near by the thesis or intake (`nearest canon: …`,
+  portfolio prose, office-hours Status-quo / Reviewer-concern).
+- Keep only ids present in `docs/reference-games/index.jsonl` with `status`
+  exactly `audited`. Discard draft, fixture, and unknown ids.
+- For each remaining id, read `docs/reference-games/cards/<id>.json` in full.
+  Each `depth_mechanisms[]` entry and each `anti_lessons[]` string becomes an
+  attack vector: "reference <id> carries mechanism M in the same slot — does the
+  thesis survive the comparison or does the slot sit empty?"
+- Disposition under a **Reference falsifier** heading in `ANTI_BORING_VERDICT.md`:
+  one line per attack vector, or exactly one line
+  `Reference falsifier: SKIPPED (reference canon empty)` when zero named-and-audited
+  cards remain. Never invent a card; never score axes from cards.
+
 OUTPUT:
 - `reviews/ANTI_BORING_VERDICT.md` — the argument, per-axis citations, and verdict.
 - `reviews/depth-vector.json` — schema `schemas/depth-vector`, scores + total +

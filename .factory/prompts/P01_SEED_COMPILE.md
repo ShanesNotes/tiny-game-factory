@@ -63,6 +63,18 @@ Generate, do not ask:
   design system the build must inherit — only when the seed or BRIEF.md names
   one; never a local path)
 
+REFERENCE CANON (docs/reference-games/README.md — pigeonhole doctrine):
+- MAY cite index `id`s with `status` exactly `audited` as contrast evidence in
+  `portfolio_distinctness` prose (and, when useful, genre priors / risk register).
+- MUST NOT set a reference as a thesis target. README quote: "Never treat a
+  reference as a target at thesis time. The thesis must name its own loop, moat,
+  and depth vector. A canon entry is evidence and contrast — a pigeonhole to
+  escape, not a mold to pour into. If a pitch collapses to \"like X but with Y,\"
+  kill or deepen until the falsifying difference is mechanical."
+- Draft cards, the fixture, and any id absent from `docs/reference-games/index.jsonl`
+  are non-citable. Zero audited rows → invent nothing; omit reference citations
+  (no fabricated nearest-canon list).
+
 RULES:
 - No architecture questions.
 - If uncertain, mark competing hypotheses for prototype.

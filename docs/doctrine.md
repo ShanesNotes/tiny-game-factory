@@ -95,6 +95,9 @@ Verdicts: `ADVANCE` | `DEEPEN` (one transform, register-specific kits) | `KILL`.
 If the owner supplied a `BRIEF.md` in the run dir, its qualities are intent
 evidence at thesis time and claims-to-falsify at review time (ADR 0008).
 Fun-lock remains downstream doctrine inside the spec pack.
+**Reference-game canon** (`docs/reference-games/README.md`): phase-tiered —
+intake vocabulary, P07 falsifier, P18 packaging/system-BOM — cites **audited**
+cards only; a reference is never a thesis target (pigeonhole doctrine).
 
 ## The feel doctrine (`docs/feel-doctrine.md`)
 
