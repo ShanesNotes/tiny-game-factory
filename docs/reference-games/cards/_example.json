@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "id": "phantom-garden",
+  "title": "Phantom Garden (FIXTURE — not a real game)",
+  "edition_pinned": "v0-fixture — synthetic card for schema/validator path only",
+  "genre_tags": ["fixture", "garden-puzzle"],
+  "register_mapping": "mechanics-first",
+  "moat": "Each water placement permanently rewires adjacency so later light paths cannot reuse the first-session route.",
+  "loop_skeleton": {
+    "verbs": ["plant", "water", "rotate"],
+    "description": "Place a seed, water to rewrite tile adjacency, rotate the bed to re-aim light before wilt."
+  },
+  "depth_mechanisms": [
+    {
+      "name": "adjacency rewrite",
+      "mechanism": "Watering a tile swaps its edge set with a neighbor, changing legal light paths without adding tiles.",
+      "falsifiable_claim": "If players never plan water order, second-session clear rate equals first-session clear rate."
+    },
+    {
+      "name": "wilt clock",
+      "mechanism": "Unlit plants accumulate wilt; three wilt ticks remove the plant and refund no seed.",
+      "falsifiable_claim": "If wilt is removed, average solve time drops more than 30% on the same boards."
+    }
+  ],
+  "feel_signature": "Short commits with irreversible adjacency edits; failure is a bed that cannot face the sun, not a health bar.",
+  "second_session_answer": "Players return to re-route light through yesterday's water scars, not to grind higher numbers.",
+  "packaging_lessons": [
+    "Ship one bed and three seed types before any shop or meta layer."
+  ],
+  "anti_lessons": [
+    "Do not copy a skill tree or XP layer onto this loop — they hide adjacency mistakes."
+  ],
+  "system_bom": [
+    { "system": "play-loop", "note": "plant → water → rotate cycle is the only required loop" },
+    { "system": "win-loss-death", "note": "wilt extinction ends the run; no lives currency" },
+    { "system": "save-state", "note": "bed adjacency must persist across sessions for second-session answer" }
+  ],
+  "citations": [
+    {
+      "claim": "This card is a synthetic fixture for the reference-card schema and validator.",
+      "source": "docs/reference-games/README.md (fixture policy)"
+    }
+  ],
+  "status": "draft"
+}
