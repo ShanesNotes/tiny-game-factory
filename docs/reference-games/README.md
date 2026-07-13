@@ -26,7 +26,7 @@ coverage counts.
 The genre index is a NAVIGATION surface for agents, PULL-ONLY:
 
 - It is NOT consulted for every game design idea or seed run, and is NEVER auto-injected into intake/grill context by default.
-- It activates when the user points to a specific reference (or explicitly asks for reference options). Then it serves two functions: (a) route to the Tier-1 card if `card_ref` exists — the card is what a "full reference" means — or to the promotion path (disposition item 9) if not; (b) surface facet-neighbor rows as OPTIONS the agent can offer the user for game generation.
+- It activates when the user points to a specific reference (or explicitly asks for reference options). Then it serves two functions: (a) route to the Tier-1 card if `card_ref` exists — the card is what a "full reference" means — or, when no card exists, to the promotion path: promotion triggers at intake when a seed names a Tier-2 reference as its nearest reference — a full Tier-1 card is authored and audited before thesis compilation, or the reference is dropped for that run. Shane ratifies promotions; (b) surface facet-neighbor rows as OPTIONS the agent can offer the user for game generation.
 
 This directory remains substrate only. Pipeline hooks that activate the
 pull-only lookup or promotion path land separately.
