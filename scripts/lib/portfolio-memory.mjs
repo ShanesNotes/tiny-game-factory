@@ -1,9 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
+import { isDeepStrictEqual } from "node:util";
 import { fileURLToPath } from "node:url";
 import { validate } from "./validate-json-schema.mjs";
-import { extractFencedJson } from "./run-state.mjs";
-import { resolveDesignRoot } from "./studio-paths.mjs";
+import { extractFencedJson, isValidSeedId } from "./run-state.mjs";
+import { resolveContractsRoot, resolveDesignRoot, resolveGamesRoot } from "./studio-paths.mjs";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const schema = (name) => JSON.parse(fs.readFileSync(path.join(REPO, "schemas", `${name}.schema.json`), "utf8"));
@@ -38,9 +39,184 @@ export function enumeratePriorTheses(seedsRoot, seedId) {
   return { priors, skipped };
 }
 
-function portfolioSeedsRoot(runDir) {
-  const designRoot = resolveDesignRoot(process.cwd());
-  return designRoot ? path.join(designRoot, ".tgf", "seeds") : path.dirname(runDir);
+const lifecycles = new Set(["skeleton", "active", "candidate", "done", "archived"]);
+const sealedVerdictFields = [
+  "schema_version", "ts", "verdict", "by", "game_commit", "manifest_digest", "lock_digest", "report"
+];
+
+function markdownCells(line) {
+  if (!line.trimStart().startsWith("|")) return null;
+  return line.trim().split("|").slice(1, -1).map((cell) => cell.trim());
+}
+
+function canonicalGameRows(markdown) {
+  const lines = markdown.split("\n");
+  const headerIndex = lines.findIndex((line) => {
+    const cells = markdownCells(line);
+    return cells && cells.map((cell) => cell.toLowerCase()).join("|") === "game|lifecycle|origin|note";
+  });
+  if (headerIndex < 0) return [];
+  const separator = markdownCells(lines[headerIndex + 1] || "");
+  if (!separator || separator.length !== 4 || separator.some((cell) => !/^:?-{3,}:?$/.test(cell))) return [];
+  const rows = [];
+  for (const line of lines.slice(headerIndex + 2)) {
+    const cells = markdownCells(line);
+    if (!cells) break;
+    if (cells.length >= 2 && lifecycles.has(cells[1])) rows.push({ gameId: cells[0], lifecycle: cells[1] });
+  }
+  return rows.sort((a, b) => a.gameId.localeCompare(b.gameId));
+}
+
+export function buildPortfolioDigestContent(seedId, startDir = process.cwd()) {
+  const content = {
+    schema_version: "1.0.0",
+    sources: [],
+    prior_theses: [],
+    games: [],
+    skipped: []
+  };
+  const skip = (source, reason, id = null) => {
+    content.skipped.push({ source, ...(id ? { id } : {}), reason });
+  };
+  const readDepthVector = (runDir, priorId) => {
+    const file = path.join(runDir, "reviews", "depth-vector.json");
+    if (!fs.existsSync(file)) {
+      skip("depth-vector", "reviews/depth-vector.json is missing", priorId);
+      return { verdict: "UNKNOWN", scores: null };
+    }
+    try {
+      const vector = JSON.parse(fs.readFileSync(file, "utf8"));
+      if (!["ADVANCE", "DEEPEN", "KILL"].includes(vector.verdict) || !vector.scores) {
+        throw new Error("verdict or scores missing");
+      }
+      return { verdict: vector.verdict, scores: vector.scores };
+    } catch (error) {
+      skip("depth-vector", `unreadable depth vector: ${error.message}`, priorId);
+      return { verdict: "UNKNOWN", scores: null };
+    }
+  };
+  const readChosenLoop = (runDir, thesis, priorId) => {
+    const specFile = path.join(runDir, "SPEC.md");
+    if (!fs.existsSync(specFile)) {
+      skip("chosen-loop", "SPEC.md is missing; no chosen loop is recorded", priorId);
+      return null;
+    }
+    const { obj: spec, error } = extractFencedJson(fs.readFileSync(specFile, "utf8"));
+    if (error || typeof spec?.chosen_loop_id !== "string") {
+      skip("chosen-loop", error || "SPEC.md has no chosen_loop_id", priorId);
+      return null;
+    }
+    const chosen = thesis.core_loop_candidates?.find((candidate) => candidate.id === spec.chosen_loop_id);
+    if (!chosen || !(typeof chosen.verbs === "string" || Array.isArray(chosen.verbs))) {
+      skip("chosen-loop", `chosen_loop_id '${spec.chosen_loop_id}' does not resolve to a thesis candidate`, priorId);
+      return null;
+    }
+    return {
+      id: chosen.id,
+      verbs: chosen.verbs,
+      ...(typeof chosen.description === "string" ? { description: chosen.description } : {})
+    };
+  };
+
+  const designRoot = resolveDesignRoot(startDir);
+  const seedsRoot = designRoot && path.join(designRoot, ".tgf", "seeds");
+  if (!seedsRoot || !fs.existsSync(seedsRoot)) {
+    content.sources.push({ source: "design-runs", status: "skipped", reason: "design seed root is missing" });
+    skip("design-runs", "design seed root is missing");
+  } else {
+    content.sources.push({ source: "design-runs", status: "read" });
+    const enumeration = enumeratePriorTheses(seedsRoot, seedId);
+    for (const row of enumeration.skipped) skip("game-thesis", row.error, row.seedId);
+    for (const { seedId: priorId, runDir, thesis } of enumeration.priors) {
+      content.prior_theses.push({
+        seed_id: priorId,
+        pitch: typeof thesis.pitch === "string" ? thesis.pitch : "UNKNOWN",
+        chosen_loop: readChosenLoop(runDir, thesis, priorId),
+        design_register: thesis.design_register ?? "UNKNOWN",
+        golden_moment: thesis.golden_moment ?? "UNKNOWN",
+        depth_vector: readDepthVector(runDir, priorId)
+      });
+    }
+  }
+
+  const contractsRoot = resolveContractsRoot(startDir);
+  const verdictSchemaFile = contractsRoot && path.join(contractsRoot, "verdict-record.schema.json");
+  let verdictSchema = null;
+  if (!verdictSchemaFile || !fs.existsSync(verdictSchemaFile)) {
+    skip("verdict-contract", "contracts/verdict-record.schema.json is missing");
+  } else {
+    try { verdictSchema = JSON.parse(fs.readFileSync(verdictSchemaFile, "utf8")); }
+    catch (error) { skip("verdict-contract", `verdict schema is unreadable: ${error.message}`); }
+  }
+  const sealedVerdictErrors = (record) => {
+    const errors = verdictSchema ? validate(verdictSchema, record) : ["sealed verdict contract unavailable"];
+    if (sealedVerdictFields.some((field) => !(field in record))) errors.push("required sealed fields are missing");
+    for (const field of ["ts", "by", "game_commit", "manifest_digest", "lock_digest"]) {
+      if (typeof record[field] !== "string" || !record[field].trim()) errors.push(`${field} must be non-empty`);
+    }
+    if (typeof record.ts === "string" && Number.isNaN(Date.parse(record.ts))) errors.push("ts must be a date-time");
+    if (typeof record.report?.digest !== "string" || !record.report.digest.trim()) errors.push("report.digest must be non-empty");
+    return errors;
+  };
+
+  const gamesRoot = resolveGamesRoot(startDir);
+  const indexFile = gamesRoot && path.join(gamesRoot, "INDEX.md");
+  if (!indexFile || !fs.existsSync(indexFile)) {
+    content.sources.push({ source: "games-index", status: "skipped", reason: "games/INDEX.md is missing" });
+    skip("games-index", "games/INDEX.md is missing");
+  } else {
+    content.sources.push({ source: "games-index", status: "read" });
+    const realGamesRootPrefix = `${fs.realpathSync(gamesRoot)}${path.sep}`;
+    const rows = canonicalGameRows(fs.readFileSync(indexFile, "utf8"));
+    for (const { gameId, lifecycle } of rows) {
+      const gameDir = path.resolve(gamesRoot, gameId);
+      const gamesRootPrefix = `${path.resolve(gamesRoot)}${path.sep}`;
+      let invalidGameDir = !isValidSeedId(gameId) || !gameDir.startsWith(gamesRootPrefix);
+      if (!invalidGameDir && fs.existsSync(gameDir)) {
+        try { invalidGameDir = !fs.realpathSync(gameDir).startsWith(realGamesRootPrefix); }
+        catch { invalidGameDir = true; }
+      }
+      if (invalidGameDir) {
+        skip("games-index", "invalid game id", gameId);
+        continue;
+      }
+      const verdictDir = path.join(gameDir, "playtests", "verdicts");
+      let humanVerdict = { verdict: "UNKNOWN" };
+      if (!fs.existsSync(verdictDir)) {
+        skip("human-verdict", "no sealed verdict record", gameId);
+      } else {
+        const files = fs.readdirSync(verdictDir).filter((name) => name.endsWith(".json")).sort().reverse();
+        if (!files.length) {
+          skip("human-verdict", "no sealed verdict record", gameId);
+        } else {
+          let record = null;
+          for (const file of files) {
+            try {
+              const candidate = JSON.parse(fs.readFileSync(path.join(verdictDir, file), "utf8"));
+              const errors = sealedVerdictErrors(candidate);
+              if (errors.length) throw new Error(errors.join("; "));
+              record = candidate;
+              break;
+            } catch (error) {
+              skip("human-verdict", `invalid sealed verdict ${file}: ${error.message}`, gameId);
+            }
+          }
+          if (record) {
+            humanVerdict = {
+              verdict: record.verdict,
+              ...(typeof record.ts === "string" ? { ts: record.ts } : {}),
+              ...(typeof record.by === "string" ? { by: record.by } : {}),
+              ...(typeof record.notes_rel === "string" ? { notes_rel: record.notes_rel } : {})
+            };
+          } else {
+            skip("human-verdict", "no schema-valid sealed verdict record", gameId);
+          }
+        }
+      }
+      content.games.push({ game_id: gameId, lifecycle, human_verdict: humanVerdict });
+    }
+  }
+  return content;
 }
 
 export function readIntakeEvidence(runDir, seedId) {
@@ -57,11 +233,14 @@ export function readIntakeEvidence(runDir, seedId) {
       digest = JSON.parse(fs.readFileSync(digestPath, "utf8"));
       validate(schema("portfolio-digest"), digest).forEach((error) => errors.push(`intake portfolio digest ${error}`));
       if (digest.seed_id !== seedId) errors.push(`intake portfolio digest seed_id '${digest.seed_id}' does not match '${seedId}'`);
-      const actualIds = enumeratePriorTheses(portfolioSeedsRoot(runDir), seedId).priors.map((row) => row.seedId);
-      const digestIds = Array.isArray(digest.prior_theses)
-        ? [...new Set(digest.prior_theses.map((row) => row?.seed_id).filter((id) => typeof id === "string"))].sort()
-        : [];
-      if (actualIds.length !== digestIds.length || actualIds.some((id, index) => id !== digestIds[index])) {
+      const storedContent = {
+        schema_version: digest.schema_version,
+        sources: digest.sources,
+        prior_theses: digest.prior_theses,
+        games: digest.games,
+        skipped: digest.skipped
+      };
+      if (!isDeepStrictEqual(storedContent, buildPortfolioDigestContent(seedId, process.cwd()))) {
         errors.push("intake portfolio digest stale/dishonest — regenerate via npm run portfolio:digest");
       }
     } catch (error) {

@@ -180,3 +180,76 @@ test("portfolio digest makes missing portfolio roots explicit", () => {
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("portfolio digest skips a symlinked game directory that escapes games root", (t) => {
+  const root = tmp();
+  const studio = path.join(root, "studio");
+  const work = path.join(root, "work");
+  const outside = path.join(root, "outside-game");
+  try {
+    fs.mkdirSync(path.join(studio, "games"), { recursive: true });
+    fs.mkdirSync(work, { recursive: true });
+    fs.writeFileSync(path.join(studio, "DISCIPLINES.md"), "# fixture\n");
+    fs.writeFileSync(path.join(studio, "games", "INDEX.md"), `| game | lifecycle | origin | note |
+|---|---|---|---|
+| evil-game | active | fixture | symlink escape |
+`);
+    writeJson(path.join(studio, "contracts", "verdict-record.schema.json"), {
+      $schema: "https://json-schema.org/draft/2020-12/schema",
+      title: "verdict-record",
+      type: "object",
+      additionalProperties: false,
+      required: ["schema_version", "ts", "verdict", "by", "game_commit", "manifest_digest", "lock_digest", "report"],
+      properties: {
+        schema_version: { enum: ["1.0.0"] },
+        ts: { type: "string" },
+        verdict: { enum: ["done"] },
+        by: { type: "string" },
+        game_commit: { type: "string" },
+        manifest_digest: { type: "string" },
+        lock_digest: { type: "string" },
+        report: {
+          type: "object",
+          additionalProperties: false,
+          required: ["digest", "overall"],
+          properties: { digest: { type: "string" }, overall: { enum: ["pass"] } }
+        }
+      }
+    });
+    writeJson(path.join(outside, "playtests", "verdicts", "sealed.json"), {
+      schema_version: "1.0.0",
+      ts: "2026-07-12T12:00:00.000Z",
+      verdict: "done",
+      by: "symlink-attacker",
+      game_commit: "outside",
+      manifest_digest: "outside",
+      lock_digest: "outside",
+      report: { digest: "outside", overall: "pass" }
+    });
+    try {
+      fs.symlinkSync(outside, path.join(studio, "games", "evil-game"), "dir");
+    } catch (error) {
+      if (["EPERM", "EACCES", "ENOSYS"].includes(error.code)) {
+        t.skip(`symlinks unavailable: ${error.code}`);
+        return;
+      }
+      throw error;
+    }
+
+    const result = spawnSync(process.execPath, [
+      path.join(REPO, "scripts/build-portfolio-digest.mjs"), "--seed-id", "current-seed"
+    ], {
+      cwd: work,
+      encoding: "utf8",
+      env: { ...process.env, STUDIO_ROOT: studio, GAME_DESIGN_ROOT: path.join(studio, "design") }
+    });
+    assert.equal(result.status, 0, result.stderr);
+    const digest = JSON.parse(fs.readFileSync(
+      path.join(work, ".tgf/seeds/current-seed/intake/portfolio-digest.json"), "utf8"
+    ));
+    assert.equal(digest.games.some((row) => row.game_id === "evil-game"), false);
+    assert.ok(digest.skipped.some((row) => row.id === "evil-game" && row.reason === "invalid game id"));
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});

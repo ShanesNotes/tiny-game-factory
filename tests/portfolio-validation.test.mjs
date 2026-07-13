@@ -5,6 +5,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { readIntakeEvidence } from "../scripts/lib/portfolio-memory.mjs";
 import { validate } from "../scripts/lib/validate-json-schema.mjs";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -24,7 +25,11 @@ function tmp() {
 }
 
 function run(script, args, cwd) {
-  return spawnSync(process.execPath, [path.join(REPO, "scripts", script), ...args], { cwd, encoding: "utf8" });
+  return spawnSync(process.execPath, [path.join(REPO, "scripts", script), ...args], {
+    cwd,
+    encoding: "utf8",
+    env: { ...process.env, STUDIO_ROOT: cwd, GAME_DESIGN_ROOT: cwd }
+  });
 }
 
 function writeJson(file, value) {
@@ -105,8 +110,18 @@ function prepareIntake(dir, id, withPrior = false) {
   const runDir = path.join(dir, ".tgf", "seeds", id);
   if (withPrior) {
     writeEmbedded(path.join(dir, ".tgf/seeds/prior-one/GAME_THESIS.md"), "Prior Thesis", { pitch: "prior" });
+    writeJson(path.join(dir, ".tgf/seeds/prior-one/reviews/depth-vector.json"), {
+      scores: SCORES,
+      total: 17,
+      verdict: "ADVANCE"
+    });
   }
-  writeJson(path.join(runDir, "intake/portfolio-digest.json"), digest(id, withPrior));
+  const built = run("build-portfolio-digest.mjs", ["--seed-id", id], dir);
+  assert.equal(built.status, 0, built.stdout + built.stderr);
+  const digestPath = path.join(runDir, "intake/portfolio-digest.json");
+  const builtDigest = JSON.parse(fs.readFileSync(digestPath, "utf8"));
+  builtDigest.generated_at = GENERATED_AT;
+  writeJson(digestPath, builtDigest);
   writeEmbedded(path.join(runDir, "intake/office-hours.md"), "Office Hours", intake(id));
   return runDir;
 }
@@ -153,6 +168,52 @@ test("fabricated empty portfolio digest is rejected when a sibling thesis exists
   }
 });
 
+test("readIntakeEvidence rejects forged prior ADVANCE scores", () => {
+  const dir = tmp();
+  const id = "forged-scores";
+  const previousStudioRoot = process.env.STUDIO_ROOT;
+  const previousDesignRoot = process.env.GAME_DESIGN_ROOT;
+  try {
+    assert.equal(run("init-game-run.mjs", ["--seed-id", id, "--seed", "x"], dir).status, 0);
+    const runDir = path.join(dir, ".tgf", "seeds", id);
+    const priorDir = path.join(dir, ".tgf", "seeds", "prior-one");
+    writeEmbedded(path.join(priorDir, "GAME_THESIS.md"), "Prior Thesis", {
+      pitch: "prior",
+      design_register: "mechanics-first",
+      golden_moment: "prior moment",
+      core_loop_candidates: [{ id: "loop-a", verbs: "plant, water, rotate" }]
+    });
+    writeJson(path.join(priorDir, "reviews", "depth-vector.json"), {
+      scores: SCORES,
+      total: 17,
+      verdict: "ADVANCE"
+    });
+    const env = { ...process.env, STUDIO_ROOT: dir, GAME_DESIGN_ROOT: dir };
+    const built = spawnSync(process.execPath, [
+      path.join(REPO, "scripts", "build-portfolio-digest.mjs"), "--seed-id", id
+    ], { cwd: dir, encoding: "utf8", env });
+    assert.equal(built.status, 0, built.stdout + built.stderr);
+
+    const digestPath = path.join(runDir, "intake", "portfolio-digest.json");
+    const forged = JSON.parse(fs.readFileSync(digestPath, "utf8"));
+    forged.prior_theses[0].depth_vector.scores = Object.fromEntries(AXES.map((axis) => [axis, 0]));
+    writeJson(digestPath, forged);
+
+    process.env.STUDIO_ROOT = dir;
+    process.env.GAME_DESIGN_ROOT = dir;
+    assert.match(
+      readIntakeEvidence(runDir, id).errors.join("\n"),
+      /digest stale\/dishonest — regenerate via npm run portfolio:digest/
+    );
+  } finally {
+    if (previousStudioRoot === undefined) delete process.env.STUDIO_ROOT;
+    else process.env.STUDIO_ROOT = previousStudioRoot;
+    if (previousDesignRoot === undefined) delete process.env.GAME_DESIGN_ROOT;
+    else process.env.GAME_DESIGN_ROOT = previousDesignRoot;
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("advance-run refuses portfolio intake to toolchain without intake artifacts", () => {
   const dir = tmp();
   const id = "advance-intake-gate";
@@ -180,7 +241,12 @@ test("new runs cannot reach toolchain without schema-valid intake evidence", () 
     let result = run("validate-artifacts.mjs", ["--check", "run", "--seed-id", id], dir);
     assert.equal(result.status, 1, result.stdout + result.stderr);
     assert.match(result.stdout, /intake\/office-hours\.md/);
-    writeJson(path.join(runDir, "intake/portfolio-digest.json"), digest(id));
+    const built = run("build-portfolio-digest.mjs", ["--seed-id", id], dir);
+    assert.equal(built.status, 0, built.stdout + built.stderr);
+    const digestPath = path.join(runDir, "intake/portfolio-digest.json");
+    const builtDigest = JSON.parse(fs.readFileSync(digestPath, "utf8"));
+    builtDigest.generated_at = GENERATED_AT;
+    writeJson(digestPath, builtDigest);
     writeEmbedded(path.join(runDir, "intake/office-hours.md"), "Office Hours", intake(id));
     result = run("validate-artifacts.mjs", ["--check", "run", "--seed-id", id], dir);
     assert.equal(result.status, 0, result.stdout + result.stderr);
