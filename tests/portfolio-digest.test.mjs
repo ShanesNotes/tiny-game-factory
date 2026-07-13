@@ -362,6 +362,58 @@ test("portfolio digest skips a proposal directory symlink that escapes games roo
   }
 });
 
+test("portfolio digest neutralizes a proposal depth-vector symlink that escapes games root", (t) => {
+  const root = tmp();
+  const studio = path.join(root, "studio");
+  const work = path.join(root, "work");
+  const outside = path.join(root, "outside-vector.json");
+  try {
+    const proposalDir = path.join(studio, "games", "_proposals", "nested-vec");
+    fs.mkdirSync(path.join(proposalDir, "reviews"), { recursive: true });
+    fs.mkdirSync(work, { recursive: true });
+    writeThesis(path.join(proposalDir, "GAME_THESIS.md"), { pitch: "real parked thesis" });
+    writeJson(outside, {
+      verdict: "ADVANCE",
+      scores: {
+        meaningful_choice: 2, tradeoff: 2, pressure: 2, uncertainty: 2,
+        progression: 2, mastery: 2, combinatorial: 2, emergence: 2,
+        replayable_variation: 2, failure_recovery: 2, expression: 2,
+        expansion_headroom: 2
+      }
+    });
+    try {
+      fs.symlinkSync(outside, path.join(proposalDir, "reviews", "depth-vector.json"), "file");
+    } catch (error) {
+      if (["EPERM", "EACCES", "ENOSYS"].includes(error.code)) {
+        t.skip(`symlinks unavailable: ${error.code}`);
+        return;
+      }
+      throw error;
+    }
+
+    const result = spawnSync(process.execPath, [
+      path.join(REPO, "scripts/build-portfolio-digest.mjs"), "--seed-id", "current-seed"
+    ], {
+      cwd: work,
+      encoding: "utf8",
+      env: { ...process.env, STUDIO_ROOT: studio, GAME_DESIGN_ROOT: path.join(studio, "design") }
+    });
+    assert.equal(result.status, 0, result.stderr);
+    const digest = JSON.parse(fs.readFileSync(
+      path.join(work, ".tgf/seeds/current-seed/intake/portfolio-digest.json"), "utf8"
+    ));
+    const row = digest.prior_theses.find((r) => r.seed_id === "nested-vec");
+    assert.ok(row, "parked row present");
+    assert.equal(row.depth_vector.verdict, "UNKNOWN", "escaped vector must not be read");
+    assert.equal(row.depth_vector.scores, null);
+    assert.ok(digest.skipped.some((r) =>
+      r.source === "depth-vector" && r.id === "nested-vec" && /escapes games root/.test(r.reason)
+    ));
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("portfolio digest skips a proposal thesis symlink that escapes games root", (t) => {
   const root = tmp();
   const studio = path.join(root, "studio");

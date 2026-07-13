@@ -102,10 +102,21 @@ export function buildPortfolioDigestContent(seedId, startDir = process.cwd()) {
   const skip = (source, reason, id = null) => {
     content.skipped.push({ source, ...(id ? { id } : {}), reason });
   };
-  const readDepthVector = (runDir, priorId) => {
+  // Secondary reads under a contained root (proposals) must not follow
+  // symlinks out of it — same rule as sealed verdict files under games/.
+  const escapesRoot = (file, realRootPrefix) => {
+    if (!realRootPrefix) return false;
+    try { return !fs.realpathSync(file).startsWith(realRootPrefix); }
+    catch { return true; }
+  };
+  const readDepthVector = (runDir, priorId, containRealRoot = null) => {
     const file = path.join(runDir, "reviews", "depth-vector.json");
     if (!fs.existsSync(file)) {
       skip("depth-vector", "reviews/depth-vector.json is missing", priorId);
+      return { verdict: "UNKNOWN", scores: null };
+    }
+    if (escapesRoot(file, containRealRoot)) {
+      skip("depth-vector", "depth vector escapes games root", priorId);
       return { verdict: "UNKNOWN", scores: null };
     }
     try {
@@ -119,10 +130,14 @@ export function buildPortfolioDigestContent(seedId, startDir = process.cwd()) {
       return { verdict: "UNKNOWN", scores: null };
     }
   };
-  const readChosenLoop = (runDir, thesis, priorId) => {
+  const readChosenLoop = (runDir, thesis, priorId, containRealRoot = null) => {
     const specFile = path.join(runDir, "SPEC.md");
     if (!fs.existsSync(specFile)) {
       skip("chosen-loop", "SPEC.md is missing; no chosen loop is recorded", priorId);
+      return null;
+    }
+    if (escapesRoot(specFile, containRealRoot)) {
+      skip("chosen-loop", "SPEC.md escapes games root", priorId);
       return null;
     }
     const { obj: spec, error } = extractFencedJson(fs.readFileSync(specFile, "utf8"));
@@ -141,13 +156,13 @@ export function buildPortfolioDigestContent(seedId, startDir = process.cwd()) {
       ...(typeof chosen.description === "string" ? { description: chosen.description } : {})
     };
   };
-  const thesisRow = (runDir, priorId, thesis, parked = false) => ({
+  const thesisRow = (runDir, priorId, thesis, parked = false, containRealRoot = null) => ({
     seed_id: priorId,
     pitch: typeof thesis.pitch === "string" ? thesis.pitch : "UNKNOWN",
-    chosen_loop: readChosenLoop(runDir, thesis, priorId),
+    chosen_loop: readChosenLoop(runDir, thesis, priorId, containRealRoot),
     design_register: thesis.design_register ?? "UNKNOWN",
     golden_moment: thesis.golden_moment ?? "UNKNOWN",
-    depth_vector: readDepthVector(runDir, priorId),
+    depth_vector: readDepthVector(runDir, priorId, containRealRoot),
     ...(parked ? {
       parked: true,
       candidate_loop_verbs: [...new Set((thesis.core_loop_candidates || [])
@@ -206,8 +221,9 @@ export function buildPortfolioDigestContent(seedId, startDir = process.cwd()) {
       entry: "proposal"
     });
     for (const row of enumeration.skipped) skip("proposal-thesis", row.error, row.seedId);
+    const realGamesPrefixForProposals = `${fs.realpathSync(gamesRoot)}${path.sep}`;
     for (const { seedId: proposalId, runDir, thesis } of enumeration.priors) {
-      content.prior_theses.push(thesisRow(runDir, proposalId, thesis, true));
+      content.prior_theses.push(thesisRow(runDir, proposalId, thesis, true, realGamesPrefixForProposals));
     }
     content.prior_theses.sort((a, b) => a.seed_id.localeCompare(b.seed_id));
   }
