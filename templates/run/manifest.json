@@ -2,6 +2,11 @@
   "seed_id": "{{SEED_ID}}",
   "factory_version": "0.3.0",
   "current_phase": "intake",
+  "design_lane": {
+    "mode": "grill",
+    "stop_line": "pack",
+    "origination": "user"
+  },
   "seed_path": ".tgf/seeds/{{SEED_ID}}/GAME_SEED.md",
   "game_thesis_path": null,
   "engine_decision_path": null,

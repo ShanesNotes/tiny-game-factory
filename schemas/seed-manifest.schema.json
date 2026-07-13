@@ -22,6 +22,22 @@
         "blocked", "failed", "killed", "complete"
       ]
     },
+    "design_lane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "stop_line", "origination"],
+      "properties": {
+        "mode": { "enum": ["grill", "yolo"] },
+        "stop_line": { "enum": ["pack", "design-lock"] },
+        "origination": { "enum": ["user", "auto"] }
+      },
+      "if": {
+        "properties": { "mode": { "enum": ["grill"] } }
+      },
+      "then": {
+        "properties": { "stop_line": { "enum": ["pack"] } }
+      }
+    },
     "seed_path": { "type": "string" },
     "game_thesis_path": { "type": ["string", "null"] },
     "engine_decision_path": { "type": ["string", "null"] },

@@ -16,6 +16,8 @@ const FACTORY_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 
 
 const seedId = arg("seed-id");
 const seed = arg("seed");
+const mode = arg("mode", "grill");
+const stop = arg("stop", "pack");
 const dryRun = hasFlag("dry-run");
 const force = hasFlag("force");
 
@@ -25,10 +27,19 @@ function fail(msg) {
 }
 
 if (!seedId || !seed) {
-  fail('usage: node scripts/init-game-run.mjs --seed-id <kebab-id> --seed "<one line>" [--dry-run] [--force]');
+  fail('usage: node scripts/init-game-run.mjs --seed-id <kebab-id> --seed "<one line>" [--mode grill|yolo] [--stop pack|design-lock] [--dry-run] [--force]');
 }
 if (!SEED_ID_RE.test(seedId)) {
   fail(`--seed-id must match ${SEED_ID_RE} (got "${seedId}")`);
+}
+if (!["grill", "yolo"].includes(mode)) {
+  fail(`--mode must be grill or yolo (got "${mode}")`);
+}
+if (!["pack", "design-lock"].includes(stop)) {
+  fail(`--stop must be pack or design-lock (got "${stop}")`);
+}
+if (hasFlag("stop") && mode !== "yolo") {
+  fail("--stop is only legal with --mode yolo");
 }
 
 const runRel = runRelFor(seedId);
@@ -44,6 +55,7 @@ const readTpl = (name) =>
 const manifest = JSON.parse(readTpl("manifest.json"));
 // Path-registry default: $STUDIO_ROOT/games/{seed-id} (not legacy ~/tgf-games).
 manifest.default_spec_pack_root = specPackRoot;
+manifest.design_lane = { mode, stop_line: stop, origination: "user" };
 const bootDoc = readTpl("README_AGENT_BOOT.md");
 const nextDoc = readTpl("README_NEXT_ACTIONS.md");
 const seedDoc = `# GAME_SEED.md\n\n${seed}\n`;
@@ -94,6 +106,7 @@ if (dryRun) {
     ok: true,
     mode: "dry-run",
     seed_id: seedId,
+    design_lane: manifest.design_lane,
     would_create: wouldCreate,
     would_not_create: [specPackRoot, `${runRel}/GAME_THESIS.md`, "src/", "app/", "public/", "assets/"],
     validation: {

@@ -24,9 +24,11 @@ rule here requires an ADR. Provenance of every doctrine surface lives in
   (`no_decomposition_before_game_thesis`).
 - No slicing before design-lock (`no_slicing_before_design_lock`): a gate-passing
   depth vector must exist in `reviews/` before engine-profile/decompose/handoff.
-- No architecture or engine questions to the user before the thesis; at most
-  one direction-changing taste question (with a recommended default) before the
-  spec is decomposed (`human_questions_max_before_decompose = 1`).
+- No architecture or engine questions to the user before the thesis. The
+  recorded AFK budget permits at most one direction-changing taste question
+  (with a recommended default) before the spec is decomposed
+  (`human_questions_max_before_decompose = 1`); live collaborative grill
+  conversation is exempt under ADR 0012.
 - Existing projects are evidence, not destiny. The current engine is an option, not
   a constraint.
 - Engine migration requires a new per-seed engine decision file
@@ -46,6 +48,14 @@ rule here requires an ADR. Provenance of every doctrine surface lives in
   per-axis evidence paths and review provenance. Reviewer independence at P07
   is process doctrine — the repo records provenance; it cannot enforce
   independence.
+
+**Design lanes** (ADR 0012) govern owner attention, not rigor or execution
+speed: `grill` is collaborative seed co-authorship and the default, while
+`yolo` asks zero questions and converts uncertainty into prototype hypotheses;
+all agent gates remain equally strong. Live grill conversation is exempt from
+the recorded AFK question budget. Yolo alone may select a hard stop at pack
+export or at design-lock/G1 (`reviews/G1_BRIEF.md` in both modes), and crossing
+the design-lock stop requires Shane's prior `stop-line-released` ledger row.
 
 ## Phase model
 

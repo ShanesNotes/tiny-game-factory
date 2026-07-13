@@ -404,14 +404,17 @@ export function phaseArtifactConstraintErrors(manifest) {
   return errors;
 }
 
-// Doctrine: at most one direction-changing taste question before the spec is
-// decomposed (factory.config.toml human_questions_max_before_decompose). Returns
-// error strings.
+// Doctrine: recorded AFK questions before decomposition are lane-budgeted. A
+// lane-aware yolo run allows none; grill and legacy manifests retain the existing
+// one-question ceiling (factory.config.toml human_questions_max_before_decompose).
+// Live collaborative grill dialogue is not recorded in this AFK budget.
 const BEFORE_DECOMPOSE = ["intake", "toolchain", "thesis", "design-review", "deepen", "engine-profile", "decompose"];
 export function questionBudgetErrors(manifest) {
   const asked = Array.isArray(manifest.questions_asked) ? manifest.questions_asked.length : 0;
-  if (BEFORE_DECOMPOSE.includes(manifest.current_phase) && asked > 1) {
-    return [`questions_asked=${asked} but at most 1 direction-changing question is allowed before the spec is decomposed`];
+  if (!BEFORE_DECOMPOSE.includes(manifest.current_phase)) return [];
+  const max = manifest.design_lane?.mode === "yolo" ? 0 : 1;
+  if (asked > max) {
+    return [`questions_asked=${asked} but design lane '${manifest.design_lane?.mode || "legacy"}' allows at most ${max} recorded question${max === 1 ? "" : "s"} before the spec is decomposed`];
   }
   return [];
 }

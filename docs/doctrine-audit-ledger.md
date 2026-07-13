@@ -46,7 +46,7 @@ tracked they fail the check.
 | `docs/agents/triage-labels.md` | reaffirmed | Canonical local label set still required for triage skills; no DESIGN-RECORD conflict. |
 | `docs/anti-boring-gate.md` | reaffirmed | Paper ADVANCE design-lock remains design's depth gate (SPEC §1 ADVANCE; DESIGN-RECORD quality). |
 | `docs/borrowed-patterns.md` | reaffirmed | Operational harvest ledger for scout; empty template still needed. |
-| `docs/doctrine.md` | rewritten | Studio design discipline + forge gate (SPEC §3.4–§3.5); intake default entry; revision side-path; asset-library seam; portfolio-at-front-door NN (ADR 0011 / grill-refresh B). |
+| `docs/doctrine.md` | rewritten | Studio design discipline + forge gate (SPEC §3.4–§3.5); intake default entry; revision side-path; asset-library seam; portfolio-at-front-door (ADR 0011); equal-rigor grill/yolo attention lanes + hard stop line (ADR 0012). |
 | `docs/engine-matrix.md` | rewritten | non-Godot engine decisions remain valid, but only godot-4 packs proceed into forge (SPEC §3.5 / T06 AC6); game feel vocabulary. |
 | `docs/feel-doctrine.md` | rewritten | Studio term game feel; feel-slang scrubbed; forge verify pointer (DESIGN-RECORD §5). |
 | `docs/game-dev-bridge.md` | rewritten | Bridge retargeted to co-dev/forge + games/ lifecycle; dropped tgf-games default (DESIGN-RECORD §2–§3). |
@@ -70,7 +70,7 @@ tracked they fail the check.
 | `.factory/prompts/attic/P12_IP_ORIGINALITY_AUDIT.md` | culled | Attic default-culled (T04/SPEC §3.2); retired build-phase TGF v0.1 surface, not re-derived under DESIGN-RECORD §8. |
 | `.factory/prompts/attic/P15_RELEASE_CANDIDATE.md` | culled | Attic default-culled (T04/SPEC §3.2); retired build-phase TGF v0.1 surface, not re-derived under DESIGN-RECORD §8. |
 | `.factory/prompts/attic/README.md` | culled | Attic default-culled (T04/SPEC §3.2); retired build-phase TGF v0.1 surface, not re-derived under DESIGN-RECORD §8. |
-| `.factory/prompts/P00_ORCHESTRATOR_ULTRAGOAL.md` | rewritten | Routes `intake` (default entry) + `deepen`; aligns router with run-state graph (ADR 0011 / grill-refresh B). |
+| `.factory/prompts/P00_ORCHESTRATOR_ULTRAGOAL.md` | rewritten | Routes `intake` + `deepen` and manifest-first grill/yolo attention semantics, including yolo hard-stop behavior without weakening gates (ADR 0011/0012). |
 | `.factory/prompts/P01_SEED_COMPILE.md` | reaffirmed | Thesis compile remains the design entry gate before engine (DESIGN-RECORD §3; no default engine). |
 | `.factory/prompts/P02_ENGINE_PROFILE.md` | reaffirmed | Engine decision phase remains; forge gate is export-time not decision-time (DESIGN-RECORD §3). |
 | `.factory/prompts/P07_DEPTH_RED_TEAM.md` | reaffirmed | Paper anti-boring / ADVANCE design-lock is still design's quality gate (DESIGN-RECORD §5 game-feel companion; SPEC ADVANCE). |
@@ -91,12 +91,12 @@ tracked they fail the check.
 | `schemas/game-thesis.schema.json` | rewritten | Structured feel_targets (T05) + optional out_of_scope for manifest mapping (SPEC §3.4 / T06). |
 | `schemas/module-card.schema.json` | reaffirmed | Scout module-card still validates harvested primitives before adoption. |
 | `schemas/playtest-report.schema.json` | reaffirmed | Shipped-pack playtest evidence schema still carries bot/human proof obligations. |
-| `schemas/seed-manifest.schema.json` | reaffirmed | Per-seed run manifest still resumption source of truth. |
+| `schemas/seed-manifest.schema.json` | rewritten | Per-seed run manifest remains resumption truth; optional enum'd `design_lane` preserves legacy runs while making new grill/yolo mode, stop line, and origination durable (ADR 0012). |
 | `schemas/spec-decomposition.schema.json` | rewritten | Structured acceptance (T05) + asset_requests/lore_refs/capabilities/verify_plan (SPEC §3.4 / T06); optional permissive ext.disciplines (enum validated in mapper per ADR-0005 / GB01). |
 | `templates/run/decisions/0001-engine-profile.md` | rewritten | Godot version/renderer/language fields for forge-manifest mapping (SPEC §3.4 / T06). |
 | `templates/run/GAME_SEED.md` | reaffirmed | Run-dir seed template still the intake capture surface. |
 | `templates/run/GAME_THESIS.template.md` | rewritten | Structured feel_targets (T05) + out_of_scope for manifest mapping (T06). |
-| `templates/run/manifest.json` | reaffirmed | Seed manifest template still initializes run state. |
+| `templates/run/manifest.json` | rewritten | Seed manifest template initializes the collaborative-default `{grill, pack, user}` design lane (ADR 0012). |
 | `templates/run/README_AGENT_BOOT.md` | reaffirmed | Per-run agent boot still routes by manifest.current_phase. |
 | `templates/run/README_NEXT_ACTIONS.md` | reaffirmed | Next-actions stub still orients cold agents on a run. |
 | `templates/spec-pack/AGENTS.md` | reaffirmed | Pack-local AGENTS still orients co-dev without design harness leakage (ADR 0006). |
@@ -124,6 +124,7 @@ in the regenerated universe list.
 | --- | --- | --- |
 | `docs/adr/0010-feel-doctrine-studio-terms.md` | rewritten | Re-derived feel + design_canon under studio terms; supersedes culled 0009 (DESIGN-RECORD §5). |
 | `docs/doctrine-audit-ledger.md` | rewritten | Exhaustive provenance ledger (DESIGN-RECORD §8 / T04); Slice B rows for ADR 0011 + in-universe rewrites (grill-refresh 2026-07-12). |
+| `docs/adr/0012-design-lanes.md` | rewritten | Owner-confirmed grill/yolo attention lanes, equal-strength gates, recorded-question split, G1 seam, and yolo stop-line release contract (2026-07-12). |
 
 ## Grill-refresh Slice B (2026-07-12) — front-end wiring truth
 
@@ -140,3 +141,12 @@ section adds only **new** universe paths. Out-of-universe surfaces also touched:
 
 | `schemas/intake-grill.schema.json` | rewritten | New schema: ten office-hours pressure fields + digest ref as the intake artifact machine surface (ADR 0011 / grill-refresh A). |
 | `schemas/portfolio-digest.schema.json` | rewritten | New schema: portfolio memory — prior theses, lifecycle, sealed human verdicts (UNKNOWN when absent), honest skipped rows (ADR 0011 / grill-refresh A). |
+
+## Design lanes (2026-07-12)
+
+ADR 0012 re-derived the touched in-universe surfaces in their existing rows
+above (`docs/doctrine.md`, P00, seed-manifest schema, and run-manifest template)
+and added the new ADR row. Out-of-universe implementation surfaces:
+`.codex/skills/tgf-office-hours-grill/SKILL.md`, `scripts/init-game-run.mjs`,
+`scripts/lib/run-state.mjs`, `scripts/validate-artifacts.mjs`, and co-located
+tests.

@@ -27,13 +27,32 @@ NON-NEGOTIABLES:
 - Agents communicate by files, not chat.
 - A spec is not done until its issues render and the pack passes the leakage gate.
 
+DESIGN LANES (route by `manifest.design_lane` when present; absence is legacy):
+- `grill` — collaborative seed co-authorship and the default. Office hours is a
+  live working session: detect gaps, propose concrete fills, and extrapolate
+  game-quality principles with the owner instead of merely collecting answers.
+  That live conversation is exempt from `questions_asked`; the recorded
+  one-question budget protects later AFK phases.
+- `yolo` — an attention mode, never a speed mode. Ask zero questions. Fill the
+  same ten office-hours fields silently from seed evidence and the portfolio
+  digest; turn unresolved uncertainty into explicit prototype hypotheses. Every
+  agent gate, depth floor, feel finding, and verifier runs at full strength.
+- `yolo` + `stop_line: pack` runs through handoff export, then parks pre-forge.
+  `yolo` + `stop_line: design-lock` parks after the P07 `ADVANCE` transition at
+  `engine-profile`, with G1 represented by `reviews/G1_BRIEF.md`; do not run P02
+  or advance again until the execution ledger contains a prior
+  `{phase:"engine-profile", event:"stop-line-released", status:"passed",
+  actor:"Shane"}` row. G1 brief generation is owned by a later slice; reference
+  the path here but do not synthesize it.
+
 PHASES (route by `manifest.current_phase`):
 1. `intake` — **DEFAULT entry for every new run.** Office-hours grill
    (`tgf-office-hours-grill`), grounded in the portfolio digest
    (`npm run portfolio:digest -- --seed-id <id>` → `intake/portfolio-digest.json`).
    Exit advances to `toolchain` (never to thesis — illegal vs the run-state graph).
    Artifact: `intake/office-hours.md` (canonical fenced json per
-   `schemas/intake-grill.schema.json`).
+   `schemas/intake-grill.schema.json`). Apply the manifest's grill/yolo behavior
+   before invoking intake; lane choice never weakens its evidence requirements.
 2. `toolchain` — verify local tools (P17) and update docs/toolchain-verification-ledger.md.
 3. `thesis` — compile the seed into GAME_THESIS.md using P01 (consumes the intake
    grill + portfolio distinctness).

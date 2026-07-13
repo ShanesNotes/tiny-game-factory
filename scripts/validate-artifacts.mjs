@@ -217,6 +217,23 @@ function checkRun(seedId) {
     }
   }
 
+  // A yolo design-lock stop line parks immediately after the ADVANCE transition,
+  // at engine-profile. Crossing into decomposition requires an explicit owner
+  // release recorded before the first downstream ledger row; a later row cannot
+  // retroactively legitimize crossing the hard stop.
+  const firstCrossing = rows.findIndex((row) => ["decompose", "handoff", "complete"].includes(row.phase));
+  if (manifest.design_lane?.stop_line === "design-lock" && firstCrossing >= 0) {
+    const released = firstCrossing > 0 && rows.slice(0, firstCrossing).some((row) =>
+      row.phase === "engine-profile"
+      && row.event === "stop-line-released"
+      && row.status === "passed"
+      && row.actor === "Shane"
+    );
+    if (!released) {
+      errors.push("design_lane.stop_line 'design-lock' forbids progress past engine-profile without a prior Shane-authored ledger row (event='stop-line-released', status='passed')");
+    }
+  }
+
   let portfolioDigest = null;
   if (isPortfolioRun(manifest) && rows.some((row) => row.phase === "toolchain")) {
     const intake = readIntakeEvidence(runDir, seedId);

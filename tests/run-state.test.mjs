@@ -146,15 +146,20 @@ test("manifestPathPolicyErrors keeps run artifact paths inside the seed run", ()
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
-test("questionBudgetErrors enforces <=1 direction-changing question before the spec is decomposed", () => {
+test("questionBudgetErrors enforces lane budgets before the spec is decomposed", () => {
   const q = (n) => Array.from({ length: n }, (_, i) => ({ question: `q${i}`, recommended_default: "d", phase_asked: "thesis" }));
+  const lane = (mode) => ({ mode, stop_line: "pack", origination: "user" });
   assert.deepEqual(rs.questionBudgetErrors({ current_phase: "thesis", questions_asked: q(1) }), []);
   assert.ok(rs.questionBudgetErrors({ current_phase: "thesis", questions_asked: q(2) }).length > 0);
   assert.ok(rs.questionBudgetErrors({ current_phase: "decompose", questions_asked: q(2) }).length > 0);
   assert.ok(rs.questionBudgetErrors({ current_phase: "intake", questions_asked: q(2) }).length > 0); // intake is the default question site
   assert.ok(rs.questionBudgetErrors({ current_phase: "toolchain", questions_asked: q(2) }).length > 0);
   assert.deepEqual(rs.questionBudgetErrors({ current_phase: "intake", questions_asked: q(1) }), []);
+  assert.deepEqual(rs.questionBudgetErrors({ current_phase: "intake", design_lane: lane("grill"), questions_asked: q(1) }), []);
+  assert.ok(rs.questionBudgetErrors({ current_phase: "intake", design_lane: lane("yolo"), questions_asked: q(1) }).length > 0);
+  assert.deepEqual(rs.questionBudgetErrors({ current_phase: "intake", design_lane: lane("yolo"), questions_asked: [] }), []);
   assert.deepEqual(rs.questionBudgetErrors({ current_phase: "handoff", questions_asked: q(5) }), []); // spec already cut
+  assert.deepEqual(rs.questionBudgetErrors({ current_phase: "handoff", design_lane: lane("yolo"), questions_asked: q(5) }), []);
   assert.deepEqual(rs.questionBudgetErrors({ current_phase: "decompose" }), []); // no field -> 0
 });
 

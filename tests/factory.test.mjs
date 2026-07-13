@@ -22,6 +22,7 @@ function markRunLegacy(dir, id) {
   const manifestFile = path.join(runDir, "manifest.json");
   const manifest = JSON.parse(fs.readFileSync(manifestFile, "utf8"));
   manifest.factory_version = "0.1.0";
+  delete manifest.design_lane;
   manifest.current_phase = "toolchain";
   manifest.resume_point.phase = "toolchain";
   fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, 2) + "\n");
@@ -111,6 +112,24 @@ test("seed-manifest schema rejects a malformed seed_id (pattern enforced)", () =
   assert.ok(validate(schema, bad).length > 0, "malformed seed_id must fail the pattern");
 });
 
+test("seed-manifest schema validates optional design lanes and legal combinations", () => {
+  const schema = JSON.parse(fs.readFileSync(rel("schemas/seed-manifest.schema.json"), "utf8"));
+  const legacy = JSON.parse(fs.readFileSync(rel("examples/fixtures/minimal-seed-manifest.json"), "utf8"));
+  assert.deepEqual(validate(schema, legacy), [], "legacy manifest without design_lane should pass");
+  assert.deepEqual(validate(schema, {
+    ...legacy,
+    design_lane: { mode: "yolo", stop_line: "design-lock", origination: "auto" }
+  }), []);
+  assert.ok(validate(schema, {
+    ...legacy,
+    design_lane: { mode: "grill", stop_line: "design-lock", origination: "user" }
+  }).length > 0, "grill cannot carry a yolo stop line");
+  assert.ok(validate(schema, {
+    ...legacy,
+    design_lane: { mode: "yolo", stop_line: "pack", origination: "robot" }
+  }).length > 0, "origination must be enum'd");
+});
+
 test("fixtures validate against their schemas", () => {
   const pairs = {
     "minimal-seed-manifest.json": "seed-manifest.schema.json",
@@ -169,6 +188,7 @@ test("init-game-run creates only .tgf/seeds/{id} with valid manifest + ledger", 
     assert.ok(!manifest.default_spec_pack_root.includes("tgf-games"));
     assert.equal(manifest.current_phase, "intake");
     assert.equal(manifest.factory_version, "0.3.0");
+    assert.deepEqual(manifest.design_lane, { mode: "grill", stop_line: "pack", origination: "user" });
 
     const firstRow = JSON.parse(fs.readFileSync(path.join(runDir, "execution-ledger.jsonl"), "utf8").trim().split("\n")[0]);
     const ledgerSchema = JSON.parse(fs.readFileSync(rel("schemas/execution-ledger-row.schema.json"), "utf8"));
@@ -180,6 +200,24 @@ test("init-game-run creates only .tgf/seeds/{id} with valid manifest + ledger", 
     assert.doesNotMatch(boot, /P17_VERIFY_TOOLCHAIN.*before any other phase/is);
     assert.match(next, /phase: `intake`/);
     assert.match(next, /build-portfolio-digest/);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("init-game-run accepts yolo stop lines and rejects invalid lane flags", () => {
+  const dir = tmp();
+  try {
+    let r = node("init-game-run.mjs", ["--seed-id", "selftest-yolo", "--seed", "x", "--mode", "yolo", "--stop", "design-lock"], { cwd: dir });
+    assert.equal(r.status, 0, r.stderr);
+    const manifest = JSON.parse(fs.readFileSync(path.join(dir, ".tgf/seeds/selftest-yolo/manifest.json"), "utf8"));
+    assert.deepEqual(manifest.design_lane, { mode: "yolo", stop_line: "design-lock", origination: "user" });
+
+    r = node("init-game-run.mjs", ["--seed-id", "bad-grill-stop", "--seed", "x", "--mode", "grill", "--stop", "design-lock"], { cwd: dir });
+    assert.equal(r.status, 1);
+    assert.match(r.stderr, /--stop is only legal with --mode yolo/);
+    assert.ok(!fs.existsSync(path.join(dir, ".tgf/seeds/bad-grill-stop")));
+
+    assert.equal(node("init-game-run.mjs", ["--seed-id", "bad-mode", "--seed", "x", "--mode", "fast"], { cwd: dir }).status, 1);
+    assert.equal(node("init-game-run.mjs", ["--seed-id", "bad-stop", "--seed", "x", "--mode", "yolo", "--stop", "forge"], { cwd: dir }).status, 1);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
@@ -236,6 +274,26 @@ test("validate-artifacts --check run passes for a created run", () => {
     assert.equal(node("init-game-run.mjs", ["--seed-id", id, "--seed", "x"], { cwd: dir }).status, 0);
     const r = node("validate-artifacts.mjs", ["--check", "run", "--seed-id", id], { cwd: dir });
     assert.equal(r.status, 0, r.stdout + r.stderr);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("validate-artifacts enforces recorded question budgets by lane presence", () => {
+  const dir = tmp();
+  const question = { question: "Which direction?", recommended_default: "A", phase_asked: "intake" };
+  try {
+    for (const [id, mode] of [["budget-grill", "grill"], ["budget-yolo", "yolo"], ["budget-legacy", null]]) {
+      assert.equal(node("init-game-run.mjs", ["--seed-id", id, "--seed", "x", ...(mode ? ["--mode", mode] : [])], { cwd: dir }).status, 0);
+      const manifestPath = path.join(dir, ".tgf", "seeds", id, "manifest.json");
+      const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+      if (mode === null) delete manifest.design_lane;
+      manifest.questions_asked = [question];
+      fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
+    }
+    assert.equal(node("validate-artifacts.mjs", ["--check", "run", "--seed-id", "budget-grill"], { cwd: dir }).status, 0);
+    const yolo = node("validate-artifacts.mjs", ["--check", "run", "--seed-id", "budget-yolo"], { cwd: dir });
+    assert.equal(yolo.status, 1, yolo.stdout);
+    assert.match(yolo.stdout, /design lane 'yolo' allows at most 0 recorded questions/);
+    assert.equal(node("validate-artifacts.mjs", ["--check", "run", "--seed-id", "budget-legacy"], { cwd: dir }).status, 0);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
@@ -623,6 +681,52 @@ test("validate-artifacts --check run gates design-lock on a passing depth vector
     r = node("validate-artifacts.mjs", ["--check", "run", "--seed-id", id], { cwd: dir });
     assert.equal(r.status, 1, r.stdout);
     assert.match(r.stdout, /register 'narrative-first' contradicts thesis design_register 'mechanics-first'/);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("validate-artifacts hard-stops yolo design-lock runs until Shane releases them", () => {
+  const dir = tmp();
+  const id = "selftest-stop-line";
+  try {
+    const runDir = decomposeReadyRun(dir, id);
+    const manifestPath = path.join(runDir, "manifest.json");
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    manifest.design_lane = { mode: "yolo", stop_line: "design-lock", origination: "user" };
+    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
+
+    let r = node("validate-artifacts.mjs", ["--check", "run", "--seed-id", id], { cwd: dir });
+    assert.equal(r.status, 1, r.stdout);
+    assert.match(r.stdout, /forbids progress past engine-profile/);
+
+    const ledgerPath = path.join(runDir, "execution-ledger.jsonl");
+    const rows = fs.readFileSync(ledgerPath, "utf8").trim().split("\n").map(JSON.parse);
+    const crossing = rows.findIndex((row) => row.phase === "decompose");
+    rows.splice(crossing, 0, {
+      ts: "2026-07-12T00:00:00.000Z", seed_id: id, phase: "engine-profile",
+      event: "stop-line-released", status: "passed", actor: "agent"
+    });
+    fs.writeFileSync(ledgerPath, rows.map(JSON.stringify).join("\n") + "\n");
+    r = node("validate-artifacts.mjs", ["--check", "run", "--seed-id", id], { cwd: dir });
+    assert.equal(r.status, 1, r.stdout);
+
+    rows.push({
+      ts: "2026-07-12T00:00:30.000Z", seed_id: id, phase: "killed",
+      event: "run-killed", status: "killed", actor: "agent"
+    });
+    manifest.current_phase = "killed";
+    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
+    fs.writeFileSync(ledgerPath, rows.map(JSON.stringify).join("\n") + "\n");
+    r = node("validate-artifacts.mjs", ["--check", "run", "--seed-id", id], { cwd: dir });
+    assert.equal(r.status, 1, r.stdout);
+    assert.match(r.stdout, /forbids progress past engine-profile/, "terminal phase must not hide an earlier crossing");
+
+    rows.splice(crossing + 1, 0, {
+      ts: "2026-07-12T00:01:00.000Z", seed_id: id, phase: "engine-profile",
+      event: "stop-line-released", status: "passed", actor: "Shane"
+    });
+    fs.writeFileSync(ledgerPath, rows.map(JSON.stringify).join("\n") + "\n");
+    r = node("validate-artifacts.mjs", ["--check", "run", "--seed-id", id], { cwd: dir });
+    assert.equal(r.status, 0, r.stdout);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 

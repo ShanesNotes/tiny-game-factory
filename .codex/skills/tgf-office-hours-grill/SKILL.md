@@ -1,6 +1,6 @@
 ---
 name: tgf-office-hours-grill
-description: Use when a seed arrives needing intake pressure — fill office-hours fields from portfolio evidence and ask at most one taste question before toolchain.
+description: Use when a seed arrives needing lane-aware intake pressure — co-author live in grill mode or fill silently in yolo mode before toolchain.
 ---
 
 # tgf-office-hours-grill
@@ -15,11 +15,22 @@ P00 router), and the seed manifest `.tgf/seeds/{seed-id}/manifest.json` when
 present. Intake has no separate P## body — this skill **is** the intake
 procedure the router dispatches.
 
-**Role** — Seed-intake grill. Fills the ten office-hours pressure fields from
-portfolio and seed evidence, classifies remaining unknowns, and asks at most
-ONE direction-changing taste question (with a recommended default). Completes
-by advancing to **`toolchain`** — never to thesis (illegal vs the run-state
-graph: `intake → toolchain` only).
+**Role** — Lane-aware seed-intake grill. Fills the ten office-hours pressure
+fields from portfolio and seed evidence, classifies remaining unknowns, and
+completes by advancing to **`toolchain`** — never to thesis (illegal vs the
+run-state graph: `intake → toolchain` only).
+
+**Lane behavior** (read `manifest.design_lane`; absence keeps the legacy
+at-most-one-question procedure):
+- `grill` — a collaborative co-authoring session and the default for new runs.
+  Detect gaps, propose concrete fills, and extrapolate game-quality principles
+  with the owner. Live-session conversation is exempt from the manifest's
+  `questions_asked` budget; do not log it there. The ≤1 recorded budget remains
+  for later AFK phases.
+- `yolo` — ask zero questions. Silently fill all ten fields from the seed,
+  digest, and other run evidence. Convert every material unknown into a named,
+  falsifiable prototype hypothesis. Yolo changes owner attention only: do not
+  abbreviate fields, soften gates, lower depth, or skip verification.
 
 **Evidence first**
 1. Run `npm run portfolio:digest -- --seed-id <id>` so
@@ -39,7 +50,8 @@ graph: `intake → toolchain` only).
   pressure fields **plus** exactly one fenced ```json block that validates
   against `schemas/intake-grill.schema.json` (Slice A owns the schema; the
   block is the machine surface the checker gates)
-- a question-log entry appended to the manifest when a question was asked
+- for legacy lane-less intake only, a question-log entry appended to the
+  manifest when its one allowed question was asked
   (schema-legal fields only: question, recommended_default, answer, phase_asked,
   actor — fold any rejected options into answer / recommended_default prose)
 - advance `manifest.current_phase` from `intake` to **`toolchain`** when the
@@ -47,13 +59,18 @@ graph: `intake → toolchain` only).
   `thesis` from this skill.
 
 **Borrowed behaviours** (wrapped or referenced — never vendor a generic skill body)
-- `grill-me` — one question at a time, always with a recommended default; ask only what evidence cannot answer
+- `grill-me` — in collaborative grill sessions, ask only what evidence cannot
+  answer and propose a recommended fill; legacy lane-less intake retains its
+  one-question ceiling
 - `grill-with-docs` — ground terms against TGF docs/ADRs, scoped to writes inside this repo only
 
 **Boundaries**
 - Obey `AGENTS.md`, `CONTEXT.md`, and `docs/doctrine.md`.
 - Manifest beats memory: read and update `.tgf/seeds/{seed-id}/manifest.json`, and record the phase transition in that run's `execution-ledger.jsonl`.
-- Ask AT MOST one direction-changing question before the thesis; never ask engine/architecture/art/content/lane questions before `GAME_THESIS.md`.
+- Never ask engine/architecture/art/content/lane questions before
+  `GAME_THESIS.md`. Yolo asks no questions. Grill's live office-hours dialogue
+  is budget-exempt; outside that session, the manifest permits at most one
+  recorded direction-changing taste question before decomposition.
 - Owns the ambiguity gate; convert most uncertainty into prototype hypotheses rather than questions.
 - External-system and borrowed-skill names stay factory-side and must never leak into a generated game or pack.
 - Never create a spec pack folder from this skill, never copy `.tgf`/`.omx`/ledgers/skill docs into generated output, and never assume an unverified tool.
