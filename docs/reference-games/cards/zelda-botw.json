@@ -10,7 +10,7 @@
     "exploration"
   ],
   "register_mapping": "world-first",
-  "moat": "Shared chemistry+physics state rules let any object rewrite routes, combat, and puzzles without scripted solutions.",
+  "moat": "Shared chemistry+physics state rules link almost every object and element, enabling unique player-authored solutions to problems and puzzles (including combat uses) rather than single scripted paths.",
   "loop_skeleton": {
     "verbs": [
       "climb",
@@ -40,10 +40,10 @@
     }
   ],
   "feel_signature": "A climb or glider path spends stamina; weapons and shields degrade through combat use and can shatter; success is a player-composed route or element interaction, not a scripted set-piece completion.",
-  "second_session_answer": "Players return to restock weapons and food, then re-route through known chemistry interactions (metal+lightning, fire+grass) toward unexplored towers and shrines rather than to grind a skill tree.",
+  "second_session_answer": "Weapon breakage plus field restock pressure incentivize ongoing exploration for replacements; reusable chemistry interactions (metal+lightning, fire+grass) remain the problem-solving vocabulary rather than a skill-tree grind. The card does not claim observed second-session return routing toward towers/shrines.",
   "packaging_lessons": [
     "Inference: ship a small closed test bed of chemistry and physics rules (Great Plateau style) before full open-world scale so rule consistency can be proven where failure is cheap.",
-    "Inference: make default tools (climb, glider, breakable weapons with field restock) legal across most of the map before adding special-case dungeon keys as the main gate."
+    "Inference: ship climb, paraglider, and breakable field weapons as default open-map tools before treating ordered dungeon keys as the main progress gate (BOTW set aside linear dungeon-order conventions)."
   ],
   "anti_lessons": [
     "Do not copy weapon durability without flooding the world with restock points and alternate tool types — durability alone without abundance only produces inventory anxiety.",
@@ -56,7 +56,7 @@
     },
     {
       "system": "inventory",
-      "note": "weapon, shield, and bow slots are temporary budgets that force field restock exploration"
+      "note": "weapon and shield slots are temporary budgets that force field restock exploration"
     },
     {
       "system": "crafting",
@@ -68,20 +68,20 @@
     },
     {
       "system": "save-state",
-      "note": "auto and manual saves preserve player progress across sessions and interruptions; frequent autosaves (including shrine approach) bank map/shrine and inventory state for multi-session return; the card does not claim durable material/chemistry object-state across reloads"
+      "note": "auto and manual saves preserve player progress across sessions and interruptions; frequent autosaves (including shrine approach and timed intervals) bank progress for multi-session return; the card does not claim durable material/chemistry object-state across reloads or enumerate specific inventory/map/shrine fields"
     },
     {
       "system": "win-loss-death",
-      "note": "death ends the attempt; Continue loads a prior auto/manual save and restores that save's inventory/map/shrine progress; uncommitted post-save exploration is lost"
+      "note": "death ends the attempt; Continue loads the prior save and refills Link to three hearts; uncommitted post-save work is lost beyond what that save holds"
     }
   ],
   "citations": [
     {
-      "claim": "Moat and chemistry depth entry: chemistry is a rule-based state calculator (elements change materials and each other; materials do not change each other) paired with physics for player-authored solutions.",
+      "claim": "Moat and chemistry depth entry: chemistry is a rule-based state calculator (elements change materials and each other; materials do not change each other) paired with physics; element/object interaction enables unique player solutions to problems (including combat examples), not universal any-object rewrite of all domains.",
       "source": "https://gamesbeat.com/the-legend-of-zelda-breath-of-the-wild-makes-chemistry-just-as-important-as-physics/"
     },
     {
-      "claim": "Chemistry framed as state calculator alongside physics for consistent world rules (GDC 2017 coverage).",
+      "claim": "Chemistry framed as state calculator alongside physics; almost every object and element is linked for unique puzzle/challenge solutions (GDC 2017 coverage).",
       "source": "https://www.thumbsticks.com/gdc-17-breath-of-the-wild-science-lies/"
     },
     {
@@ -105,8 +105,8 @@
       "source": "https://joshuabgad.medium.com/breath-of-the-wild-experimental-solutions-5ce0ec0ec9b7"
     },
     {
-      "claim": "Second-session and chemistry combat/route reuse: fire, ice, electricity interactions and material states are the reusable problem-solving vocabulary.",
-      "source": "https://gamesbeat.com/the-legend-of-zelda-breath-of-the-wild-makes-chemistry-just-as-important-as-physics/"
+      "claim": "Second-session incentive structure: breakable weapons create exploration pressure for replacements; fire, ice, electricity interactions and material states are the reusable problem-solving vocabulary (not observed second-session return routing).",
+      "source": "https://www.siliconera.com/breath-of-the-wilds-durability-system-is-a-benefit-not-a-drawback/ ; chemistry reuse: https://gamesbeat.com/the-legend-of-zelda-breath-of-the-wild-makes-chemistry-just-as-important-as-physics/"
     },
     {
       "claim": "Cooking converts ingredients into food and elixirs that restore hearts/stamina and grant resistance buffs for weather and combat.",
@@ -129,12 +129,12 @@
       "source": "https://www.shacknews.com/article/99236/how-to-get-hearts-and-stamina-breath-of-the-wild"
     },
     {
-      "claim": "Save-state BOM: auto-save and manual-save preserve progress across multi-session play and interruptions; autosaves fire on shrine approach (and other progress moments) so durable inventory/map/shrine progress can bank between sessions. Chemistry/material world-state across reloads is not claimed.",
-      "source": "GameRant, 'Breath Of The Wild: How To Save' (manual save path; autosave on shrine approach, campfire, stable, chest, and timed intervals; progress kept intact for multi-session play): https://web.archive.org/web/20230528193236/https://gamerant.com/breath-of-the-wild-how-to-save/ ; Eiji Aonuma (Waypoint interview via Zelda Dungeon): auto-save and manual-save so battery/session interruption does not erase progress: https://www.zeldadungeon.net/breath-of-the-wild-has-two-saving-methods/"
+      "claim": "Save-state BOM: auto-save and manual-save preserve progress across multi-session play and interruptions; autosaves fire on shrine approach, campfire, stable, chest, and timed intervals so progress can bank between sessions. Specific inventory/map/shrine field enumeration and chemistry/material world-state across reloads are not claimed.",
+      "source": "GameRant, 'Breath Of The Wild: How To Save' (manual save path; autosave on shrine approach, campfire, stable, chest, and timed intervals; little chance of losing significant progress): https://web.archive.org/web/20230528193236/https://gamerant.com/breath-of-the-wild-how-to-save/ ; Eiji Aonuma (Waypoint interview via Zelda Dungeon): auto-save and manual-save so battery/session interruption does not erase progress: https://www.zeldadungeon.net/breath-of-the-wild-has-two-saving-methods/"
     },
     {
-      "claim": "Win-loss-death BOM: choosing Continue after death loads a save (restoring that save's inventory and progression state, with heart refill on continue); autosaves bank shrine-approach and other progress moments so retained map/shrine/inventory progress is the loaded save, not post-save work.",
-      "source": "Zelda Wiki, Glitches in Breath of the Wild: Continue after dying loads the save: https://web.archive.org/web/20241227000208/https://zelda.fandom.com/wiki/Glitches_in_Breath_of_the_Wild ; GameRant, 'Breath Of The Wild: How To Save' (autosave on shrine approach and other progress moments; recoverable save slots): https://web.archive.org/web/20230528193236/https://gamerant.com/breath-of-the-wild-how-to-save/"
+      "claim": "Win-loss-death BOM: choosing Continue after dying loads the save and gives Link three hearts; retained state is whatever that save holds, not post-save work.",
+      "source": "Zelda Wiki, Glitches in Breath of the Wild: 'Choosing to continue after dying will load the save but give Link 3 hearts': https://web.archive.org/web/20241227000208/https://zelda.fandom.com/wiki/Glitches_in_Breath_of_the_Wild ; GameRant, 'Breath Of The Wild: How To Save' (autosave on shrine approach and other progress moments; recoverable save slots): https://web.archive.org/web/20230528193236/https://gamerant.com/breath-of-the-wild-how-to-save/"
     },
     {
       "claim": "Play-loop BOM chemistry/physics share: exploration and combat use the same chemistry and physics rules for player-authored solutions.",
@@ -145,8 +145,8 @@
       "source": "https://www.ign.com/wikis/the-legend-of-zelda-breath-of-the-wild/The_Isolated_Plateau"
     },
     {
-      "claim": "Packaging lesson 2 (labeled Inference): default climb/glider and field weapons are world-legal tools before story dungeon keys become the main gate.",
-      "source": "https://www.thumbsticks.com/gdc-17-breath-of-the-wild-science-lies/"
+      "claim": "Packaging lesson 2 (labeled Inference): climb, paraglider, and breakable weapons/shields are default open-map tools; production set aside ordered-dungeon-key conventions so dungeon order is not the main progress gate.",
+      "source": "https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_Breath_of_the_Wild"
     },
     {
       "claim": "Anti-lesson durability without restock: designers and coverage treat abundant field weapons as the counterpart to breakage.",
