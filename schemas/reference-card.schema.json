@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Game Design Reference Card",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "edition_pinned",
+    "genre_tags",
+    "register_mapping",
+    "moat",
+    "loop_skeleton",
+    "depth_mechanisms",
+    "feel_signature",
+    "second_session_answer",
+    "packaging_lessons",
+    "anti_lessons",
+    "system_bom",
+    "citations",
+    "status"
+  ],
+  "properties": {
+    "schema_version": { "enum": ["1.0.0"] },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$" },
+    "title": { "type": "string" },
+    "edition_pinned": { "type": "string" },
+    "genre_tags": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "register_mapping": {
+      "enum": ["mechanics-first", "narrative-first", "hybrid", "world-first"]
+    },
+    "moat": { "type": "string" },
+    "loop_skeleton": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verbs", "description"],
+      "properties": {
+        "verbs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "description": { "type": "string" }
+      }
+    },
+    "depth_mechanisms": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "mechanism", "falsifiable_claim"],
+        "properties": {
+          "name": { "type": "string" },
+          "mechanism": { "type": "string" },
+          "falsifiable_claim": { "type": "string" }
+        }
+      }
+    },
+    "feel_signature": { "type": "string" },
+    "second_session_answer": { "type": "string" },
+    "packaging_lessons": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "anti_lessons": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "system_bom": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["system", "note"],
+        "properties": {
+          "system": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "citations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim", "source"],
+        "properties": {
+          "claim": { "type": "string" },
+          "source": { "type": "string" }
+        }
+      }
+    },
+    "status": { "enum": ["draft", "audited"] }
+  }
+}

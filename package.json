@@ -15,8 +15,9 @@
     "spec:revise": "node scripts/package-spec.mjs",
     "gates": "node scripts/run-gates.mjs --dry-run",
     "validate": "node scripts/validate-artifacts.mjs --check all",
+    "validate:reference-cards": "node scripts/validate-reference-cards.mjs",
     "test": "node --test \"tests/**/*.test.mjs\"",
     "lint": "node scripts/lint.mjs",
-    "verify": "npm run lint && npm run validate && npm run gates && npm test"
+    "verify": "npm run lint && npm run validate && npm run validate:reference-cards && npm run gates && npm test"
   }
 }

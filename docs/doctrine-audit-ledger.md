@@ -150,3 +150,17 @@ and added the new ADR row. Out-of-universe implementation surfaces:
 `.codex/skills/tgf-office-hours-grill/SKILL.md`, `scripts/init-game-run.mjs`,
 `scripts/lib/run-state.mjs`, `scripts/validate-artifacts.mjs`, and co-located
 tests.
+
+## FUE e3 (2026-07-12) — reference-game card substrate
+
+Machine substrate only (schema, canon, validator, index). No P01/P07/P18
+hooks yet; pigeonhole doctrine lives in `docs/reference-games/README.md`.
+
+| path | disposition | rationale |
+| --- | --- | --- |
+| `docs/reference-games/CANON.md` | rewritten | Shane-ratified membership list for reference cards; substrate for later pipeline cites (orchestrate FUE e3). |
+| `docs/reference-games/README.md` | rewritten | Phase-tiered roles + pigeonhole doctrine for the reference-game canon (FUE e3). |
+| `docs/reference-games/cards/.gitkeep` | rewritten | Keeps empty cards/ tree tracked until real research cards land. |
+| `docs/reference-games/cards/_example.json` | rewritten | Fictional fixture card proving schema/validator path; not research, not citable. |
+| `docs/reference-games/index.jsonl` | rewritten | Generated summary index (id/title/genre_tags/register_mapping/status) refreshed by validate-reference-cards. |
+| `schemas/reference-card.schema.json` | rewritten | Draft 2020-12 card shape (moat, loop, depth mechanisms, system BOM, status draft\|audited) for the reference-game canon (FUE e3). |
