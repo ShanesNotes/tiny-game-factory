@@ -542,6 +542,7 @@ test("genre index is pull-only: never referenced by the seed/intake pipeline", (
     "scripts/probe-spec-availability.mjs",
     "scripts/package-spec.mjs",
     "scripts/validate-artifacts.mjs",
+    "scripts/lib/factory-contract.mjs",
     "scripts/lib/run-state.mjs",
     "scripts/lib/portfolio-memory.mjs",
     "scripts/lib/spec-decomposition.mjs",
@@ -549,7 +550,11 @@ test("genre index is pull-only: never referenced by the seed/intake pipeline", (
     "scripts/lib/manifest-mapper.mjs"
   ];
   for (const file of pipelineFiles) {
-    const source = fs.readFileSync(rel(file), "utf8");
+    let source = fs.readFileSync(rel(file), "utf8");
+    if (file === "scripts/lib/factory-contract.mjs") {
+      // Its schema-name registry is vocabulary, not pipeline injection.
+      source = source.replace('"genre-index-row"', "");
+    }
     assert.doesNotMatch(
       source,
       /(?:genre[-_ ]?index|reference[-_ ]?games?)/i,
