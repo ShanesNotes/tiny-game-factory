@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "wolfenstein-3d",
+  "title": "Wolfenstein 3D",
+  "edition_pinned": "Wolfenstein 3D Steam app 2270 listing, observed 2026-07-13; row describes the 1992 id Software design.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "execution",
+      "secondary": []
+    },
+    "session_structure": {
+      "primary": "chapters",
+      "secondary": []
+    },
+    "progression_form": {
+      "primary": "fixed-kit",
+      "secondary": [
+        "authored-campaign"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": []
+  },
+  "moat": "Raycast corridors and limited ammo turn maze routing and weapon choice into room-clear mastery.",
+  "scope_efficiency_hypothesis": "One fixed weapon ladder and episode maps generate campaign length without RPG growth systems.",
+  "exemplar_rationale": "FPS root that isolates maze combat execution before full 3D movement complexity.",
+  "evidence": [
+    {
+      "claim": "Steam reported 4297 all-language, all-purchase user reviews for Wolfenstein 3D.",
+      "metric_type": "steam_user_reviews",
+      "value_or_range": 4297,
+      "class": "review-niche",
+      "class_definition": "taxonomy-v1#steam-user-reviews/review-niche",
+      "platform": "Steam",
+      "territory": "worldwide",
+      "observed_at": "2026-07-13",
+      "source": "https://store.steampowered.com/appreviews/2270?json=1&language=all&purchase_type=all&num_per_page=0",
+      "source_tier": "primary-platform"
+    },
+    {
+      "claim": "Steam appdetails genres field listed: Action.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Action"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Steam",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://store.steampowered.com/api/appdetails?appids=2270&cc=us&l=en",
+      "source_tier": "primary-platform"
+    }
+  ]
+}

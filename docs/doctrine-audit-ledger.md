@@ -357,3 +357,23 @@ genre alias. No publisher-genre extension or reserve swap was required.
 | `docs/reference-games/genre-index/goldeneye-007.json` | rewritten | Sourced Tier-2 batch E1 lineage row for 1997 GoldenEye 007 using the faithful Xbox re-release's Action & adventure/Shooter evidence. |
 | `docs/reference-games/genre-index/mortal-kombat-1992.json` | rewritten | Sourced Tier-2 batch E1 lineage row for the 1992 Mortal Kombat arcade design using GOG Action/Arcade/Fighting evidence. |
 | `docs/reference-games/genre-index/prince-of-persia-1989.json` | rewritten | Sourced Tier-2 batch E1 lineage row for the 1989 Prince of Persia design using Nintendo VC Action/Adventure evidence. |
+## Classics wave batch E2 (2026-07-13) — point-and-click / strategy roots / immersive-sim / arcade / sports
+
+Ten sourced Tier-2 rows under ratified taxonomy v1 + classics evidence doctrine
+(README ratifications). Live Steam GENRE fields (or Nintendo eShop for Space Invaders
+Invincible Collection). Memberships subset of fetched storefront strings under current
+validator (no alias table). Disposition `rewritten` for new paths (ledger convention).
+Drops: none. Reserves unused. Mechanical ledger rows only.
+
+| path | disposition | rationale |
+| --- | --- | --- |
+| `docs/reference-games/genre-index/secret-of-monkey-island.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1990 point-and-click; Steam SE Adventure. |
+| `docs/reference-games/genre-index/x-com-ufo-defense.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1994 tactical strategy root; Steam Strategy. |
+| `docs/reference-games/genre-index/command-and-conquer.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1995 RTS root; Remastered Collection Strategy. |
+| `docs/reference-games/genre-index/system-shock-2.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1999 immersive-sim; Steam Action/RPG. |
+| `docs/reference-games/genre-index/unreal-tournament-99.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1999 arena FPS; Steam UT GOTY Action. |
+| `docs/reference-games/genre-index/rollercoaster-tycoon.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1999 management sim; Steam Deluxe Simulation/Strategy. |
+| `docs/reference-games/genre-index/tony-hawk-pro-skater.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1999 extreme sports; THPS 1+2 Sports. |
+| `docs/reference-games/genre-index/space-invaders.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1978 arcade; eShop Invincible Collection Action/Shooting. |
+| `docs/reference-games/genre-index/wolfenstein-3d.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1992 FPS root; Steam Action. |
+| `docs/reference-games/genre-index/worms-armageddon.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1999 turn-based multiplayer; Steam Strategy. |

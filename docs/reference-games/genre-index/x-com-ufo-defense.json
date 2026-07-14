@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "x-com-ufo-defense",
+  "title": "X-COM: UFO Defense",
+  "edition_pinned": "X-COM: UFO Defense Steam app 7760 listing, observed 2026-07-13; row describes the 1994 MicroProse design.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "optimization",
+      "secondary": [
+        "discovery"
+      ]
+    },
+    "session_structure": {
+      "primary": "chapters",
+      "secondary": []
+    },
+    "progression_form": {
+      "primary": "authored-campaign",
+      "secondary": [
+        "persistent-unlocks"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "strategy",
+    "secondary": []
+  },
+  "moat": "Soldier permadeath binds turn-based cover choices to research, bases, and a global alien clock.",
+  "scope_efficiency_hypothesis": "One geoscape-and-tactical loop reuses squads, tech trees, and mission types across a campaign.",
+  "exemplar_rationale": "Roots modern tactical strategy by making every mission casualty permanent campaign damage.",
+  "evidence": [
+    {
+      "claim": "Steam reported 3980 all-language, all-purchase user reviews for X-COM: UFO Defense.",
+      "metric_type": "steam_user_reviews",
+      "value_or_range": 3980,
+      "class": "review-niche",
+      "class_definition": "taxonomy-v1#steam-user-reviews/review-niche",
+      "platform": "Steam",
+      "territory": "worldwide",
+      "observed_at": "2026-07-13",
+      "source": "https://store.steampowered.com/appreviews/7760?json=1&language=all&purchase_type=all&num_per_page=0",
+      "source_tier": "primary-platform"
+    },
+    {
+      "claim": "Steam appdetails genres field listed: Strategy.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Strategy"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Steam",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://store.steampowered.com/api/appdetails?appids=7760&cc=us&l=en",
+      "source_tier": "primary-platform"
+    }
+  ]
+}
