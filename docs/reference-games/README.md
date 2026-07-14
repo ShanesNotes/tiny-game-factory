@@ -31,6 +31,17 @@ The genre index is a NAVIGATION surface for agents, PULL-ONLY:
 This directory remains substrate only. Pipeline hooks that activate the
 pull-only lookup or promotion path land separately.
 
+### Ratifications & evidence reach
+
+- Taxonomy v1 + 20-row pilot: ratified (Shane, 2026-07-13).
+- Fill-to-floors corpus (71 rows): ratified (Shane, 2026-07-13).
+- Classics doctrine (Shane, 2026-07-13): the classic canon (8/16-bit era
+  onward) belongs in the index. Steam was an evidence hint, never a boundary:
+  `storefront_genres` evidence may come from live listings or **archived
+  storefront pages** of the game or a faithful re-release (`source_tier:
+  archival-secondary`); `edition_pinned` records exactly which listing the
+  evidence describes, while the row's facets describe the classic design.
+
 ## Pigeonhole doctrine
 
 **Never treat a reference as a target at thesis time.** The thesis must name its
