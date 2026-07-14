@@ -103,7 +103,7 @@ hooks/           factory guards (build-time guards ship in templates/spec-pack/g
 scripts/         advance-run · emit-local-issues · init-game-run · lint · package-spec · …
 templates/       run/ (seed-run state) · spec-pack/ (the exported pack skeleton)
 examples/        fixtures/ (schema fixtures) · seeds/
-tests/           186-test suite
+tests/           behavior test suite (run via `npm run verify`)
 ```
 
 ## Documentation
