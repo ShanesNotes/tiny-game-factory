@@ -76,7 +76,7 @@ test("ledgerTransitionErrors flags the first illegal hop only where it occurs", 
 
   const illegal = [{ phase: "toolchain" }, { phase: "thesis" }, { phase: "handoff" }];
   const errs = rs.ledgerTransitionErrors(illegal);
-  assert.equal(errs.length, 1);
+  assert.equal(errs.length, 1, "only the first illegal hop should be flagged");
   assert.match(errs[0], /thesis -> handoff/);
 });
 
@@ -87,15 +87,15 @@ test("phaseArtifactConstraintErrors enforces thesis/engine/spec paths strictly a
   assert.deepEqual(rs.phaseArtifactConstraintErrors({ current_phase: "thesis", game_thesis_path: null, engine_decision_path: null }), []);
   // design-review: past thesis -> thesis required; engine not yet
   const dr = rs.phaseArtifactConstraintErrors({ current_phase: "design-review", game_thesis_path: null, engine_decision_path: null });
-  assert.equal(dr.length, 1);
+  assert.equal(dr.length, 1, "design-review missing thesis must be the only violation");
   assert.match(dr[0], /game_thesis_path/);
   // decompose: past engine-profile -> engine required
   const dc = rs.phaseArtifactConstraintErrors({ current_phase: "decompose", game_thesis_path: "t.md", engine_decision_path: null });
-  assert.equal(dc.length, 1);
+  assert.equal(dc.length, 1, "decompose missing engine_decision_path must be the only violation");
   assert.match(dc[0], /engine_decision_path/);
   // handoff: past decompose -> spec required
   const ho = rs.phaseArtifactConstraintErrors({ current_phase: "handoff", game_thesis_path: "t.md", engine_decision_path: "d.md", spec_path: null });
-  assert.equal(ho.length, 1);
+  assert.equal(ho.length, 1, "handoff missing spec_path must be the only violation");
   assert.match(ho[0], /spec_path/);
   // fully populated downstream phase passes
   assert.deepEqual(rs.phaseArtifactConstraintErrors({ current_phase: "handoff", game_thesis_path: "t.md", engine_decision_path: "d.md", spec_path: "s.md" }), []);
@@ -177,8 +177,8 @@ test("readLedger is crash-safe: a malformed line is skipped and reported", () =>
     fs.writeFileSync(path.join(runDir, "execution-ledger.jsonl"),
       `${JSON.stringify({ phase: "toolchain", event: "a" })}\n{ this is not json\n${JSON.stringify({ phase: "toolchain", event: "b" })}\n`);
     const { rows, parseErrors } = rs.readLedger(runDir);
-    assert.equal(rows.length, 2);
-    assert.equal(parseErrors.length, 1);
+    assert.equal(rows.length, 2, "malformed line must be skipped from parsed rows");
+    assert.equal(parseErrors.length, 1, "the one malformed line must be reported");
     assert.match(parseErrors[0], /line 2/);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
