@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "starcraft",
+  "title": "StarCraft",
+  "edition_pinned": "Genre evidence from archived eBay product page for StarCraft (PC, 1998) - European Version, ePID 56232775, captured 2026-01-30 and observed 2026-07-13; row describes the 1998 base-game design and excludes the 1998 Brood War expansion.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "optimization",
+      "secondary": [
+        "execution"
+      ]
+    },
+    "session_structure": {
+      "primary": "rounds",
+      "secondary": [
+        "chapters"
+      ]
+    },
+    "progression_form": {
+      "primary": "run-reset",
+      "secondary": [
+        "authored-campaign"
+      ]
+    },
+    "player_count": {
+      "primary": "competitive",
+      "secondary": [
+        "solo",
+        "cooperative"
+      ]
+    }
+  },
+  "market_genres": {
+    "primary": "strategy",
+    "secondary": []
+  },
+  "moat": "Asymmetric factions and fog-of-war scouting turn economy timing into counter-production commitments.",
+  "scope_efficiency_hypothesis": "Three sharply asymmetric factions recombine shared maps, resources, and vision rules into distinct strategic matchups.",
+  "exemplar_rationale": "Defines competitive real-time strategy through scouting, production timing, and faction asymmetry.",
+  "evidence": [
+    {
+      "claim": "Archived eBay Product Key Features listed Genre: Strategy for StarCraft (PC, 1998) - European Version.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Strategy"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "eBay boxed-retail storefront (archived)",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://web.archive.org/web/20260130043600/https://www.ebay.com/p/56232775",
+      "source_tier": "archival-secondary"
+    }
+  ]
+}

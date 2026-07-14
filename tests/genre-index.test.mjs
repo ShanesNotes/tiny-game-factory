@@ -132,6 +132,56 @@ test("every row still requires storefront genre evidence", () => {
   }
 });
 
+test("archived Role-Playing storefront evidence supports rpg membership", () => {
+  const row = validRow({ market_genres: { primary: "rpg", secondary: [] } });
+  row.evidence[1].value_or_range = ["Role-Playing"];
+  const paths = tempCorpus([row]);
+  try {
+    const { errors } = validateGenreIndex(paths);
+    assert.deepEqual(errors, []);
+  } finally {
+    fs.rmSync(paths.root, { recursive: true, force: true });
+  }
+});
+
+test("explicit fetched storefront aliases support frozen action membership", () => {
+  for (const fetchedGenre of ["Action & Adventure", "FIGHTING"]) {
+    const row = validRow({ market_genres: { primary: "action", secondary: [] } });
+    row.evidence[1].value_or_range = [fetchedGenre];
+    const paths = tempCorpus([row]);
+    try {
+      const { errors } = validateGenreIndex(paths);
+      assert.deepEqual(errors, [], fetchedGenre);
+    } finally {
+      fs.rmSync(paths.root, { recursive: true, force: true });
+    }
+  }
+});
+
+test("an unaliased storefront genre still fails market membership validation", () => {
+  const row = validRow({ market_genres: { primary: "rpg", secondary: [] } });
+  row.evidence[1].value_or_range = ["Roleplaying"];
+  const paths = tempCorpus([row]);
+  try {
+    const { errors } = validateGenreIndex(paths);
+    assert.ok(errors.some((error) => /market genre 'rpg'.*absent/.test(error)), errors.join("\n"));
+  } finally {
+    fs.rmSync(paths.root, { recursive: true, force: true });
+  }
+});
+
+test("storefront genre aliases require an exact case-insensitive match", () => {
+  const row = validRow({ market_genres: { primary: "rpg", secondary: [] } });
+  row.evidence[1].value_or_range = ["role-playing games"];
+  const paths = tempCorpus([row]);
+  try {
+    const { errors } = validateGenreIndex(paths);
+    assert.ok(errors.some((error) => /market genre 'rpg'.*absent/.test(error)), errors.join("\n"));
+  } finally {
+    fs.rmSync(paths.root, { recursive: true, force: true });
+  }
+});
+
 test("semantic checks enforce membership uniqueness, moat length, and evidence classes", () => {
   const row = validRow({ moat: "x".repeat(121) });
   row.design_shape.loop_class.secondary = ["optimization", "optimization"];

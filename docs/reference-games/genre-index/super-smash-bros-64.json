@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "super-smash-bros-64",
+  "title": "Super Smash Bros.",
+  "edition_pinned": "Super Smash Bros. Nintendo UK Virtual Console (Wii) listing (2009 re-release), observed 2026-07-13; row describes the 1999 Nintendo 64 Super Smash Bros. design.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "execution",
+      "secondary": [
+        "social-coordination"
+      ]
+    },
+    "session_structure": {
+      "primary": "rounds",
+      "secondary": []
+    },
+    "progression_form": {
+      "primary": "fixed-kit",
+      "secondary": []
+    },
+    "player_count": {
+      "primary": "competitive",
+      "secondary": [
+        "solo"
+      ]
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": []
+  },
+  "moat": "Rising damage and blast zones convert every hit into contested position instead of draining a health bar.",
+  "scope_efficiency_hypothesis": "Shared movement and ring-out rules make stages, items, and twelve compact kits produce many multiplayer matchups.",
+  "exemplar_rationale": "Defines platform fighting through positional knockback, readable chaos, and simultaneous four-player rounds.",
+  "evidence": [
+    {
+      "claim": "Nintendo UK Virtual Console product page listed Category: Fighting.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Fighting"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Nintendo Store (Virtual Console Wii)",
+      "territory": "United Kingdom",
+      "observed_at": "2026-07-13",
+      "source": "https://www.nintendo.com/en-gb/Games/Nintendo-64/Super-Smash-Bros-269756.html",
+      "source_tier": "primary-platform"
+    }
+  ]
+}

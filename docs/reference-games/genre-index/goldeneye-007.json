@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "goldeneye-007",
+  "title": "GoldenEye 007",
+  "edition_pinned": "GoldenEye 007 Xbox Store listing (2023 enhanced re-release), observed 2026-07-13; row describes the 1997 Nintendo 64 GoldenEye 007 design.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "execution",
+      "secondary": [
+        "discovery"
+      ]
+    },
+    "session_structure": {
+      "primary": "chapters",
+      "secondary": [
+        "rounds"
+      ]
+    },
+    "progression_form": {
+      "primary": "authored-campaign",
+      "secondary": [
+        "persistent-unlocks"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": [
+        "competitive"
+      ]
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": []
+  },
+  "moat": "Difficulty-specific objectives and timed cheat unlocks turn repeated missions into route-planning challenges.",
+  "scope_efficiency_hypothesis": "Campaign spaces, weapons, and movement rules double as four-player arenas and replayable objective routes.",
+  "exemplar_rationale": "Unifies authored stealth objectives, execution mastery, and local competitive rounds in one first-person ruleset.",
+  "evidence": [
+    {
+      "claim": "Xbox Store product metadata listed: Action & adventure; Classics; Shooter.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Action & adventure",
+        "Classics",
+        "Shooter"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Xbox Store",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://www.xbox.com/en-US/games/store/goldeneye-007/9N6639H7VGH4",
+      "source_tier": "primary-platform"
+    }
+  ]
+}

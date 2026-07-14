@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "prince-of-persia-1989",
+  "title": "Prince of Persia",
+  "edition_pinned": "Prince of Persia Nintendo UK Virtual Console (Wii) listing for the 2012 Wii release of the SNES edition, observed 2026-07-13; row describes the original 1989 Prince of Persia design.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "execution",
+      "secondary": [
+        "discovery"
+      ]
+    },
+    "session_structure": {
+      "primary": "chapters",
+      "secondary": []
+    },
+    "progression_form": {
+      "primary": "authored-campaign",
+      "secondary": []
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": [
+      "adventure"
+    ]
+  },
+  "moat": "Committed animation and a global rescue timer make every observed trap a wager between caution and lost time.",
+  "scope_efficiency_hypothesis": "A small movement and sword-fighting kit recombines through room geometry, traps, guards, and time pressure.",
+  "exemplar_rationale": "Defines cinematic platforming through physical commitment, environmental reading, and one campaign-wide clock.",
+  "evidence": [
+    {
+      "claim": "Nintendo UK Virtual Console product page listed Categories: Action, Adventure and called the re-release faithful.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Action",
+        "Adventure"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Nintendo Store (Virtual Console Wii)",
+      "territory": "United Kingdom",
+      "observed_at": "2026-07-13",
+      "source": "https://www.nintendo.com/en-gb/Games/Virtual-Console-Wii-/Prince-of-Persia-278612.html",
+      "source_tier": "primary-platform"
+    }
+  ]
+}

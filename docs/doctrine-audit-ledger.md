@@ -166,7 +166,7 @@ landed later in FUE W2-B; pigeonhole doctrine lives in
 | `docs/reference-games/cards/_example.json` | rewritten | Fictional fixture card proving schema/validator path; not research, not citable. |
 | `docs/reference-games/index.jsonl` | rewritten | Generated summary index (id/title/genre_tags/register_mapping/status) refreshed by validate-reference-cards. |
 | `docs/reference-games/TAXONOMY.md` | rewritten | Frozen Tier-2 design-shape ontology, storefront-derived market vocabulary, evidence thresholds, and completeness rules for the reference canon pilot. |
-| `docs/reference-games/genre-index.jsonl` | rewritten | Generated greppable Tier-2 navigation summary; coverage counts remain derived rather than stored. |
+| `docs/reference-games/genre-index.jsonl` | rewritten | Generated greppable Tier-2 navigation summary, regenerated for the 112-row corpus after classics wave batch E1; coverage counts remain derived rather than stored. |
 | `docs/reference-games/genre-index/baba-is-you.json` | rewritten | Sourced Tier-2 pilot row for Baba Is You under frozen taxonomy v1. |
 | `docs/reference-games/genre-index/balatro.json` | rewritten | Sourced Tier-2 pilot row for Balatro under frozen taxonomy v1. |
 | `docs/reference-games/genre-index/celeste.json` | rewritten | Sourced Tier-2 pilot row for Celeste with Tier-1 card navigation. |
@@ -213,8 +213,8 @@ landed later in FUE W2-B; pigeonhole doctrine lives in
 | `docs/reference-games/genre-index/zelda-botw.json` | rewritten | Sourced Tier-2 fill row for Breath of the Wild with Tier-1 card navigation and Nintendo storefront evidence. |
 | `schemas/reference-card.schema.json` | rewritten | Draft 2020-12 card shape (moat, loop, depth mechanisms, system BOM, status draft\|audited) for the reference-game canon (FUE e3). |
 | `schemas/genre-index-row.schema.json` | rewritten | Draft 2020-12 Tier-2 row contract for design facets, market memberships, typed evidence, hypotheses, and optional Tier-1 navigation. |
-| `scripts/validate-genre-index.mjs` | rewritten | Validator amendment makes Steam review reach optional while retaining mandatory storefront genres and all present-item checks. |
-| `tests/genre-index.test.mjs` | rewritten | Regression coverage for optional Steam reviews, derived review classes, mandatory storefront genres, and expandable corpus size. |
+| `scripts/validate-genre-index.mjs` | rewritten | Validator retains optional Steam review reach and adds an explicit exact, case-insensitive storefront-genre alias table for role-playing→rpg, fighting→action, and action & adventure→action. |
+| `tests/genre-index.test.mjs` | rewritten | Regression coverage for optional Steam reviews plus exact alias acceptance, unaliased mismatches, and near-match alias rejection. |
 
 ## FUE cards batch Grok (2026-07-12) — draft research cards (8/16)
 
@@ -337,3 +337,23 @@ ledger rows only; disposition rewritten.
 | `docs/reference-games/genre-index/resident-evil-4.json` | rewritten | Sourced Tier-2 classics batch D row for Resident Evil 4 (2005) under ratified taxonomy v1. |
 | `docs/reference-games/genre-index/pac-man.json` | rewritten | Sourced Tier-2 classics batch D row for PAC-MAN (Museum+ listing evidence) under ratified taxonomy v1. |
 | `docs/reference-games/genre-index/myst.json` | rewritten | Sourced Tier-2 classics batch D row for Myst under ratified taxonomy v1. |
+
+## Classics wave batch E1 (2026-07-13) — required and lineage classics
+
+Ten sourced Tier-2 rows under ratified taxonomy v1 and classics evidence doctrine.
+StarCraft and Warcraft III use archived boxed-retail storefront genre fields; Pokémon
+Red/Blue uses an archived Nintendo Role-Playing field through the validator's explicit
+genre alias. No publisher-genre extension or reserve swap was required.
+
+| path | disposition | rationale |
+| --- | --- | --- |
+| `docs/reference-games/genre-index/starcraft.json` | rewritten | Sourced Tier-2 batch E1 row for the 1998 StarCraft base game, pinned separately from Brood War, with archived boxed-retail Strategy evidence. |
+| `docs/reference-games/genre-index/warcraft-3.json` | rewritten | Sourced Tier-2 batch E1 row for 2002 Warcraft III: Reign of Chaos, pinned separately from The Frozen Throne, with archived boxed-retail Strategy evidence. |
+| `docs/reference-games/genre-index/pokemon-red-blue.json` | rewritten | Sourced Tier-2 batch E1 row for Pokémon Red/Blue using archived Nintendo 3DS VC Role-Playing evidence through the exact role-playing→rpg alias. |
+| `docs/reference-games/genre-index/sonic-the-hedgehog.json` | rewritten | Sourced Tier-2 batch E1 lineage row for the 1991 Sonic the Hedgehog design using Steam Action/Adventure evidence. |
+| `docs/reference-games/genre-index/tetris.json` | rewritten | Sourced Tier-2 batch E1 lineage row for the 1984 Tetris design using Tetris Forever Puzzle/Arcade evidence. |
+| `docs/reference-games/genre-index/final-fantasy-6.json` | rewritten | Sourced Tier-2 batch E1 lineage row for the 1994 Final Fantasy VI design using Pixel Remaster RPG evidence. |
+| `docs/reference-games/genre-index/super-smash-bros-64.json` | rewritten | Sourced Tier-2 batch E1 lineage row for 1999 Super Smash Bros. using Nintendo VC Fighting evidence through the fighting→action alias. |
+| `docs/reference-games/genre-index/goldeneye-007.json` | rewritten | Sourced Tier-2 batch E1 lineage row for 1997 GoldenEye 007 using the faithful Xbox re-release's Action & adventure/Shooter evidence. |
+| `docs/reference-games/genre-index/mortal-kombat-1992.json` | rewritten | Sourced Tier-2 batch E1 lineage row for the 1992 Mortal Kombat arcade design using GOG Action/Arcade/Fighting evidence. |
+| `docs/reference-games/genre-index/prince-of-persia-1989.json` | rewritten | Sourced Tier-2 batch E1 lineage row for the 1989 Prince of Persia design using Nintendo VC Action/Adventure evidence. |

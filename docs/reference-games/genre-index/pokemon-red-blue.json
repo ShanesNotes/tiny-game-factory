@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "pokemon-red-blue",
+  "title": "Pokémon Red Version and Pokémon Blue Version",
+  "edition_pinned": "Pokémon Red Version Nintendo 3DS Virtual Console listing (2016 re-release; archived capture 2017-01-04), observed 2026-07-13; row describes the paired Pokémon Red and Blue Game Boy design released in North America in 1998, originating with Japan's 1996 Pocket Monsters Red/Green.",
+  "design_shape": {
+    "register": {
+      "primary": "hybrid",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "optimization",
+      "secondary": [
+        "discovery"
+      ]
+    },
+    "session_structure": {
+      "primary": "continuous",
+      "secondary": []
+    },
+    "progression_form": {
+      "primary": "persistent-unlocks",
+      "secondary": [
+        "authored-campaign"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": [
+        "competitive"
+      ]
+    }
+  },
+  "market_genres": {
+    "primary": "rpg",
+    "secondary": []
+  },
+  "moat": "Version-exclusive captures and type matchups turn party construction into both exploration and social exchange.",
+  "scope_efficiency_hypothesis": "A compact creature roster recombines capture, growth, elemental matchups, trading, and battles across one map.",
+  "exemplar_rationale": "Makes collection itself a progression system whose missing pieces invite both exploration and competition.",
+  "evidence": [
+    {
+      "claim": "Archived Nintendo 3DS Virtual Console product page encoded data-genre=\"Role-Playing\" for Pokémon Red Version.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Role-Playing"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Nintendo Store (archived 3DS Virtual Console)",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://web.archive.org/web/20170104032221/http://www.nintendo.com/games/detail/pokemon-red-version-3ds",
+      "source_tier": "archival-secondary"
+    }
+  ]
+}

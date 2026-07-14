@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "final-fantasy-6",
+  "title": "FINAL FANTASY VI",
+  "edition_pinned": "FINAL FANTASY VI Steam app 1173820 (2022 Pixel Remaster), observed 2026-07-13; row describes the original 1994 Super Famicom/SNES FINAL FANTASY VI design.",
+  "design_shape": {
+    "register": {
+      "primary": "hybrid",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "optimization",
+      "secondary": [
+        "discovery"
+      ]
+    },
+    "session_structure": {
+      "primary": "chapters",
+      "secondary": []
+    },
+    "progression_form": {
+      "primary": "authored-campaign",
+      "secondary": [
+        "persistent-unlocks"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "rpg",
+    "secondary": []
+  },
+  "moat": "Esper teaching and character-specific commands let a large ensemble share progression without erasing identity.",
+  "scope_efficiency_hypothesis": "A shared ATB grammar and esper system recombine a broad cast while bespoke commands preserve distinct tactical roles.",
+  "exemplar_rationale": "Balances authored ensemble drama with flexible party construction and persistent ability learning.",
+  "evidence": [
+    {
+      "claim": "Steam appdetails genres field for FINAL FANTASY VI Pixel Remaster listed: RPG.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "RPG"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Steam",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://store.steampowered.com/api/appdetails?appids=1173820&cc=us&l=en",
+      "source_tier": "primary-platform"
+    }
+  ]
+}

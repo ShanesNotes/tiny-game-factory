@@ -25,6 +25,12 @@ const CLASS_DEFINITIONS = {
   "time-long": "taxonomy-v1#development-time-months/time-long"
 };
 
+const STOREFRONT_GENRE_ALIASES = new Map([
+  ["action & adventure", "action"],
+  ["fighting", "action"],
+  ["role-playing", "rpg"]
+]);
+
 function readJson(file, errors, label) {
   try {
     return JSON.parse(fs.readFileSync(file, "utf8"));
@@ -188,6 +194,7 @@ export function validateGenreIndex({
         .filter((item) => item.metric_type === "storefront_genres")
         .flatMap((item) => item.value_or_range)
         .map((value) => value.trim().toLowerCase())
+        .map((value) => STOREFRONT_GENRE_ALIASES.get(value) || value)
         .filter(Boolean)
     );
     for (const genre of new Set([row.market_genres.primary, ...row.market_genres.secondary])) {

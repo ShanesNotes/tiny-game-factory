@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "warcraft-3",
+  "title": "Warcraft III: Reign of Chaos",
+  "edition_pinned": "Genre evidence from archived eBay product page for WarCraft III: Reign of Chaos (Windows/Mac, 2002), ePID 9217, captured 2025-12-21 and observed 2026-07-13; row describes the 2002 base-game design and excludes the 2003 The Frozen Throne expansion.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "optimization",
+      "secondary": [
+        "execution"
+      ]
+    },
+    "session_structure": {
+      "primary": "rounds",
+      "secondary": [
+        "chapters"
+      ]
+    },
+    "progression_form": {
+      "primary": "run-reset",
+      "secondary": [
+        "authored-campaign"
+      ]
+    },
+    "player_count": {
+      "primary": "competitive",
+      "secondary": [
+        "solo",
+        "cooperative"
+      ]
+    }
+  },
+  "market_genres": {
+    "primary": "strategy",
+    "secondary": []
+  },
+  "moat": "Persistent heroes and upkeep thresholds force army composition to trade expansion against concentrated power.",
+  "scope_efficiency_hypothesis": "Four factions reuse economy and combat rules while heroes and items create match-specific build paths.",
+  "exemplar_rationale": "Shows how hero progression can sit inside resettable real-time strategy without replacing economy play.",
+  "evidence": [
+    {
+      "claim": "Archived eBay Product Key Features listed Genre: Strategy for WarCraft III: Reign of Chaos (Windows/Mac, 2002).",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Strategy"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "eBay boxed-retail storefront (archived)",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://web.archive.org/web/20251221154156/https://www.ebay.com/p/9217",
+      "source_tier": "archival-secondary"
+    }
+  ]
+}
