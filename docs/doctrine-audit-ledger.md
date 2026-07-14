@@ -337,3 +337,24 @@ ledger rows only; disposition rewritten.
 | `docs/reference-games/genre-index/resident-evil-4.json` | rewritten | Sourced Tier-2 classics batch D row for Resident Evil 4 (2005) under ratified taxonomy v1. |
 | `docs/reference-games/genre-index/pac-man.json` | rewritten | Sourced Tier-2 classics batch D row for PAC-MAN (Museum+ listing evidence) under ratified taxonomy v1. |
 | `docs/reference-games/genre-index/myst.json` | rewritten | Sourced Tier-2 classics batch D row for Myst under ratified taxonomy v1. |
+
+## Classics wave batch E2 (2026-07-13) — point-and-click / strategy roots / immersive-sim / arcade / sports
+
+Ten sourced Tier-2 rows under ratified taxonomy v1 + classics evidence doctrine
+(README ratifications). Live Steam GENRE fields (or Nintendo eShop for Space Invaders
+Invincible Collection). Memberships subset of fetched storefront strings under current
+validator (no alias table). Disposition `rewritten` for new paths (ledger convention).
+Drops: none. Reserves unused. Mechanical ledger rows only.
+
+| path | disposition | rationale |
+| --- | --- | --- |
+| `docs/reference-games/genre-index/secret-of-monkey-island.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1990 point-and-click; Steam SE Adventure. |
+| `docs/reference-games/genre-index/x-com-ufo-defense.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1994 tactical strategy root; Steam Strategy. |
+| `docs/reference-games/genre-index/command-and-conquer.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1995 RTS root; Remastered Collection Strategy. |
+| `docs/reference-games/genre-index/system-shock-2.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1999 immersive-sim; Steam Action/RPG. |
+| `docs/reference-games/genre-index/unreal-tournament-99.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1999 arena FPS; Steam UT GOTY Action. |
+| `docs/reference-games/genre-index/rollercoaster-tycoon.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1999 management sim; Steam Deluxe Simulation/Strategy. |
+| `docs/reference-games/genre-index/tony-hawk-pro-skater.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1999 extreme sports; THPS 1+2 Sports. |
+| `docs/reference-games/genre-index/space-invaders.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1978 arcade; eShop Invincible Collection Action/Shooting. |
+| `docs/reference-games/genre-index/wolfenstein-3d.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1992 FPS root; Steam Action. |
+| `docs/reference-games/genre-index/worms-armageddon.json` | rewritten | Sourced Tier-2 classics batch E2 row; 1999 turn-based multiplayer; Steam Strategy. |

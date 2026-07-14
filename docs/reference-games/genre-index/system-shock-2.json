@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "system-shock-2",
+  "title": "System Shock 2",
+  "edition_pinned": "System Shock 2 (1999) Steam app 238210 listing, observed 2026-07-13; row describes the 1999 Looking Glass/Irrational design.",
+  "design_shape": {
+    "register": {
+      "primary": "hybrid",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "expression",
+      "secondary": [
+        "discovery"
+      ]
+    },
+    "session_structure": {
+      "primary": "chapters",
+      "secondary": []
+    },
+    "progression_form": {
+      "primary": "authored-campaign",
+      "secondary": [
+        "persistent-unlocks"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": [
+      "rpg"
+    ]
+  },
+  "moat": "OSA implants and weapon skills open stealth, combat, or tech routes through the same station decks.",
+  "scope_efficiency_hypothesis": "One RPG investment sheet multiplies solutions across authored decks without new verbs each map.",
+  "exemplar_rationale": "Defines hybrid immersive-sim depth where character build rewrites how horror spaces are solved.",
+  "evidence": [
+    {
+      "claim": "Steam reported 7829 all-language, all-purchase user reviews for System Shock 2 (1999).",
+      "metric_type": "steam_user_reviews",
+      "value_or_range": 7829,
+      "class": "review-niche",
+      "class_definition": "taxonomy-v1#steam-user-reviews/review-niche",
+      "platform": "Steam",
+      "territory": "worldwide",
+      "observed_at": "2026-07-13",
+      "source": "https://store.steampowered.com/appreviews/238210?json=1&language=all&purchase_type=all&num_per_page=0",
+      "source_tier": "primary-platform"
+    },
+    {
+      "claim": "Steam appdetails genres field listed: Action; RPG.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Action",
+        "RPG"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Steam",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://store.steampowered.com/api/appdetails?appids=238210&cc=us&l=en",
+      "source_tier": "primary-platform"
+    }
+  ]
+}
