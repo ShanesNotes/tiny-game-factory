@@ -3,7 +3,7 @@
   "taxonomy_version": "1.0.0",
   "id": "diablo-2",
   "title": "Diablo II",
-  "edition_pinned": "Evidence from Diablo II: Resurrected \u2013 Infernal Edition Steam app 2536520, observed 2026-07-13; row describes the 2000 LoD design D2:R faithfully preserves.",
+  "edition_pinned": "Evidence from Diablo II: Resurrected – Infernal Edition Steam app 2536520, observed 2026-07-13; row describes the 2000 Diablo II design with its 2001 Lord of Destruction expansion, which D2:R faithfully preserves.",
   "design_shape": {
     "register": {
       "primary": "mechanics-first",
@@ -44,7 +44,7 @@
   "exemplar_rationale": "Shows persistent characters plus reset worlds turning item search into the core session structure.",
   "evidence": [
     {
-      "claim": "Steam reported 5553 all-language, all-purchase user reviews for Diablo II: Resurrected \u2013 Infernal Edition.",
+      "claim": "Steam reported 5553 all-language, all-purchase user reviews for Diablo II: Resurrected – Infernal Edition.",
       "metric_type": "steam_user_reviews",
       "value_or_range": 5553,
       "class": "review-niche",
