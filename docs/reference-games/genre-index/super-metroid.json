@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "super-metroid",
+  "title": "Super Metroid",
+  "edition_pinned": "Row describes the 1994 SNES design; genre evidence from archived Wii U Virtual Console product page, observed 2026-07-13.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "discovery",
+      "secondary": [
+        "execution"
+      ]
+    },
+    "session_structure": {
+      "primary": "continuous",
+      "secondary": [
+        "chapters"
+      ]
+    },
+    "progression_form": {
+      "primary": "persistent-unlocks",
+      "secondary": [
+        "authored-campaign"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": [
+      "adventure"
+    ]
+  },
+  "moat": "Ability-gated map reconnection turns one connected planet into ordered power-route discovery.",
+  "scope_efficiency_hypothesis": "New movement tools reopen old rooms, multiplying backtracking value without new biomes each time.",
+  "exemplar_rationale": "Defines ability-gated exploration depth later labeled Metroidvania.",
+  "evidence": [
+    {
+      "claim": "Archived Nintendo Wii U Virtual Console product page listed Genre as: Action; Adventure.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Action",
+        "Adventure"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Nintendo Store (archived Wii U Virtual Console)",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://web.archive.org/web/20201214202007/https://www.nintendo.com/games/detail/super-metroid-wii-u/",
+      "source_tier": "archival-secondary"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "super-mario-bros-3",
+  "title": "Super Mario Bros. 3",
+  "edition_pinned": "Row describes the 1988/1990 NES design; genre evidence from archived Wii U Virtual Console product page, observed 2026-07-13.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "execution",
+      "secondary": [
+        "discovery"
+      ]
+    },
+    "session_structure": {
+      "primary": "chapters",
+      "secondary": []
+    },
+    "progression_form": {
+      "primary": "authored-campaign",
+      "secondary": [
+        "fixed-kit"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": [
+      "adventure"
+    ]
+  },
+  "moat": "Suit power-ups rewrite movement rules while the world map prices inventory risk between stages.",
+  "scope_efficiency_hypothesis": "Temporary suits and a shared map inventory multiply stage solutions without permanent skill trees.",
+  "exemplar_rationale": "Shows authored platform mastery layered with optional power-up routing.",
+  "evidence": [
+    {
+      "claim": "Archived Nintendo Wii U Virtual Console product page listed Genre as: Action; Adventure.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Action",
+        "Adventure"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Nintendo Store (archived Wii U Virtual Console)",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://web.archive.org/web/20201021000034/https://www.nintendo.com/games/detail/super-mario-bros-3-wii-u/",
+      "source_tier": "archival-secondary"
+    }
+  ]
+}

@@ -284,3 +284,30 @@ breadth. Reserves used: deep-rock-galactic, shapez-2. Mechanical ledger rows onl
 | `docs/reference-games/genre-index/valheim.json` | rewritten | Sourced Tier-2 fill-to-floors batch B row for Valheim under ratified taxonomy v1. |
 | `docs/reference-games/genre-index/what-remains-of-edith-finch.json` | rewritten | Sourced Tier-2 fill-to-floors batch B row for What Remains of Edith Finch under ratified taxonomy v1. |
 | `docs/reference-games/genre-index/wingspan.json` | rewritten | Sourced Tier-2 fill-to-floors batch B row for Wingspan under ratified taxonomy v1. |
+
+
+## Classics wave batch C (2026-07-13) — console-era genre-index rows
+
+Fifteen sourced Tier-2 rows under ratified taxonomy v1 + classics evidence doctrine
+(archival storefront / live re-release listings). Disposition `rewritten` for new
+paths (ledger convention). Dropped: pokemon-red-blue (storefront Role-Playing
+string does not match market_genres enum `rpg` — validator gap reported, not patched).
+Reserves unused. Mechanical ledger rows only.
+
+| path | disposition | rationale |
+| --- | --- | --- |
+| `docs/reference-games/genre-index/super-mario-bros.json` | rewritten | Sourced Tier-2 classics batch C row; NES design; archived Wii U VC Action. |
+| `docs/reference-games/genre-index/super-mario-bros-3.json` | rewritten | Sourced Tier-2 classics batch C row; NES design; archived Wii U VC Action/Adventure. |
+| `docs/reference-games/genre-index/super-mario-world.json` | rewritten | Sourced Tier-2 classics batch C row; SNES design; archived 3DS VC Action. |
+| `docs/reference-games/genre-index/super-mario-64.json` | rewritten | Sourced Tier-2 classics batch C row; N64 design; archived 3D All-Stars Platformer/Action. |
+| `docs/reference-games/genre-index/zelda-link-to-the-past.json` | rewritten | Sourced Tier-2 classics batch C row; SNES design; archived Wii U VC Action. |
+| `docs/reference-games/genre-index/zelda-ocarina-of-time.json` | rewritten | Sourced Tier-2 classics batch C row; N64 design; archived OoT 3D Action. |
+| `docs/reference-games/genre-index/super-metroid.json` | rewritten | Sourced Tier-2 classics batch C row; SNES design; archived Wii U VC Action/Adventure. |
+| `docs/reference-games/genre-index/chrono-trigger.json` | rewritten | Sourced Tier-2 classics batch C row; SNES design; Steam re-release RPG. |
+| `docs/reference-games/genre-index/final-fantasy-7.json` | rewritten | Sourced Tier-2 classics batch C row; PS1 design; Steam re-release RPG. |
+| `docs/reference-games/genre-index/castlevania-symphony-of-the-night.json` | rewritten | Sourced Tier-2 classics batch C row; PS1 design; PS Store Requiem Action. |
+| `docs/reference-games/genre-index/street-fighter-2.json` | rewritten | Sourced Tier-2 classics batch C row; SFII lineage; Steam 30th Collection Action. |
+| `docs/reference-games/genre-index/mega-man-2.json` | rewritten | Sourced Tier-2 classics batch C row; NES design; Steam Legacy Collection Action. |
+| `docs/reference-games/genre-index/donkey-kong-arcade.json` | rewritten | Sourced Tier-2 classics batch C row; 1981 arcade; live Arcade Archives Action. |
+| `docs/reference-games/genre-index/super-mario-kart.json` | rewritten | Sourced Tier-2 classics batch C row; SNES design; archived Wii U VC Racing. |
+| `docs/reference-games/genre-index/earthbound.json` | rewritten | Sourced Tier-2 classics batch C row; SNES design; archived Wii U VC Action. |

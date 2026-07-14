@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "super-mario-bros",
+  "title": "Super Mario Bros.",
+  "edition_pinned": "Row describes the 1985 NES design; genre evidence from archived Wii U Virtual Console product page (data-genre Action), observed 2026-07-13.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "execution",
+      "secondary": []
+    },
+    "session_structure": {
+      "primary": "chapters",
+      "secondary": []
+    },
+    "progression_form": {
+      "primary": "authored-campaign",
+      "secondary": [
+        "fixed-kit"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": []
+  },
+  "moat": "One jump-and-run kit turns enemy patterns and pipe routes into precision timing across short levels.",
+  "scope_efficiency_hypothesis": "A tiny verb set and reusable enemy tiles multiply routes without new systems per world.",
+  "exemplar_rationale": "Foundational side-scrolling execution depth from fixed kit and authored stage geometry.",
+  "evidence": [
+    {
+      "claim": "Archived Nintendo Wii U Virtual Console product page listed data-genre as: Action.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Action"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Nintendo Store (archived Wii U Virtual Console)",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://web.archive.org/web/20160822124514/http://www.nintendo.com/games/detail/super-mario-bros-wii-u",
+      "source_tier": "archival-secondary"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "earthbound",
+  "title": "EarthBound",
+  "edition_pinned": "Row describes the 1994/1995 SNES design; genre evidence from archived Wii U Virtual Console product page (data-genre Action), observed 2026-07-13.",
+  "design_shape": {
+    "register": {
+      "primary": "hybrid",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "discovery",
+      "secondary": [
+        "optimization"
+      ]
+    },
+    "session_structure": {
+      "primary": "chapters",
+      "secondary": []
+    },
+    "progression_form": {
+      "primary": "authored-campaign",
+      "secondary": [
+        "persistent-unlocks"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": []
+  },
+  "moat": "Rolling HP drain and scripted encounter wit turn turn-based fights into tension management.",
+  "scope_efficiency_hypothesis": "One battle grammar plus town inventory supports long authored travel without combat mode switches.",
+  "exemplar_rationale": "Hybrid JRPG where modern-setting writing and battle timing share the loop.",
+  "evidence": [
+    {
+      "claim": "Archived Nintendo Wii U Virtual Console product page listed data-genre as: Action.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Action"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Nintendo Store (archived Wii U Virtual Console)",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://web.archive.org/web/20170401213943/http://www.nintendo.com/games/detail/earthbound-wii-u",
+      "source_tier": "archival-secondary"
+    }
+  ]
+}

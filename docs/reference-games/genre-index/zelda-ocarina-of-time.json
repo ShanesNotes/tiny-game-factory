@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "zelda-ocarina-of-time",
+  "title": "The Legend of Zelda: Ocarina of Time",
+  "edition_pinned": "Row describes the 1998 N64 design; genre evidence from archived Ocarina of Time 3D product page (data-genre Action), observed 2026-07-13.",
+  "design_shape": {
+    "register": {
+      "primary": "hybrid",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "discovery",
+      "secondary": [
+        "execution"
+      ]
+    },
+    "session_structure": {
+      "primary": "chapters",
+      "secondary": [
+        "continuous"
+      ]
+    },
+    "progression_form": {
+      "primary": "authored-campaign",
+      "secondary": [
+        "persistent-unlocks"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": []
+  },
+  "moat": "Child/adult time split and context items rewrite the same map into two interlocking quest graphs.",
+  "scope_efficiency_hypothesis": "One world state machine plus reusable item tools supports dungeons, overworld, and time puzzles.",
+  "exemplar_rationale": "Shows hybrid adventure depth from time-linked world states and Z-targeting combat.",
+  "evidence": [
+    {
+      "claim": "Archived Nintendo 3DS product page for Ocarina of Time 3D listed data-genre as: Action.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Action"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Nintendo Store (archived)",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://web.archive.org/web/20160303104457/http://www.nintendo.com/games/detail/the-legend-of-zelda-ocarina-of-time-3d-3ds",
+      "source_tier": "archival-secondary"
+    }
+  ]
+}

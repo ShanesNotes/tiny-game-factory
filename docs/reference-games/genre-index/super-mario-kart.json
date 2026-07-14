@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "super-mario-kart",
+  "title": "Super Mario Kart",
+  "edition_pinned": "Row describes the 1992 SNES design; genre evidence from archived Wii U Virtual Console product page, observed 2026-07-13.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "execution",
+      "secondary": []
+    },
+    "session_structure": {
+      "primary": "rounds",
+      "secondary": []
+    },
+    "progression_form": {
+      "primary": "fixed-kit",
+      "secondary": []
+    },
+    "player_count": {
+      "primary": "competitive",
+      "secondary": [
+        "solo"
+      ]
+    }
+  },
+  "market_genres": {
+    "primary": "racing",
+    "secondary": []
+  },
+  "moat": "Item roulette and drift boosts convert track knowledge into contested race swings.",
+  "scope_efficiency_hypothesis": "One kart physics kit plus shared items support solo ghost races and multiplayer cups.",
+  "exemplar_rationale": "Defines item-combat kart racing with fixed vehicles and short round structure.",
+  "evidence": [
+    {
+      "claim": "Archived Nintendo Wii U Virtual Console product page listed Genre as: Racing.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Racing"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Nintendo Store (archived Wii U Virtual Console)",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://web.archive.org/web/20200928000512/https://www.nintendo.com/games/detail/super-mario-kart-wii-u/",
+      "source_tier": "archival-secondary"
+    }
+  ]
+}

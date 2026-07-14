@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "castlevania-symphony-of-the-night",
+  "title": "Castlevania: Symphony of the Night",
+  "edition_pinned": "Row describes the 1997 PlayStation design; genre evidence from live PlayStation Store Castlevania Requiem listing (includes Symphony of the Night), observed 2026-07-13.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "discovery",
+      "secondary": [
+        "execution",
+        "optimization"
+      ]
+    },
+    "session_structure": {
+      "primary": "continuous",
+      "secondary": [
+        "chapters"
+      ]
+    },
+    "progression_form": {
+      "primary": "persistent-unlocks",
+      "secondary": [
+        "authored-campaign"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": []
+  },
+  "moat": "RPG-stat exploration and new movement tools reopen an inverted castle map for optional mastery.",
+  "scope_efficiency_hypothesis": "One connected castle plus gear and transformation tools multiplies routes without new hubs.",
+  "exemplar_rationale": "Pairs Metroid-like map gating with RPG loot in a single nonlinear castle.",
+  "evidence": [
+    {
+      "claim": "PlayStation Store product metadata Genre values listed: Action.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Action"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "PlayStation Store",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://store.playstation.com/en-us/product/UP0101-CUSA13434_00-CASTLEVANIA00001",
+      "source_tier": "primary-platform"
+    }
+  ]
+}

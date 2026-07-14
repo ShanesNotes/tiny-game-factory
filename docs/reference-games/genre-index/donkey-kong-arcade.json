@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "donkey-kong-arcade",
+  "title": "Donkey Kong",
+  "edition_pinned": "Row describes the 1981 arcade design; genre evidence from live Nintendo eShop Arcade Archives DONKEY KONG Switch listing, observed 2026-07-13.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "execution",
+      "secondary": []
+    },
+    "session_structure": {
+      "primary": "rounds",
+      "secondary": []
+    },
+    "progression_form": {
+      "primary": "fixed-kit",
+      "secondary": []
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": []
+  },
+  "moat": "Four-board barrel climbs price jump timing against score ladders in a fixed-kit loop.",
+  "scope_efficiency_hypothesis": "A short board cycle and one jump verb sustain competitive score chase without campaign systems.",
+  "exemplar_rationale": "Arcade platformer that isolates pure execution and score-attack structure.",
+  "evidence": [
+    {
+      "claim": "Nintendo eShop product genres field listed: Action.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Action"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Nintendo Store",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://www.nintendo.com/us/store/products/arcade-archives-donkey-kong-switch/",
+      "source_tier": "primary-platform"
+    }
+  ]
+}

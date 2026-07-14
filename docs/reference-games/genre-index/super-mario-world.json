@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "super-mario-world",
+  "title": "Super Mario World",
+  "edition_pinned": "Row describes the 1990/1991 SNES design; genre evidence from archived 3DS Virtual Console product page (data-genre Action), observed 2026-07-13.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "execution",
+      "secondary": [
+        "discovery"
+      ]
+    },
+    "session_structure": {
+      "primary": "chapters",
+      "secondary": []
+    },
+    "progression_form": {
+      "primary": "authored-campaign",
+      "secondary": [
+        "fixed-kit"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": []
+  },
+  "moat": "Cape flight and Yoshi mounts retime platform routes across a branching, secret-exit world map.",
+  "scope_efficiency_hypothesis": "One movement kit plus mount and cape modifiers open alternate exits without new level grammars.",
+  "exemplar_rationale": "Exemplifies surplus pathing in an authored platform campaign via movement modifiers.",
+  "evidence": [
+    {
+      "claim": "Archived Nintendo 3DS Virtual Console product page listed data-genre as: Action.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Action"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Nintendo Store (archived 3DS Virtual Console)",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://web.archive.org/web/20160306140255/http://www.nintendo.com/games/detail/super-mario-world-vc-snes-3ds",
+      "source_tier": "archival-secondary"
+    }
+  ]
+}

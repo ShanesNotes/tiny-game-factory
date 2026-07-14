@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "zelda-link-to-the-past",
+  "title": "The Legend of Zelda: A Link to the Past",
+  "edition_pinned": "Row describes the 1991/1992 SNES design; genre evidence from archived Wii U Virtual Console product page (data-genre Action), observed 2026-07-13.",
+  "design_shape": {
+    "register": {
+      "primary": "hybrid",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "discovery",
+      "secondary": [
+        "execution"
+      ]
+    },
+    "session_structure": {
+      "primary": "chapters",
+      "secondary": []
+    },
+    "progression_form": {
+      "primary": "authored-campaign",
+      "secondary": [
+        "persistent-unlocks"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": []
+  },
+  "moat": "Light/Dark World mirrors and item tools rewrite dungeon routes across one dual overworld.",
+  "scope_efficiency_hypothesis": "Shared item verbs solve both combat and puzzle gates without separate dungeon languages.",
+  "exemplar_rationale": "Classic item-gated adventure where exploration tools double as combat solutions.",
+  "evidence": [
+    {
+      "claim": "Archived Nintendo Wii U Virtual Console product page listed data-genre as: Action.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Action"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Nintendo Store (archived Wii U Virtual Console)",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://web.archive.org/web/20161220020212/http://www.nintendo.com/games/detail/the-legend-of-zelda-a-link-to-the-past-wii-u",
+      "source_tier": "archival-secondary"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "1.0.0",
+  "id": "super-mario-64",
+  "title": "Super Mario 64",
+  "edition_pinned": "Row describes the 1996 N64 design; genre evidence from archived Super Mario 3D All-Stars Switch product page (collection listing that includes Super Mario 64), observed 2026-07-13.",
+  "design_shape": {
+    "register": {
+      "primary": "mechanics-first",
+      "secondary": []
+    },
+    "loop_class": {
+      "primary": "execution",
+      "secondary": [
+        "discovery"
+      ]
+    },
+    "session_structure": {
+      "primary": "chapters",
+      "secondary": [
+        "continuous"
+      ]
+    },
+    "progression_form": {
+      "primary": "authored-campaign",
+      "secondary": [
+        "fixed-kit"
+      ]
+    },
+    "player_count": {
+      "primary": "solo",
+      "secondary": []
+    }
+  },
+  "market_genres": {
+    "primary": "action",
+    "secondary": []
+  },
+  "moat": "Analog 3D movement and camera control turn open courses into surplus star-route mastery.",
+  "scope_efficiency_hypothesis": "One movement kit and reusable course geometry support dozens of star goals without unique systems each.",
+  "exemplar_rationale": "Defines 3D platformer depth through free movement and multi-objective courses.",
+  "evidence": [
+    {
+      "claim": "Archived Nintendo Switch product page for Super Mario 3D All-Stars listed Genre as: Platformer; Action.",
+      "metric_type": "storefront_genres",
+      "value_or_range": [
+        "Platformer",
+        "Action"
+      ],
+      "class": "storefront-listed",
+      "class_definition": "taxonomy-v1#storefront-genres/storefront-listed",
+      "platform": "Nintendo Store (archived)",
+      "territory": "United States",
+      "observed_at": "2026-07-13",
+      "source": "https://web.archive.org/web/20200903150356/https://www.nintendo.com/games/detail/super-mario-3d-all-stars-switch/",
+      "source_tier": "archival-secondary"
+    }
+  ]
+}
