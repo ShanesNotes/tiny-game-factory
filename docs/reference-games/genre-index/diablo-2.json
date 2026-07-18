@@ -3,7 +3,7 @@
   "taxonomy_version": "1.0.0",
   "id": "diablo-2",
   "title": "Diablo II",
-  "edition_pinned": "Evidence from Diablo II: Resurrected – Infernal Edition Steam app 2536520, observed 2026-07-13; row describes the 2000 Diablo II design with its 2001 Lord of Destruction expansion, which D2:R faithfully preserves.",
+  "edition_pinned": "Evidence from Diablo II: Resurrected – Infernal Edition Steam app 2536520, observed 2026-07-13; row describes the 2000 Diablo II design with its 2001 Lord of Destruction expansion, which D2:R faithfully preserves. Re-pinned from classic LoD to D2:R because no archived storefront genre field exists for the classic Lord of Destruction listing (Shane ruling, 2026-07-14).",
   "design_shape": {
     "register": {
       "primary": "mechanics-first",
