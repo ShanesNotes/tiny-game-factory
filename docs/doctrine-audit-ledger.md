@@ -171,7 +171,7 @@ records and are not rewritten by this prose correction.
 | --- | --- | --- |
 | `docs/reference-games/CANON.md` | rewritten | Shane-ratified membership list for reference cards; substrate for later pipeline cites (orchestrate FUE e3). |
 | `docs/reference-games/README.md` | rewritten | Phase-tiered roles + pigeonhole doctrine for the reference-game canon (FUE e3). |
-| `docs/reference-games/cards/.gitkeep` | rewritten | Keeps empty cards/ tree tracked until real research cards land. |
+| `docs/reference-games/cards/.gitkeep` | culled | Purpose expired — 16 real research cards landed in cards/; placeholder removed (historical row kept). |
 | `docs/reference-games/cards/_example.json` | rewritten | Fictional fixture card proving schema/validator path; not research, not citable. |
 | `docs/reference-games/index.jsonl` | rewritten | Generated summary index (id/title/genre_tags/register_mapping/status) refreshed by validate-reference-cards. |
 | `docs/reference-games/TAXONOMY.md` | rewritten | Frozen Tier-2 design-shape ontology, storefront-derived market vocabulary, evidence thresholds, and completeness rules for the reference canon pilot. |

@@ -1,6 +1,6 @@
 # Codex adapter (thin mirror)
 
-OpenAI Codex runs the Tiny Game Factory by reading the **root `AGENTS.md`** as its
+OpenAI Codex runs game-design (formerly tiny-game-factory) by reading the **root `AGENTS.md`** as its
 operating procedure. This directory is a thin adapter note, not a second home for
 logic.
 

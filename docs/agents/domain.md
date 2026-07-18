@@ -26,7 +26,7 @@
 - **Design-lock** — The `ADVANCE` verdict from the design red-team; the only door to engine-profile and decompose. Fun-lock remains downstream doctrine inside the spec pack / forge verify.
 - **Game feel** — The only permitted term for moment-to-moment sensation (DESIGN-RECORD §5 vocabulary lock). Design owns falsifiable feel targets; forge turns them into verify gates.
 - **Spec decomposition** — `SPEC.md` (`schemas/spec-decomposition`): a chosen loop, an out-of-scope list, and ordered slices (tracer bullet first) with falsifiable acceptance and evidence requirements. Issue = slice (1:1).
-- **Spec pack** — Design's terminal artifact (ADR 0006): the exported folder of spec, issues, thesis, review, PLAYTEST_PLAN, guards, and evidence schemas. Forge-manifest emission is T06.
+- **Spec pack** — Design's terminal artifact (ADR 0006): the exported folder of spec, issues, thesis, review, PLAYTEST_PLAN, guards, and evidence schemas. Godot-4 packs also carry forge-manifest.json (T06).
 - **Forge manifest** — Machine-readable design→forge interface (studio `contracts/`); semantic requests only, no filesystem paths (DESIGN-RECORD §4).
 - **Verdict** — A gate decision by the depth red-team: `ADVANCE` | `DEEPEN` (name one transform) | `KILL`.
 - **Manifest** — `.tgf/seeds/{seed-id}/manifest.json`; its `current_phase` is the resumption source of truth. Manifest beats memory — agents coordinate through artifacts, never chat.

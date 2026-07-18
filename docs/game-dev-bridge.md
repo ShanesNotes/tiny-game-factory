@@ -57,7 +57,8 @@ nothing but the engine and a shell.
 5. **Spec-pack handoff** — `npm run spec:package` exports the pack (thesis, spec,
    issues, PLAYTEST_PLAN, guards, evidence schemas) into a clean folder for
    human+AI co-development without leaking design ledgers or agent vocabulary.
-   Forge-manifest emission is T06.
+   Forge-manifest emission (T06, shipped): `spec:package` emits
+   `forge-manifest.json` for godot-4 seeds.
 
 ## Backlog vocabulary mapping
 

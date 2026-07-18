@@ -10,9 +10,8 @@ from P01 on (ADR 0010).
 Feel is specified on paper as **falsifiable commitments**, argued at P07, sliced
 at P18, and *proven only downstream* (this repo builds no game — ADR 0006; forge
 turns feel targets into verify gates). What ships in the spec pack is the
-contract the build must honor. Structured metric fields on feel targets are
-T05; until then targets remain free-string commitments that still pass the
-Adjective Test.
+contract the build must honor. Feel targets are structured (id, statement,
+metric, budget, unit — T05); each must still pass the Adjective Test.
 
 ## The golden moment
 

@@ -39,7 +39,6 @@ A repo is never “good” because it is impressive. It is only useful if it giv
 
 - seed compilation
 - depth generation
-- branch bake-off
 - bot playtesting
 - code-native assets
 - hook enforcement

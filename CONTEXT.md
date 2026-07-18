@@ -102,8 +102,9 @@ human-friendly view.
 | (scout) | `P16_REPO_SCOUT` | `tgf-repo-scout` | `docs/borrowed-patterns.md` entry |
 | (kill/restart) | `P14_KILL_RESTART` | — | evidence-backed kill + new seed brief |
 
-Retired build prompts (P03–P06, P08–P12, P15) live in `.factory/prompts/attic/`
-and are not registered in the contract (ADR 0006).
+Retired build prompts (P03–P06, P08–P12, P15) were culled in the T04 doctrine
+audit (see `docs/doctrine-audit-ledger.md`) and are not registered in the
+contract (ADR 0006).
 
 ## Verdict vocabulary
 

@@ -4,9 +4,12 @@ This ledger is the truth source for what agents may assume.
 
 Legend:
 - `ACCEPT`: safe to use if installed.
+- `ACCEPT_IF_INSTALLED`: safe to use when installed; never assume presence on a new machine.
+- `ACCEPT_IF_AVAILABLE`: use when available; absence must not block the core loop.
+- `ACCEPT_AFTER_PIN`: candidate only after a version probe/pin.
+- `ACCEPT_FOR_EXPLORATION`: exploration and capture only, never the default runner.
 - `PROBE`: must run the local probe or current-doc harvest before use.
 - `OFF_BY_DEFAULT`: useful only after a gate unlocks it.
-- `CORRECTED`: Claude addendum claim was directionally useful but too strong.
 
 | Surface | Status | What agents may assume | Probe / guard |
 |---|---:|---|---|

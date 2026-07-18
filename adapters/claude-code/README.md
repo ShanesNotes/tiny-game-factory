@@ -1,6 +1,6 @@
 # Claude Code adapter
 
-A thin binding of the Tiny Game Factory to the Claude Code harness. It adds no
+A thin binding of game-design (formerly tiny-game-factory) to the Claude Code harness. It adds no
 doctrine — it only maps factory contracts onto Claude Code's primitives.
 
 **`.codex/skills/` is the source of truth for skills.** The TGF phase wrappers

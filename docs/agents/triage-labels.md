@@ -33,8 +33,8 @@ Readiness is **evidence-gated**, not vibe-gated. "Completion is evidence, not pr
   these, label `needs-info`.
 - **A design-review-completion issue is `ready-for-human` only with the gate
   artifacts** — `reviews/ANTI_BORING_VERDICT.md` plus `reviews/depth-vector.json`
-  (depth verdict `ADVANCE`/`DEEPEN`/`KILL`, vector ≥16/24 with nonzero
-  Choice/Tradeoff/Pressure/Uncertainty/Mastery/Replayable). Without both artifacts
+  (depth verdict `ADVANCE`/`DEEPEN`/`KILL`, vector ≥16/24 with the register's six
+  mandatory axes nonzero — ADR 0007/0008). Without both artifacts
   it stays `needs-info`; the human is not asked to judge depth on prose. Playtest
   evidence is shipped-pack doctrine and lands downstream, not here.
 - **Direction/taste questions are `ready-for-human`** — but at most one before the
