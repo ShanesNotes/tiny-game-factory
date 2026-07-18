@@ -195,6 +195,27 @@ test("summarize-run prints an evidence-first summary for a created run", () => {
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
+test("summarize-run reports revision exports instead of '(none — not exported)'", () => {
+  // spec_pack_path stays null for --revise-of exports (path policy: only the
+  // default root is recordable), so the summary must derive the revision-export
+  // state from the ledger instead of contradicting it.
+  const dir = tmp();
+  const id = "rs-summary-revision";
+  try {
+    assert.equal(node("init-game-run.mjs", ["--seed-id", id, "--seed", "x"], { cwd: dir }).status, 0);
+    const ledgerPath = path.join(dir, ".tgf", "seeds", id, "execution-ledger.jsonl");
+    const row = {
+      ts: new Date().toISOString(), seed_id: id, phase: "complete",
+      event: "spec-pack-revision-exported", status: "passed", actor: "package-spec.mjs"
+    };
+    fs.appendFileSync(ledgerPath, JSON.stringify(row) + "\n");
+    const r = node("summarize-run.mjs", ["--seed-id", id], { cwd: dir });
+    assert.equal(r.status, 0, r.stderr);
+    assert.doesNotMatch(r.stdout, /\(none — not exported\)/);
+    assert.match(r.stdout, /spec pack:\s+\(revision-exported to existing game dir — 1 ledger row\)/);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
 test("summarize-run rejects invalid seed-id before path derivation", () => {
   const dir = tmp();
   try {

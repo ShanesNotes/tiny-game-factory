@@ -50,12 +50,23 @@ for (const [i, row] of rows.entries()) {
 }
 const last = rows[rows.length - 1];
 
+// spec_pack_path is only recorded for default-root exports (manifest path
+// policy); revision exports (--revise-of) target an existing game dir, so
+// their truth lives in the ledger. Derive that state instead of contradicting it.
+const revisionExports = rows.filter(
+  (r) => r.event === "spec-pack-revision-exported" && r.status === "passed"
+);
+const specPackLine = manifest.spec_pack_path
+  || (revisionExports.length
+    ? `(revision-exported to existing game dir — ${revisionExports.length} ledger row${revisionExports.length === 1 ? "" : "s"})`
+    : "(none — not exported)");
+
 console.log(`# Seed run: ${manifest.seed_id}`);
 console.log(`- phase:        ${manifest.current_phase}`);
 console.log(`- thesis:       ${manifest.game_thesis_path || "(not compiled)"}`);
 console.log(`- engine ADR:   ${manifest.engine_decision_path || "(not decided)"}`);
 console.log(`- spec:         ${manifest.spec_path || "(not decomposed)"}`);
-console.log(`- spec pack:    ${manifest.spec_pack_path || "(none — not exported)"}`);
+console.log(`- spec pack:    ${specPackLine}`);
 console.log(`- ledger rows:  ${rows.length}`);
 if (last) console.log(`- last event:   ${last.phase}/${last.event} (${last.status})`);
 if (parseErrors.length) console.log(`- ledger warns: ${parseErrors.length} unparseable row(s) skipped`);
