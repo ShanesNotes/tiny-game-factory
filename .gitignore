@@ -22,6 +22,10 @@ node_modules/
 # own git, and a committed handoff report — not the meta-factory's history.
 .tgf/
 
+# Ad-hoc / pre-triage notes (docs/agents/issue-tracker.md) — machine-local,
+# never version-controlled
+.scratch/
+
 # Python / build artifacts
 __pycache__/
 *.py[cod]

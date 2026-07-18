@@ -7,7 +7,8 @@ host by default, per `issue-tracker.md` and ADR 0004; per-seed run state under
 `to-issues` skills read this file as their label authority.
 
 **HARD RULE: these five triage labels plus the `done` closure state are the entire
-vocabulary. Do not invent, alias, or extend it.** A need that no label covers is a signal to sharpen the issue, not to
+`state` vocabulary, and the two-value `afk` axis below is the entire readiness
+vocabulary. Do not invent, alias, or extend either.** A need that no label covers is a signal to sharpen the issue, not to
 add a label.
 
 ## The label set
@@ -20,6 +21,14 @@ add a label.
 | `ready-for-human` | Needs human judgement (taste, direction, a verdict) before it moves. |
 | `wontfix` | Acknowledged and deliberately declined; closed without action. |
 | `done` | Closed with evidence: acceptance held and at least one evidence link recorded. |
+
+## The `afk` axis
+
+Issue front matter carries a second field, separate from `state` (see
+`issue-tracker.md`): `afk: ready-for-agent | needs-human` — exactly these two
+values, enforced by `scripts/validate-artifacts.mjs`. It flags AFK/HITL
+readiness, not triage state: `needs-human` exists only on this axis, and the
+axis's `ready-for-agent` reuses the label's spelling without being a `state`.
 
 ## Factory readiness notes (phase model — see CONTEXT.md)
 
