@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 import { validate } from "../scripts/lib/validate-json-schema.mjs";
 import { SKILLS, SCHEMAS, FACTORY_HOOKS, SPEC_PACK_GUARDS, THRESHOLDS } from "../scripts/lib/factory-contract.mjs";
 import { emitIssues, planIssues } from "../scripts/emit-local-issues.mjs";
+import { runSpecPackHandoff } from "../scripts/lib/spec-pack-export.mjs";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rel = (...p) => path.join(REPO, ...p);
@@ -529,6 +530,30 @@ test("run-gates --dry-run proves all guards gate", () => {
   assert.equal(r.status, 0, r.stdout + r.stderr);
 });
 
+/** Strip registry-literal tokens only on SCHEMAS / FIXTURE_SCHEMA declaration lines. */
+function stripPullOnlyRegistryLines(source) {
+  const lines = source.split("\n");
+  let inSchemas = false;
+  let inFixtures = false;
+  return lines.map((line) => {
+    if (/export const SCHEMAS\s*=/.test(line)) inSchemas = true;
+    if (/export const FIXTURE_SCHEMA\s*=/.test(line)) inFixtures = true;
+    let out = line;
+    if (inSchemas || inFixtures) {
+      // Registry vocabulary only — do not blank the same tokens on executable lines.
+      out = out
+        .replaceAll('"genre-index-row"', '""')
+        .replaceAll('"minimal-genre-index-row.json"', '""')
+        .replaceAll('"genre-index-row.schema.json"', '""');
+    }
+    if (inSchemas && /\]\s*;/.test(line)) inSchemas = false;
+    if (inFixtures && /\}\s*;/.test(line)) inFixtures = false;
+    return out;
+  }).join("\n");
+}
+
+const PULL_ONLY_FORBIDDEN = /(?:genre[-_ ]?index|reference[-_ ]?games?)/i;
+
 test("genre index is pull-only: never referenced by the seed/intake pipeline", () => {
   // Complete run-artifact pipeline: content entrypoints/readers plus their content-bearing libraries.
   const pipelineFiles = [
@@ -554,17 +579,28 @@ test("genre index is pull-only: never referenced by the seed/intake pipeline", (
     let source = fs.readFileSync(rel(file), "utf8");
     if (file === "scripts/lib/factory-contract.mjs") {
       // Schema-name + fixture registry entries are vocabulary, not pipeline injection.
-      source = source
-        .replaceAll('"genre-index-row"', "")
-        .replaceAll('"minimal-genre-index-row.json"', "")
-        .replaceAll('"genre-index-row.schema.json"', "");
+      // Exemption is scoped to SCHEMAS / FIXTURE_SCHEMA blocks only (not global replaceAll).
+      source = stripPullOnlyRegistryLines(source);
     }
     assert.doesNotMatch(
       source,
-      /(?:genre[-_ ]?index|reference[-_ ]?games?)/i,
+      PULL_ONLY_FORBIDDEN,
       `${file} must not auto-inject the pull-only genre index`
     );
   }
+});
+
+test("pull-only guard catches non-registry genre fixture injection in factory-contract", () => {
+  // Self-test: an executable loadFixture outside the registry must still match the ban
+  // after the scoped strip (global replaceAll would have blanked it and evaded the guard).
+  let source = fs.readFileSync(rel("scripts/lib/factory-contract.mjs"), "utf8");
+  source += '\nexport const seedContext = loadFixture("minimal-genre-index-row.json");\n';
+  source = stripPullOnlyRegistryLines(source);
+  assert.match(
+    source,
+    PULL_ONLY_FORBIDDEN,
+    "injected non-registry fixture load must still be rejected after scoped strip"
+  );
 });
 
 test("advance-run performs a legal phase transition and keeps the run valid", () => {
@@ -1251,6 +1287,75 @@ test("package-spec --force replaces a dirty target with exactly the pack file se
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
     fs.rmSync(target, { recursive: true, force: true });
+  }
+});
+
+test("materializeExact does not write through pre-existing symlink or hardlink destinations", () => {
+  // Confinement: a linked destination must not mutate an outside file; export
+  // either succeeds confined (outside untouched) or refuses without a receipt.
+  const root = tmp();
+  try {
+    for (const kind of ["symlink", "hardlink"]) {
+      const target = path.join(root, kind);
+      const outside = path.join(root, `${kind}.txt`);
+      fs.mkdirSync(target, { recursive: true });
+      fs.writeFileSync(outside, "OUTSIDE");
+      const dest = path.join(target, "README.md");
+      if (kind === "symlink") fs.symlinkSync(outside, dest);
+      else fs.linkSync(outside, dest);
+
+      const r = runSpecPackHandoff({
+        target,
+        write: true,
+        force: true,
+        log() {},
+        fillStaging(s) {
+          fs.writeFileSync(path.join(s, "README.md"), "PACK");
+        }
+      });
+      assert.equal(fs.readFileSync(outside, "utf8"), "OUTSIDE", `${kind}: outside file must stay untouched`);
+      if (r.ok) {
+        assert.ok(r.receipt, `${kind}: successful confined export yields a receipt`);
+        assert.equal(fs.readFileSync(path.join(target, "README.md"), "utf8"), "PACK");
+        // Destination must be a real file, not a remaining symlink.
+        assert.ok(!fs.lstatSync(path.join(target, "README.md")).isSymbolicLink());
+      } else {
+        assert.equal(r.receipt, undefined, `${kind}: refused export must not emit a receipt`);
+      }
+    }
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("materializeExact --force resolves file-vs-directory path conflicts fully", () => {
+  // Stale FILE named "issues" where the pack needs issues/ must be replaced;
+  // full success preferred (entire pack set present, no partial overwrite fail).
+  const root = tmp();
+  try {
+    const target = path.join(root, "target");
+    fs.mkdirSync(target);
+    fs.writeFileSync(path.join(target, "A.md"), "old A");
+    fs.writeFileSync(path.join(target, "issues"), "blocking file");
+
+    const r = runSpecPackHandoff({
+      target,
+      write: true,
+      force: true,
+      log() {},
+      fillStaging(s) {
+        fs.writeFileSync(path.join(s, "A.md"), "new A");
+        fs.mkdirSync(path.join(s, "issues"));
+        fs.writeFileSync(path.join(s, "issues", "one.md"), "issue");
+      }
+    });
+    assert.equal(r.ok, true, r.error || "expected full success");
+    assert.ok(r.receipt, "forced conflict resolution must yield a receipt");
+    assert.equal(fs.readFileSync(path.join(target, "A.md"), "utf8"), "new A");
+    assert.equal(fs.readFileSync(path.join(target, "issues", "one.md"), "utf8"), "issue");
+    assert.ok(fs.statSync(path.join(target, "issues")).isDirectory());
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
   }
 });
 

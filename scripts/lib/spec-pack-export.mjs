@@ -29,8 +29,75 @@ export function withStaging(work, { prefix = STAGING_PREFIX, tmpdir = os.tmpdir(
 }
 
 /**
+ * Remove a path entry without following links (file, dir, symlink, hardlink).
+ * No-op when the path does not exist.
+ */
+function removePathEntry(abs) {
+  try {
+    fs.lstatSync(abs);
+  } catch (err) {
+    if (err && err.code === "ENOENT") return;
+    throw err;
+  }
+  fs.rmSync(abs, { recursive: true, force: true });
+}
+
+/**
+ * Ensure abs is a real directory (not a file/symlink). Removes a conflicting
+ * entry of the wrong type, then mkdir. Parents must already be directories.
+ */
+function ensureRealDir(abs) {
+  try {
+    const st = fs.lstatSync(abs);
+    if (st.isDirectory() && !st.isSymbolicLink()) return;
+    // File, symlink, or other → remove so we can create a real directory.
+    fs.rmSync(abs, { recursive: true, force: true });
+  } catch (err) {
+    if (!err || err.code !== "ENOENT") throw err;
+  }
+  fs.mkdirSync(abs);
+}
+
+/**
+ * Create each path segment under target as a real directory, resolving
+ * file-vs-directory conflicts (e.g. a stale file named "issues" where the
+ * pack needs issues/).
+ */
+function ensureParentDirs(target, rel) {
+  const parts = rel.split("/");
+  let cur = target;
+  for (let i = 0; i < parts.length - 1; i++) {
+    cur = path.join(cur, parts[i]);
+    ensureRealDir(cur);
+  }
+}
+
+/**
+ * List files under root without following symlinks. Symlinks and other
+ * non-directory entries are reported as leaf paths (so a symlink in the
+ * final tree is visible as an extra/defect).
+ */
+function listFilesNoFollow(dir, acc = []) {
+  if (!fs.existsSync(dir)) return acc;
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, e.name);
+    // Dirent for a symlink is never isDirectory() without following; only
+    // real directories are recursed so link targets outside the tree are never walked.
+    if (e.isDirectory() && !e.isSymbolicLink()) listFilesNoFollow(p, acc);
+    else acc.push(p);
+  }
+  return acc;
+}
+
+/**
  * Copy staged pack files into target, then delete any target files not in the pack set
  * so the final tree is exactly equal to the verified pack file set (--force exact replace).
+ *
+ * Target-confined: any pre-existing destination entry (symlink, hardlink, file, or
+ * wrong-type path component) is removed before write so copyFileSync never follows
+ * a link and mutates outside the target. Full success preferred over fail-before-mutate
+ * for --force exact-set exports over any prior target state.
+ *
  * Returns the sorted relative file list of the target after write.
  */
 export function materializeExact(staging, target, packFiles) {
@@ -39,18 +106,33 @@ export function materializeExact(staging, target, packFiles) {
   for (const rel of packFiles) {
     const from = path.join(staging, rel);
     const to = path.join(target, ...rel.split("/"));
-    fs.mkdirSync(path.dirname(to), { recursive: true });
+    ensureParentDirs(target, rel);
+    // Never write through a pre-existing link or clobber-conflict path.
+    removePathEntry(to);
     fs.copyFileSync(from, to);
   }
-  // Remove stale files not in the verified pack set.
-  for (const abs of listFiles(target)) {
+  // Remove stale files not in the verified pack set (lstat-aware; do not follow links).
+  for (const abs of listFilesNoFollow(target)) {
     const rel = path.relative(target, abs).split(path.sep).join("/");
-    if (!want.has(rel)) fs.rmSync(abs, { force: true });
+    if (!want.has(rel)) fs.rmSync(abs, { force: true, recursive: true });
   }
   // Prune empty directories left behind by stale removals (deepest first).
   pruneEmptyDirs(target, target);
 
-  const finalFiles = relativeFileSet(target);
+  // Final tree must be real files only — a remaining symlink is a confinement defect.
+  for (const abs of listFilesNoFollow(target)) {
+    const st = fs.lstatSync(abs);
+    if (st.isSymbolicLink()) {
+      throw new Error(
+        `target tree contains a symlink after materialize (confinement defect): ` +
+          path.relative(target, abs).split(path.sep).join("/")
+      );
+    }
+  }
+
+  const finalFiles = listFilesNoFollow(target)
+    .map((abs) => path.relative(target, abs).split(path.sep).join("/"))
+    .sort();
   if (finalFiles.length !== packFiles.length || finalFiles.some((f, i) => f !== packFiles[i])) {
     const extra = finalFiles.filter((f) => !want.has(f));
     const missing = packFiles.filter((f) => !finalFiles.includes(f));
@@ -64,9 +146,17 @@ export function materializeExact(staging, target, packFiles) {
 }
 
 function pruneEmptyDirs(dir, root) {
-  if (!fs.existsSync(dir)) return;
+  let st;
+  try {
+    st = fs.lstatSync(dir);
+  } catch {
+    return;
+  }
+  if (!st.isDirectory() || st.isSymbolicLink()) return;
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (ent.isDirectory()) pruneEmptyDirs(path.join(dir, ent.name), root);
+    if (ent.isDirectory() && !ent.isSymbolicLink()) {
+      pruneEmptyDirs(path.join(dir, ent.name), root);
+    }
   }
   if (dir === root) return;
   if (fs.readdirSync(dir).length === 0) fs.rmdirSync(dir);
