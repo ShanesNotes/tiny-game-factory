@@ -155,7 +155,9 @@ high-fidelity assets require fun-lock + art-direction lock + a provenance recipe
 (`schemas/asset-provenance`) + asset review. The studio also owns a purchased
 asset library reached from design via forge-manifest `asset_requests` and the
 P18 availability probe (`npm run spec:probe`); that seam does not relax the
-code-native-before-fun-lock pack rule.
+code-native-before-fun-lock pack rule. Its sibling `npm run assets:recommend --
+<spec-decomposition.json>` renders per-request library candidates
+(`asset-recommendations.{json,html}`) — same catalog, presentation-grade.
 
 ### Asset source policy (design-authored)
 
