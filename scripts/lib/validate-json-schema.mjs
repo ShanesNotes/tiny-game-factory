@@ -1,8 +1,8 @@
 // Minimal JSON Schema validator — supports the draft-2020-12 subset used by TGF schemas.
 // Intentionally tiny and dependency-free. Supports: type (incl. integer/number/array/null
 // and arrays of types), enum, pattern, required, properties, additionalProperties:false,
-// items, minItems, minimum, maximum, and if/then/else. Returns an array of error
-// strings ([] means valid).
+// items, minItems, uniqueItems, minLength, maxLength, minimum, maximum, and if/then/else.
+// Returns an array of error strings ([] means valid).
 // This is NOT a general-purpose validator; it covers exactly what schemas/*.json use.
 
 function jsType(v) {
@@ -44,6 +44,15 @@ export function validate(schema, data, path = "$") {
     errors.push(`${path}: ${JSON.stringify(data)} does not match pattern ${schema.pattern}`);
   }
 
+  if (typeof data === "string") {
+    if (schema.minLength !== undefined && data.length < schema.minLength) {
+      errors.push(`${path}: string length ${data.length} < minLength ${schema.minLength}`);
+    }
+    if (schema.maxLength !== undefined && data.length > schema.maxLength) {
+      errors.push(`${path}: string length ${data.length} > maxLength ${schema.maxLength}`);
+    }
+  }
+
   if (typeof data === "number") {
     if (schema.minimum !== undefined && data < schema.minimum) {
       errors.push(`${path}: ${data} < minimum ${schema.minimum}`);
@@ -56,6 +65,17 @@ export function validate(schema, data, path = "$") {
   if (Array.isArray(data)) {
     if (schema.minItems !== undefined && data.length < schema.minItems) {
       errors.push(`${path}: array length ${data.length} < minItems ${schema.minItems}`);
+    }
+    if (schema.uniqueItems === true) {
+      const seen = new Set();
+      for (const item of data) {
+        const key = JSON.stringify(item);
+        if (seen.has(key)) {
+          errors.push(`${path}: duplicate items (uniqueItems)`);
+          break;
+        }
+        seen.add(key);
+      }
     }
     if (schema.items) {
       data.forEach((item, i) => errors.push(...validate(schema.items, item, `${path}[${i}]`)));
