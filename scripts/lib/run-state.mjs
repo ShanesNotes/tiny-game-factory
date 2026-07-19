@@ -713,7 +713,20 @@ export function advanceRun(cwd, seedId, intent, options = {}) {
     restoreLedger: (contents) => replaceRunFileSync(cwd, seedId, ledgerRel, contents)
   };
   const persistence = { ...defaults, ...(options.persistence || {}) };
-  persistence.writeLedger(ledgerAfter);
+  try {
+    persistence.writeLedger(ledgerAfter);
+  } catch (error) {
+    // Ledger replacement failed before any truth mutated: the run is still
+    // consistent, so the transaction note must not survive to block openRun.
+    try { removeRunFileSync(cwd, seedId, transactionRel); }
+    catch (cleanupError) {
+      throw new RunStateError(
+        `${error.message}; transaction cleanup failed: ${cleanupError.message}`,
+        "PERSISTENCE_CLEANUP_FAILED"
+      );
+    }
+    throw error;
+  }
   try {
     persistence.writeManifest(`${JSON.stringify(next, null, 2)}\n`);
   } catch (error) {

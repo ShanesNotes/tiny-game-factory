@@ -276,6 +276,28 @@ test("advanceRun rolls back the ledger when manifest persistence fails", () => {
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
+test("advanceRun clears the transaction note when ledger persistence fails", () => {
+  const dir = tmp();
+  const id = "rs-advance-ledger-fail";
+  try {
+    const runDir = initializedRun(dir, id);
+    const manifestPath = path.join(runDir, "manifest.json");
+    const ledgerPath = path.join(runDir, "execution-ledger.jsonl");
+    const manifestBefore = fs.readFileSync(manifestPath, "utf8");
+    const ledgerBefore = fs.readFileSync(ledgerPath, "utf8");
+    assert.throws(() => rs.advanceRun(dir, id, {
+      to: "blocked", event: "injected-failure", status: "blocked", actor: "test"
+    }, {
+      now: "2026-07-19T12:00:00.000Z",
+      persistence: { writeLedger() { throw new Error("injected ledger failure"); } }
+    }), /injected ledger failure/);
+    assert.equal(fs.readFileSync(manifestPath, "utf8"), manifestBefore);
+    assert.equal(fs.readFileSync(ledgerPath, "utf8"), ledgerBefore);
+    assert.equal(fs.existsSync(path.join(runDir, "run-state-transaction.json")), false);
+    rs.openRun(dir, id); // untouched run must stay openable
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
 test("advanceRun preserves a valid ledger that lacks a trailing newline", () => {
   const dir = tmp();
   const id = "rs-advance-no-newline";
