@@ -8,6 +8,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { validate } from "../scripts/lib/validate-json-schema.mjs";
 import { SKILLS, SCHEMAS, FACTORY_HOOKS, SPEC_PACK_GUARDS, THRESHOLDS } from "../scripts/lib/factory-contract.mjs";
+import { emitIssues, planIssues } from "../scripts/emit-local-issues.mjs";
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rel = (...p) => path.join(REPO, ...p);
@@ -995,6 +996,61 @@ test("emit-local-issues dry-runs the spec backlog without writing by default", (
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
+test("planIssues returns structured eligibility blockers without running the CLI", () => {
+  const dir = tmp();
+  const id = "selftest-issue-plan-blocked";
+  try {
+    decomposeReadyRun(dir, id, { spec: false });
+    const plan = planIssues(dir, id);
+    assert.equal(plan.documents.length, 0);
+    assert.match(plan.blockers.join("\n"), /blocked until SPEC\.md validates/);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("planIssues owns spec eligibility and returns ordered issue documents", () => {
+  const dir = tmp();
+  const id = "selftest-issue-plan";
+  try {
+    const runDir = decomposeReadyRun(dir, id);
+    let plan = planIssues(dir, id);
+    assert.deepEqual(plan.blockers, []);
+    assert.deepEqual(plan.documents.map((document) => document.path), [
+      `.tgf/seeds/${id}/issues/tracer-loop.md`,
+      `.tgf/seeds/${id}/issues/sunlight-pressure.md`
+    ]);
+    assert.match(plan.documents[0].content, /id: tracer-loop/);
+
+    const spec = JSON.parse(fs.readFileSync(rel("examples/fixtures/minimal-spec-decomposition.json"), "utf8"));
+    spec.seed_id = id;
+    spec.slices = spec.slices.map((slice) => ({ ...slice, loop_verbs_covered: ["plant"] }));
+    fs.writeFileSync(path.join(runDir, "SPEC.md"), specMdWith(id, { slices: spec.slices }));
+    plan = planIssues(dir, id);
+    assert.equal(plan.documents.length, 0);
+    assert.match(plan.blockers.join("\n"), /core loop verb 'water' is not covered/);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("emitIssues preflights collisions and returns only actually written paths", () => {
+  const dir = tmp();
+  const id = "selftest-issue-emit-api";
+  try {
+    const runDir = decomposeReadyRun(dir, id);
+    const plan = planIssues(dir, id);
+    const first = path.join(runDir, "issues", "tracer-loop.md");
+    const second = path.join(runDir, "issues", "sunlight-pressure.md");
+    fs.writeFileSync(first, "sentinel");
+    assert.throws(() => emitIssues(plan), /exists; pass --force/);
+    assert.equal(fs.readFileSync(first, "utf8"), "sentinel");
+    assert.equal(fs.existsSync(second), false, "collision preflight must prevent partial writes");
+
+    const emitted = emitIssues(plan, { force: true });
+    assert.deepEqual(emitted.writtenPaths, plan.documents.map((document) => document.path));
+    for (const writtenPath of emitted.writtenPaths) {
+      assert.equal(fs.existsSync(path.join(dir, writtenPath)), true);
+    }
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
 test("emit-local-issues --write renders validator-clean issues inside the seed run", () => {
   const dir = tmp();
   const id = "selftest-emit-write";
@@ -1560,18 +1616,24 @@ test("walk-game-idea --write-issues records emitted local issues in the run ledg
   const id = "selftest-walk-write";
   try {
     const runDir = decomposeReadyRun(dir, id);
+    const plannedIssuePaths = planIssues(dir, id).documents.map((document) => document.path);
     const r = node("walk-game-idea.mjs", ["--seed-id", id, "--write-issues"], { cwd: dir });
     assert.equal(r.status, 0, r.stdout + r.stderr);
     assert.ok(fs.existsSync(path.join(runDir, "issues", "tracer-loop.md")));
     assert.ok(fs.existsSync(path.join(runDir, "issues", "sunlight-pressure.md")));
+    for (const writtenPath of plannedIssuePaths) {
+      assert.equal(fs.existsSync(path.join(dir, writtenPath)), true);
+    }
     const ledgerRows = fs.readFileSync(path.join(runDir, "execution-ledger.jsonl"), "utf8").trim().split("\n").map((line) => JSON.parse(line));
     const last = ledgerRows.at(-1);
     assert.deepEqual(last.changed_paths, [
       `.tgf/seeds/${id}/IDEA_WALKTHROUGH.md`,
-      `.tgf/seeds/${id}/issues/tracer-loop.md`,
-      `.tgf/seeds/${id}/issues/sunlight-pressure.md`
+      ...plannedIssuePaths
     ]);
     assert.match(last.verification.evidence, /local issue files emitted/);
+    const walkthroughSource = fs.readFileSync(rel("scripts", "walk-game-idea.mjs"), "utf8");
+    assert.match(walkthroughSource, /writtenIssuePaths = emitIssues\([^\n]+\)\.writtenPaths/);
+    assert.doesNotMatch(walkthroughSource, /writtenIssuePaths\.length\s*\?[^:]+:\s*plannedIssuePaths/);
     const chk = node("validate-artifacts.mjs", ["--check", "issues"], { cwd: dir });
     assert.equal(chk.status, 0, chk.stdout);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
@@ -1584,10 +1646,15 @@ test("walk-game-idea write-issues preserves existing local issues unless force i
     const runDir = decomposeReadyRun(dir, id);
     const existing = path.join(runDir, "issues", "tracer-loop.md");
     fs.writeFileSync(existing, "keep me");
+    const ledgerPath = path.join(runDir, "execution-ledger.jsonl");
+    const ledgerBefore = fs.readFileSync(ledgerPath, "utf8");
     const r = node("walk-game-idea.mjs", ["--seed-id", id, "--write-issues"], { cwd: dir });
     assert.equal(r.status, 1, r.stdout + r.stderr);
     assert.match(r.stderr, /exists; pass --force/);
     assert.equal(fs.readFileSync(existing, "utf8"), "keep me");
+    assert.equal(fs.existsSync(path.join(runDir, "issues", "sunlight-pressure.md")), false);
+    assert.equal(fs.existsSync(path.join(runDir, "IDEA_WALKTHROUGH.md")), false);
+    assert.equal(fs.readFileSync(ledgerPath, "utf8"), ledgerBefore);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
 
