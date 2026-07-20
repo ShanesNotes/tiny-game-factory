@@ -1,4 +1,5 @@
 {
+  "schema_version": "2.0.0",
   "seed": "tiny asteroid gardening",
   "pitch": "Cultivate fragile gardens across drifting asteroids before they tumble out of sunlight.",
   "thesis": "A timing-and-placement loop where light, drift, and scarce water force constant re-prioritisation.",
@@ -14,6 +15,11 @@
       "unit": "ms"
     }
   ],
+  "portfolio_distinctness": {
+    "nearest_prior_seed": "none",
+    "falsifying_difference": "EXAMPLE — no prior thesis exists in this portfolio, so nothing is being falsified against; the distinct mechanic is sunlight-sweep timing pressure on a shared water budget.",
+    "digest_generated_at": "EXAMPLE — replace with intake/portfolio-digest.json generated_at verbatim"
+  },
   "genre_hypotheses": [
     { "hypothesis": "tile-placement puzzle", "confidence": 0.6 }
   ],

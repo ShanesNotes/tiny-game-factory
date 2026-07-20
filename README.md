@@ -45,6 +45,104 @@ No spec pack, engine, or gameplay code is created by initialization. The next
 agent reads `.tgf/seeds/{seed-id}/README_AGENT_BOOT.md` and proceeds through the
 phases.
 
+### The golden path, gate by gate
+
+Under factory_version 0.3.0 the design artifacts at each gate are **human-authored
+by design** — the scripts validate and record; they do not generate them. A worked
+example for every authored artifact ships under `examples/` (placeholder content
+is labeled EXAMPLE), and `tests/quickstart-cold-walk.test.mjs` replays exactly
+this sequence to a green export, so the list below cannot drift silently. After
+every advance, `node scripts/validate-artifacts.mjs --check run --seed-id <id>`
+is the honest status check.
+
+1. **intake** — build the portfolio digest, then author the grill:
+   ```bash
+   npm run portfolio:digest -- --seed-id <id>  # writes intake/portfolio-digest.json
+   ```
+   Author `.tgf/seeds/<id>/intake/office-hours.md` — one fenced ```json block
+   against `schemas/intake-grill.schema.json`, with `portfolio_digest_ref` equal
+   to `.tgf/seeds/<id>/intake/portfolio-digest.json` verbatim:
+   ```json
+   {
+     "schema_version": "1.0.0",
+     "seed_id": "<id>",
+     "portfolio_digest_ref": ".tgf/seeds/<id>/intake/portfolio-digest.json",
+     "demand_reality": "…", "status_quo": "…", "desperate_specificity": "…",
+     "narrow_playable_wedge": "…", "observation_evidence": "…",
+     "premise_challenge": "…", "alternatives": "…", "future_fit": "…",
+     "store_positioning": "…", "reviewer_concern": "…"
+   }
+   ```
+   The `…` answers are the human grill judgment (P00/`tgf-office-hours-grill`),
+   grounded in the digest. Then advance:
+   ```bash
+   node scripts/advance-run.mjs --seed-id <id> --to toolchain \
+     --event intake-complete --status passed
+   ```
+   (the advance refuses until both intake artifacts validate — the portfolio
+   gate at the front door, ADR 0011.)
+2. **toolchain** — run P17's real probes (`docs/toolchain-verification-ledger.md`);
+   no design artifact. Advance `--to thesis`.
+3. **thesis** — author `.tgf/seeds/<id>/GAME_THESIS.md` (one fenced ```json
+   block against `schemas/game-thesis.schema.json`; worked example
+   `examples/fixtures/minimal-game-thesis.json`). The portfolio-era shape adds:
+   `schema_version: "2.0.0"` and a `portfolio_distinctness` block —
+   `nearest_prior_seed` (a seed id from the digest, or `"none"` when it lists
+   zero prior theses), `falsifying_difference` (a concrete, checkable
+   difference), and `digest_generated_at` (the digest's `generated_at`,
+   verbatim). Then:
+   ```bash
+   node scripts/advance-run.mjs --seed-id <id> --to design-review \
+     --event thesis-compiled --status passed \
+     --set game_thesis_path=.tgf/seeds/<id>/GAME_THESIS.md
+   ```
+4. **design-review** — author two artifacts (P07 owns the verdict judgment):
+   - `.tgf/seeds/<id>/reviews/depth-vector.json` (worked example
+     `examples/fixtures/minimal-depth-vector.json`): `schema_version: "2.0.0"`,
+     `register` equal to the thesis `design_register`, per-axis `evidence` whose
+     every value is a **real dotted field-path into the thesis JSON**
+     (e.g. `core_loop_candidates[0].verbs`), `review_provenance`
+     `{mode, reviewer_note}`, and a verdict. `ADVANCE` requires total ≥ 16/24
+     with the register's six mandatory axes nonzero — and ≥ 1 thesis
+     `feel_target`.
+   - `.tgf/seeds/<id>/reviews/ANTI_BORING_VERDICT.md` (worked example
+     `examples/reviews/ANTI_BORING_VERDICT.md`) carrying a **distinctness
+     disposition**: one line naming both "Distinctness" and the nearest prior
+     seed id (or `none`).
+   `ADVANCE` is design-lock. Advance `--to engine-profile`.
+5. **engine-profile** — author `.tgf/seeds/<id>/decisions/0001-engine-profile.md`
+   from `templates/run/decisions/0001-engine-profile.md` (`status: "accepted"`;
+   for a forge-bound pack, `profile: "godot-4"` with its
+   `godot_min`/`godot_max`/`renderer`/`language` fields — other profiles export
+   without a forge manifest). Then:
+   ```bash
+   node scripts/advance-run.mjs --seed-id <id> --to decompose \
+     --event engine-decided --status passed \
+     --set engine_decision_path=.tgf/seeds/<id>/decisions/0001-engine-profile.md
+   ```
+6. **decompose** — author `.tgf/seeds/<id>/SPEC.md` (one fenced ```json block
+   against `schemas/spec-decomposition.schema.json`; worked example
+   `examples/fixtures/minimal-spec-decomposition.json`; `seed_id` must equal the
+   run's). Each slice's `evidence_requirements` follow the forge-enforced
+   contract — a game-relative path glob (`docs/evidence/<slice-id>/**`) or an
+   exact produced-evidence type token (`log` | `metric` | `screenshot`); prose
+   never verifies downstream (see P18). Then record the path on the exit
+   transition and render the backlog:
+   ```bash
+   node scripts/advance-run.mjs --seed-id <id> --to handoff \
+     --event spec-decomposed --status passed \
+     --set spec_path=.tgf/seeds/<id>/SPEC.md
+   node scripts/emit-local-issues.mjs --seed-id <id> --write
+   ```
+7. **handoff** — export the pack (dry-run first, then write):
+   ```bash
+   npm run spec:package -- --seed-id <id> --require-manifest
+   npm run spec:package -- --seed-id <id> --write --require-manifest
+   ```
+   Default target is `$STUDIO_ROOT/games/<id>` (`--to` always wins);
+   `--require-manifest` hard-fails a non-godot-4 profile instead of exporting
+   manifest-less.
+
 ## Decompose and package
 
 Use `walk-game-idea.mjs` as the end-to-end seed walkthrough. It initializes or
@@ -103,7 +201,7 @@ schemas/         JSON schemas (manifest, thesis, depth, spec-decomposition, ...)
 hooks/           factory guards (build-time guards ship in templates/spec-pack/guards/)
 scripts/         advance-run · emit-local-issues · init-game-run · lint · package-spec · …
 templates/       run/ (seed-run state) · spec-pack/ (the exported pack skeleton)
-examples/        fixtures/ (schema fixtures) · seeds/
+examples/        fixtures/ (schema fixtures) · reviews/ (worked gate artifacts, EXAMPLE-labeled) · seeds/
 tests/           behavior test suite (run via `npm run verify`)
 ```
 
