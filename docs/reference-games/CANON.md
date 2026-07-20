@@ -24,4 +24,5 @@ real entries; the fixture row keeps the empty-canon path honest.
 | into-the-breach | Into the Breach | ratified 2026-07-12 (Shane) |
 | stardew-valley | Stardew Valley | ratified 2026-07-12 (Shane) |
 | disco-elysium | Disco Elysium | ratified 2026-07-12 (Shane) |
+| warcraft-3 | Warcraft III: Reign of Chaos | promoted from Tier-2 row on Shane's direction; ratified 2026-07-19 (Shane) |
 | phantom-garden | Phantom Garden | **FIXTURE only** — fictional game in `cards/_example.json`; not research, not citable |

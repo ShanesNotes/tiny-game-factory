@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0.0",
+  "id": "warcraft-3",
+  "title": "Warcraft III: Reign of Chaos",
+  "edition_pinned": "Reign of Chaos on PC as documented by Blizzard's classic Warcraft III strategy guide (classic.battle.net/war3), consulted 2026-07-19, plus the archived eBay product listing (ePID 9217) already pinned by the Tier-2 row. The guide documents the patched classic game and includes Frozen Throne-era content; this card describes the base-game systems it states: three-tier upkeep, hero leveling and revival, creep camps, the day/night cycle, and four asymmetric races.",
+  "genre_tags": ["real-time-strategy", "hero-progression", "multiplayer"],
+  "register_mapping": "mechanics-first",
+  "moat": "A food-tiered upkeep tax on gold income plus leveling heroes shifts real-time strategy from mass production to small armies contesting map experience.",
+  "loop_skeleton": {
+    "verbs": ["harvest", "build", "creep", "scout", "level", "raid", "engage", "revive"],
+    "description": "Assign workers to gold and lumber, train a hero with a small force, clear creep camps for experience, items, and gold whenever idle, then contest camps, expansions, and hero fights while upkeep tiers decide how large an army the economy can afford."
+  },
+  "depth_mechanisms": [
+    {
+      "name": "upkeep income tax",
+      "mechanism": "Gold income is taxed by army size in three food tiers — 0-50 food pays no tax, 51-80 drops income to 70 percent, 81-100 drops it to 40 percent — so army size is a strategic dial with stated pros and cons rather than a cap to fill.",
+      "falsifiable_claim": "If gold income were flat regardless of food consumed, replay logs would show armies climbing to the food cap by default and the small-army aggression the tiers were designed to force would fall."
+    },
+    {
+      "name": "creep camps as a map experience economy",
+      "mechanism": "Neutral creeps camp in strategic locations guarding gold mines and neutral buildings, and killing them grants hero experience, items, and gold, so map movement converts idle time into hero power before players ever meet.",
+      "falsifiable_claim": "If creep kills granted no experience or items, replays would show idle-time creeping, creep-jacking, and fights staged around neutral camps disappearing from the early game."
+    },
+    {
+      "name": "hero death as priced, recoverable loss",
+      "mechanism": "A fallen hero waits at the race's Altar and can be revived without limit, but the gold cost scales with hero level and a global message announces every hero death, so killing the enemy hero buys a timed, priced advantage rather than the match.",
+      "falsifiable_claim": "If revival were free and instant, focus-firing enemy heroes would stop changing win probability in replays and armies would fight without protecting their hero."
+    },
+    {
+      "name": "day/night tactical cycle",
+      "mechanism": "A visible clock alternates day and night: sight range shrinks at night, some creeps sleep, Night Elf units regenerate and can turn invisible only at night, and Orc and Human units regenerate day and night, so timing windows differ by race.",
+      "falsifiable_claim": "If sight, regeneration, creep sleep, and invisibility did not change with the clock, attack and creep timings in replays would decorrelate from the day/night indicator."
+    }
+  ],
+  "feel_signature": "Under the no-upkeep line with a level-2 hero, the player weighs clearing one more creep camp against harassing the enemy hero, knowing night will shrink sight and put camps to sleep before the next fight.",
+  "second_session_answer": "A different race matchup, hero pick, and set of creep-camp item drops change which camps are worth clearing, when to fight, and whether to stay under the next upkeep tier.",
+  "packaging_lessons": [
+    "Tax income by army size in visible tiers instead of only capping it, so 'how big an army' becomes a stated strategic decision that pushes players out of their bases.",
+    "Seed the map with neutral camps that guard something worth taking — mines, shops, expansion sites — so movement and map control feed progression before player contact.",
+    "Price hero death in level-scaled gold and revival time rather than making it permanent or free, so battles carry stakes without one lost fight ending the match.",
+    "Ship the asymmetry as four races with unique units and abilities over shared economy, upkeep, and creep rules, and let heroes and items carry match-to-match variety."
+  ],
+  "anti_lessons": [
+    "Do not bolt a leveling hero onto a mass-army RTS without an army-size governor; Warcraft III pairs heroes with the upkeep tax so small forces stay the vehicle that makes hero power legible.",
+    "Do not scatter neutral monsters as decoration; creeps must guard mines, shops, and expansions, or the map-experience economy and the fights it stages never emerge."
+  ],
+  "system_bom": [
+    {
+      "system": "play-loop",
+      "note": "Harvest, build, creep, scout, and fight repeat while upkeep tiers and hero level change what each minute of the loop is worth."
+    },
+    {
+      "system": "economy",
+      "note": "Workers gather gold and lumber; food both caps the army and sets the upkeep tier that taxes all gold income."
+    },
+    {
+      "system": "progression",
+      "note": "Heroes gain experience from kills by themselves or nearby units, advance in levels, and spend points in an ability tree with auras that buff surrounding units."
+    },
+    {
+      "system": "inventory",
+      "note": "Heroes carry items found by clearing creep camps, adding a Diablo-like loot layer inside a strategy match."
+    },
+    {
+      "system": "win-loss-death",
+      "note": "Hero death is a level-priced, announced setback recoverable at the Altar; matches are decided by destroying the opponent, not by hero kills alone."
+    },
+    {
+      "system": "multiplayer",
+      "note": "Battle.net supports head-to-head warfare and cooperative team modes; creeping intensity varies by team size from solo to 4 vs. 4."
+    },
+    {
+      "system": "ui",
+      "note": "A sun-to-moon orb with eight ticks shows the day/night clock, and global messages announce every fallen hero by name and level."
+    }
+  ],
+  "citations": [
+    {
+      "claim": "Moat and upkeep depth: upkeep is a tax on gold mining in three food tiers (0-50: 100%, 51-80: 70%, 81-100: 40%), included to foster aggression, reduce turtling, focus the game on smaller numbers of units, and give players real strategic decisions about how many units to control.",
+      "source": "Blizzard Entertainment, classic Warcraft III strategy guide, 'Upkeep,' consulted 2026-07-19: https://classic.battle.net/war3/basics/upkeep.shtml"
+    },
+    {
+      "claim": "Moat and progression BOM: heroes gain experience for accomplishments by themselves or nearby units, advance in levels, learn new spells and abilities, and confer aura benefits to nearby units; the guide states the focus moved from large groups in Warcraft II and StarCraft to heroes, spellcasting, and unit control, with unit numbers secondary.",
+      "source": "Blizzard Entertainment, classic Warcraft III strategy guide, 'Hero Basics' (Introduction, Gaining Experience, Auras), consulted 2026-07-19: https://classic.battle.net/war3/basics/heroes.shtml"
+    },
+    {
+      "claim": "Creep-camp depth and inventory BOM: creeping means attacking creeps for experience, items, and gold; the guide calls it a Diablo-like mini-game within Warcraft III, advises creeping whenever idle, warns of creep jacking, and notes creeping is heaviest in solo and 2 vs. 2 play.",
+      "source": "Blizzard Entertainment, classic Warcraft III strategy guide, 'Creeping,' consulted 2026-07-19: https://classic.battle.net/war3/basics/creeping.shtml"
+    },
+    {
+      "claim": "Creep-camp depth and anti-lesson — camps guard value: creeps camp in strategic locations, are hostile to all players, range in level like heroes, and are mostly found guarding gold mines or neutral buildings.",
+      "source": "Blizzard Entertainment, classic Warcraft III strategy guide, 'Creep Basics,' consulted 2026-07-19: https://classic.battle.net/war3/neutral/creepbasics.shtml"
+    },
+    {
+      "claim": "Hero-death depth and win-loss-death BOM: each race builds an Altar to revive dead heroes without limit, the gold cost of revival scales with hero level, heroes leave no corpses, and a global message announces every fallen hero by name, type, and level.",
+      "source": "Blizzard Entertainment, classic Warcraft III strategy guide, 'Hero Basics' (Hero Revival), consulted 2026-07-19: https://classic.battle.net/war3/basics/heroes.shtml"
+    },
+    {
+      "claim": "Day/night depth and UI BOM: a sun-to-moon orb with eight time ticks shows the cycle; at night sight range decreases and some creeps sleep; Night Elf units regenerate only at night and certain ones can become invisible at night, while Orc and Human units regenerate day and night.",
+      "source": "Blizzard Entertainment, classic Warcraft III strategy guide, 'Day/Night Cycle,' consulted 2026-07-19: https://classic.battle.net/war3/basics/daynight.shtml"
+    },
+    {
+      "claim": "Loop skeleton and feel signature: the guide's opening sequence is workers to buildings and lumber, food for the army, a hero plus first units from the first barracks-type building, then sending the hero's group to kill nearby creeps to level the hero, find hero items, and generate additional gold.",
+      "source": "Blizzard Entertainment, classic Warcraft III strategy guide, 'Basics' (Starting out), consulted 2026-07-19: https://classic.battle.net/war3/basics/basics.shtml"
+    },
+    {
+      "claim": "Second-session answer and packaging lesson 4: the game features four distinct races — human, orc, undead, and night elf — each with unique units and special abilities, with heroes who gain experience and carry special weapons and magic items.",
+      "source": "Archived eBay product page for WarCraft III: Reign of Chaos (Windows/Mac, 2002), ePID 9217, captured 2025-12-21, re-verified against the live listing 2026-07-19: https://web.archive.org/web/20251221154156/https://www.ebay.com/p/9217"
+    },
+    {
+      "claim": "Multiplayer BOM: the game supports multiplayer over Battle.net with head-to-head warfare plus modes for cooperative team adventuring, and ships a map editor supporting the game's tile sets, unit scripts, and event triggers.",
+      "source": "Archived eBay product page for WarCraft III: Reign of Chaos (Windows/Mac, 2002), ePID 9217, captured 2025-12-21, re-verified against the live listing 2026-07-19: https://web.archive.org/web/20251221154156/https://www.ebay.com/p/9217"
+    },
+    {
+      "claim": "Packaging lesson 1 and anti-lesson — upkeep as governor: the guide states upkeep was instituted to focus the game on smaller numbers of units and to make players more aggressive and turtle less, framing army size as a decision with pros and cons.",
+      "source": "Blizzard Entertainment, classic Warcraft III strategy guide, 'Upkeep,' consulted 2026-07-19: https://classic.battle.net/war3/basics/upkeep.shtml"
+    },
+    {
+      "claim": "Packaging lesson 2: creeping clears gold mines and map paths, and building near creeps provokes attacks, tying camp placement to expansion sites and movement routes.",
+      "source": "Blizzard Entertainment, classic Warcraft III strategy guide, 'Creeping,' consulted 2026-07-19: https://classic.battle.net/war3/basics/creeping.shtml"
+    },
+    {
+      "claim": "Packaging lesson 3: revival has no use limit but costs gold scaled to hero level, making hero loss priced and recoverable rather than permanent or free.",
+      "source": "Blizzard Entertainment, classic Warcraft III strategy guide, 'Hero Basics' (Hero Revival), consulted 2026-07-19: https://classic.battle.net/war3/basics/heroes.shtml"
+    }
+  ],
+  "status": "audited"
+}

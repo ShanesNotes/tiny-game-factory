@@ -39,6 +39,7 @@
     "primary": "strategy",
     "secondary": []
   },
+  "card_ref": "warcraft-3",
   "moat": "Persistent heroes and upkeep thresholds force army composition to trade expansion against concentrated power.",
   "scope_efficiency_hypothesis": "Four factions reuse economy and combat rules while heroes and items create match-specific build paths.",
   "exemplar_rationale": "Shows how hero progression can sit inside resettable real-time strategy without replacing economy play.",
