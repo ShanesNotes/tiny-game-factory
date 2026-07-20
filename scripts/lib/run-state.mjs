@@ -35,9 +35,10 @@ export function runDirFor(cwd, seedId) {
 export function runRelFor(seedId) {
   return path.join(".tgf", "seeds", seedId);
 }
-// Default export destination for a finished spec pack: $STUDIO_ROOT/games/{seed-id}
-// (path-registry). Declared, never created until an explicit package-spec step.
-// package-spec --to still wins over this default.
+// Default export destination for a finished spec pack:
+// $STUDIO_ROOT/games/_export-{seed-id} (two-dir studio shape: export pack here,
+// forge intake births games/{seed-id}). Declared, never created until an
+// explicit package-spec step. package-spec --to still wins over this default.
 // Discovery: startDir → FACTORY_ROOT walk-up → STUDIO_ROOT env (via findStudioRoot).
 export function specPackRootFor(seedId, startDir = process.cwd()) {
   const studio =
@@ -47,7 +48,7 @@ export function specPackRootFor(seedId, startDir = process.cwd()) {
       "cannot resolve STUDIO_ROOT for default pack root (set STUDIO_ROOT or run under a studio tree with DISCIPLINES.md)",
     );
   }
-  return path.join(studio, "games", seedId);
+  return path.join(studio, "games", `_export-${seedId}`);
 }
 
 export function pathIsInside(parent, child) {
@@ -394,16 +395,29 @@ export function openRun(cwd, seedId) {
 
 // --- Path policy ---
 
-// The only absolute path a manifest may contain is its own default_spec_pack_root,
-// which must equal $STUDIO_ROOT/games/{seed-id} (path-registry). This keeps a run
-// from pointing writes at source repos or anywhere outside its declared sandbox.
+// Absolute paths a manifest may contain are limited to its declared
+// default_spec_pack_root. That root must be one of:
+//   - $STUDIO_ROOT/games/_export-{seed-id}  (canonical; new inits always write this)
+//   - $STUDIO_ROOT/games/{seed-id}          (legacy; pre-DES-C runs are immutable
+//     history and keep the old root — no migration; new runs never get this)
+// Absolute-path scan allows whichever of those two the manifest actually carries.
+// This keeps a run from pointing writes at source repos or anywhere outside its
+// declared sandbox.
 export function manifestPathPolicyErrors(manifest, seedId, cwd = process.cwd()) {
   const errors = [];
   const specPackRoot = specPackRootFor(seedId, cwd);
+  // Legacy pre-DES-C default: product/game dir was also the pack root.
+  const legacySpecPackRoot = path.join(path.dirname(specPackRoot), seedId);
+  const allowedRoots = new Set([specPackRoot, legacySpecPackRoot]);
+  const declaredRoot = manifest.default_spec_pack_root;
   const absPaths = JSON.stringify(manifest).match(/\/home\/ark\/[A-Za-z0-9._/-]+/g) || [];
-  for (const p of absPaths) if (p !== specPackRoot) errors.push(`illegal absolute source path in manifest: ${p}`);
-  if (manifest.default_spec_pack_root !== specPackRoot) {
-    errors.push(`default_spec_pack_root must be ${specPackRoot}`);
+  for (const p of absPaths) {
+    if (!allowedRoots.has(p)) errors.push(`illegal absolute source path in manifest: ${p}`);
+  }
+  if (!allowedRoots.has(declaredRoot)) {
+    errors.push(
+      `default_spec_pack_root must be ${specPackRoot} (or legacy ${legacySpecPackRoot})`
+    );
   }
   const runPathFields = [
     ["seed_path", manifest.seed_path],
@@ -421,9 +435,11 @@ export function manifestPathPolicyErrors(manifest, seedId, cwd = process.cwd()) 
     catch (e) { errors.push(e.message); }
   }
   if (manifest.spec_pack_path) {
+    // Pack path must sit under the declared root (canonical _export or legacy).
+    const packAnchor = allowedRoots.has(declaredRoot) ? declaredRoot : specPackRoot;
     const packPath = path.resolve(manifest.spec_pack_path);
-    if (!pathIsInside(specPackRoot, packPath)) {
-      errors.push(`spec_pack_path must resolve inside ${specPackRoot}: ${manifest.spec_pack_path}`);
+    if (!pathIsInside(packAnchor, packPath)) {
+      errors.push(`spec_pack_path must resolve inside ${packAnchor}: ${manifest.spec_pack_path}`);
     }
   }
   return errors;

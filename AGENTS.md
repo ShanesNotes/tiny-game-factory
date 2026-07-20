@@ -47,8 +47,15 @@ node scripts/summarize-run.mjs --seed-id <kebab-id>
 # Or the all-in-one walkthrough (init/resume + durable IDEA_WALKTHROUGH.md + issue dry-run):
 node scripts/walk-game-idea.mjs --seed-id <kebab-id> [--seed "<one-line seed>"]
 
-# Advance a phase (refuses illegal transitions; re-validates before writing):
-node scripts/advance-run.mjs --seed-id <kebab-id> --to <phase> --event <event> --status passed
+# At intake (0.3.0 runs): build the digest, then author the grill answers —
+# the advance to toolchain refuses until both intake artifacts validate:
+npm run portfolio:digest -- --seed-id <kebab-id>
+#   → author .tgf/seeds/<kebab-id>/intake/office-hours.md (schemas/intake-grill)
+
+# Advance a phase (refuses illegal transitions; re-validates before writing).
+# Set each artifact path on the exit transition of its producing phase, e.g.:
+node scripts/advance-run.mjs --seed-id <kebab-id> --to <phase> --event <event> --status passed \
+  [--set game_thesis_path=.tgf/seeds/<kebab-id>/GAME_THESIS.md]
 
 # At decompose: render SPEC.md into the issue backlog (dry-run by default):
 node scripts/emit-local-issues.mjs --seed-id <kebab-id> --write
@@ -56,6 +63,21 @@ node scripts/emit-local-issues.mjs --seed-id <kebab-id> --write
 # At handoff: export the spec pack (dry-run by default; leakage-gated):
 npm run spec:package -- --seed-id <kebab-id> --write
 ```
+
+The gates between those commands are **human-authored, by design**. The v2
+artifacts a run cannot advance without (worked examples under `examples/`;
+full gate-by-gate list in `README.md` → Quickstart → "The golden path"):
+
+- **thesis** — `GAME_THESIS.md` with `schema_version: "2.0.0"` +
+  `portfolio_distinctness` (nearest prior from the digest or `"none"`,
+  falsifying difference, the digest's `generated_at` verbatim);
+- **design-review** — `reviews/depth-vector.json` 2.0.0 (register matching the
+  thesis, per-axis evidence as real dotted field-paths into the thesis JSON,
+  `review_provenance`) plus `reviews/ANTI_BORING_VERDICT.md` with a
+  distinctness disposition naming the nearest prior seed (or `none`);
+- **decompose** — `SPEC.md` whose slices carry forge-checkable
+  `evidence_requirements` (game-relative globs or `log|metric|screenshot`
+  tokens, never prose — see P18).
 
 The initializer creates **only** `.tgf/seeds/{seed-id}/`. It never creates a spec
 pack, picks an engine, or writes `GAME_THESIS.md`.

@@ -30,11 +30,12 @@ pack. The harness is durable process memory.
 |---|---|---|---|
 | Design repo | `/home/ark/game-studio/design/` | reusable doctrine, prompts, schemas, hooks, scripts, skills | durable |
 | Per-seed run state | `.tgf/seeds/{seed-id}/` | one seed's manifest, ledger, thesis, decisions, SPEC, issues, reviews, intake | durable temporal truth |
-| Spec pack | `$STUDIO_ROOT/games/{seed-id}/` (default; `--to` wins) | the exported spec + backlog, opened for co-dev | durable deliverable |
+| Spec pack | `$STUDIO_ROOT/games/_export-{seed-id}/` (default; `--to` wins) | the exported spec + backlog; forge intake then births `games/{seed-id}` | durable deliverable |
 
 The spec pack root is a **declared default, not a created path**
-(`manifest.default_spec_pack_root` → `$STUDIO_ROOT/games/{seed-id}`). Nothing
-creates that folder until the handoff phase exports the pack via
+(`manifest.default_spec_pack_root` → `$STUDIO_ROOT/games/_export-{seed-id}`;
+pre-DES-C runs may still carry the legacy `$STUDIO_ROOT/games/{seed-id}`).
+Nothing creates that folder until the handoff phase exports the pack via
 `scripts/package-spec.mjs --write` (`--to` overrides the default); the export
 destination is recorded as `manifest.spec_pack_path`.
 
@@ -93,8 +94,8 @@ human-friendly view.
 | intake | (P00 router; default entry) | `tgf-office-hours-grill` | `intake/office-hours.md` + `intake/portfolio-digest.json`, ≤1 question; exit → `toolchain` |
 | deepen | (P00/P07 path) | — (one named transform, then re-enter thesis) | deepened thesis; ≤2 attempts |
 | toolchain | `P17_VERIFY_TOOLCHAIN` | `tgf-verify-toolchain` | toolchain ledger from real probes |
-| thesis | `P01_SEED_COMPILE` | `tgf-seed-compile` | `GAME_THESIS.md` |
-| design-review | `P07_DEPTH_RED_TEAM` | `tgf-depth-redteam` | `reviews/ANTI_BORING_VERDICT.md` + `reviews/depth-vector.json` |
+| thesis | `P01_SEED_COMPILE` | `tgf-seed-compile` | `GAME_THESIS.md` (`schema_version: "2.0.0"` + digest-backed `portfolio_distinctness`) |
+| design-review | `P07_DEPTH_RED_TEAM` | `tgf-depth-redteam` | `reviews/ANTI_BORING_VERDICT.md` (incl. distinctness disposition naming the nearest prior seed, or `none`) + `reviews/depth-vector.json` (`schema_version: "2.0.0"`: per-axis evidence as real thesis field-paths + `review_provenance`) |
 | engine-profile | `P02_ENGINE_PROFILE` | `tgf-engine-profile` | `decisions/0001-engine-profile.md` |
 | decompose | `P18_DECOMPOSE_SPEC` | `tgf-decompose` | `SPEC.md` + `issues/*.md` (via `scripts/emit-local-issues.mjs --write`) |
 | handoff | `P19_PACKAGE_SPEC` | `tgf-handoff` | exported spec pack (`scripts/package-spec.mjs`) |

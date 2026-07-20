@@ -1,4 +1,5 @@
 {
+  "schema_version": "2.0.0",
   "scores": {
     "meaningful_choice": 2,
     "tradeoff": 2,
@@ -14,9 +15,24 @@
     "expansion_headroom": 1
   },
   "total": 17,
-  "evidence": [
-    "skilled bot scored 2.3x random bot over 20 runs",
-    "no single action exceeded 40% of meaningful actions"
-  ],
+  "register": "mechanics-first",
+  "evidence": {
+    "meaningful_choice": "core_loop_candidates[0].verbs",
+    "tradeoff": "depth_mechanisms[0]",
+    "pressure": "depth_mechanisms[1]",
+    "uncertainty": "replayability_hypothesis",
+    "progression": "first_playable_slice.scope",
+    "mastery": "bot_success_criteria[2]",
+    "combinatorial": "core_loop_candidates[1].verbs",
+    "emergence": "depth_mechanisms[2]",
+    "replayable_variation": "replayability_hypothesis",
+    "failure_recovery": "risk_register[0].risk",
+    "expression": "player_fantasy",
+    "expansion_headroom": "out_of_scope[0]"
+  },
+  "review_provenance": {
+    "mode": "independent",
+    "reviewer_note": "EXAMPLE — record how the review actually ran (independent = separate context from the thesis author; same-context otherwise); never invent independence."
+  },
   "verdict": "ADVANCE"
 }
