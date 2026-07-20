@@ -248,6 +248,7 @@ Eight draft research cards for the Shane-ratified canon. Status remains
 | `docs/reference-games/cards/stardew-valley.json` | rewritten | Draft reference card; day energy + seasons + bundles (orch/fue-cards-grok). |
 | `docs/reference-games/cards/vampire-survivors.json` | rewritten | Draft reference card; auto-attack + level forks + gold meta (orch/fue-cards-grok). |
 | `docs/reference-games/cards/zelda-botw.json` | rewritten | Draft reference card; chemistry engine + durability + stamina (orch/fue-cards-grok). |
+| `docs/reference-games/cards/warcraft-3.json` | rewritten | Tier-1 promotion ratified by Shane 2026-07-19 (665e704); per-claim Blizzard classic-guide citations — upkeep tiers, creeps, hero revival, day/night. Ledger row added during kingdoms e2e (validator audit gap). |
 
 ## FUE W2-B (2026-07-12) — reference-game pipeline hooks
 
