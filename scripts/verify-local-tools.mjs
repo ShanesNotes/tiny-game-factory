@@ -18,6 +18,7 @@ const checks = [
   { cmd: "claude", args: ["--version"], category: "builder" },
   { cmd: "codex", args: ["--version"], category: "builder" },
   { cmd: "omx", args: ["--version"], category: "builder" },
+  { cmd: "grok", args: ["--version"], category: "builder" },
   { cmd: "kimi", args: ["--version"], category: "builder" },
   { cmd: "npx", args: ["playwright", "--version"], category: "harness" },
   { cmd: "godot", args: ["--version"], category: "engine" },
