@@ -102,11 +102,12 @@ if (isRevision) {
   if (!fs.existsSync(gameDir) || !fs.statSync(gameDir).isDirectory()) {
     fail(`--revise-of must be an existing game directory: ${gameDir}`);
   }
-  // Without --to the default target is $STUDIO_ROOT/games/<seed-id> — for an
-  // intaken game (stamp: forge-template-stamp.json) that IS the live scaffold,
-  // and --force would replace it with pack files, deadlocking the revision
-  // path. Refuse so the game survives for `forge intake --revise` to apply the
-  // revision. An explicit --to is honored exactly as-is.
+  // Without --to the default target is $STUDIO_ROOT/games/_export-<seed-id>
+  // (DES-C). If that dir ever carries forge-template-stamp.json it is a live
+  // intaken scaffold, and --force would replace it with pack files,
+  // deadlocking the revision path (FRG-B). Refuse so the game survives for
+  // `forge intake --revise` to apply the revision. An explicit --to is
+  // honored exactly as-is.
   if (!toDir && fs.existsSync(path.join(target, "forge-template-stamp.json"))) {
     fail(
       `revision export default target ${target} is an intaken game dir (forge-template-stamp.json present); ` +

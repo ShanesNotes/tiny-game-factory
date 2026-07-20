@@ -747,7 +747,11 @@ test("FRG-B: default revise-of target refuses to clobber an intaken game scaffol
   try {
     completeReadyRun(dir, id, { profile: GODOT_PROFILE, env });
 
-    // Default path (no --to): the documented repro command — must refuse.
+    // Guard: if the DEFAULT target ($STUDIO_ROOT/games/_export-<id> since
+    // DES-C) is itself a stamped/intaken dir, the default path must refuse.
+    const exportRoot = path.join(tmpStudio, "games", `_export-${id}`);
+    fs.mkdirSync(exportRoot, { recursive: true });
+    fs.writeFileSync(path.join(exportRoot, "forge-template-stamp.json"), JSON.stringify({ template: "forge", v: 1 }) + "\n");
     const refused = node(
       "package-spec.mjs",
       ["--seed-id", id, "--revise-of", gameDir, "--write", "--force"],
@@ -757,6 +761,21 @@ test("FRG-B: default revise-of target refuses to clobber an intaken game scaffol
     assert.match(refused.stderr, /forge-template-stamp\.json/);
     assert.match(refused.stderr, /--to/);
     assert.deepEqual(scaffoldSnapshot(), before, "intaken scaffold must survive the refusal");
+    fs.rmSync(exportRoot, { recursive: true, force: true });
+
+    // Default path (no --to): since DES-C the default target is the neutral
+    // _export root — the documented repro command now succeeds and the intaken
+    // game scaffold survives (FRG-B acceptance).
+    const dflt = node(
+      "package-spec.mjs",
+      ["--seed-id", id, "--revise-of", gameDir, "--write", "--force"],
+      { cwd: dir, env }
+    );
+    assert.equal(dflt.status, 0, dflt.stdout + dflt.stderr);
+    assert.ok(fs.existsSync(path.join(exportRoot, "SPEC.md")), "pack lands at the default _export root");
+    const dmf = JSON.parse(fs.readFileSync(path.join(exportRoot, "forge-manifest.json"), "utf8"));
+    assert.equal(dmf.parent_digest, parentDigest);
+    assert.deepEqual(scaffoldSnapshot(), before, "intaken scaffold must survive the default revision export");
 
     // Neutral --to: export lands there, game dir untouched (proven live 2026-07-20).
     const r = node(
